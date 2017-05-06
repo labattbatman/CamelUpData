@@ -1,0 +1,6 @@
+C:\Users\belal1\Desktop\Alexis\CamelUpData\CamelUpData\bin\Release\CamelUpData.exe.config
+C:\Users\belal1\Desktop\Alexis\CamelUpData\CamelUpData\bin\Release\CamelUpData.exe
+C:\Users\belal1\Desktop\Alexis\CamelUpData\CamelUpData\bin\Release\CamelUpData.pdb
+C:\Users\belal1\Desktop\Alexis\CamelUpData\CamelUpData\obj\Release\CamelUpData.exe
+C:\Users\belal1\Desktop\Alexis\CamelUpData\CamelUpData\obj\Release\CamelUpData.pdb
+C:\Users\belal1\Desktop\Alexis\CamelUpData\CamelUpData\obj\Release\CamelUpData.csprojResolveAssemblyReference.cache
