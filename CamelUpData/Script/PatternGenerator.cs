@@ -76,9 +76,9 @@ public class PatternGenerator
         m_PatternsDiscoveredButNotSaved.Clear();
     }
 
-    public void Init()
+    public void Init(string aInitialBoard)
     {
-        m_PatternsToDiscover.Add(";ABCDE;;+;;+");
+        m_PatternsToDiscover.Add(aInitialBoard);
     }
 
     public void Update()

@@ -10,3 +10,9 @@ C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData17-05-05 - Copie\C
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData17-05-05 - Copie\CamelUpData17-05-05 - Copie\CamelUpData\bin\Debug\CamelUpData.exe
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData17-05-05 - Copie\CamelUpData17-05-05 - Copie\CamelUpData\bin\Debug\CamelUpData.pdb
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData17-05-05 - Copie\CamelUpData17-05-05 - Copie\CamelUpData\obj\Debug\CamelUpData.csprojResolveAssemblyReference.cache
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.exe.config
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.exe
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.pdb
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.exe
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.pdb
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.csprojResolveAssemblyReference.cache

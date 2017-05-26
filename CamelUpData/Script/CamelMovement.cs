@@ -7,6 +7,7 @@ public class Camel: ICloneable
     public char Id { get; private set; }
     public int Pos { get; set; }
     public Camel CamelOnTop{ get; set; }
+    public bool IsMoving { get; set; }
 
     public Camel(char aId)
     {
@@ -98,6 +99,7 @@ public class CamelsMovement
 
     private void MoveCamel(Camel aCamel, int aDice, bool aIsFirstCamel)
     {
+        aCamel.IsMoving = true;
         aCamel.Pos += aDice;
 
         if (aIsFirstCamel)
@@ -105,14 +107,16 @@ public class CamelsMovement
             RemoveCamelOnTop(aCamel);
         }
 
-        CheckCamelLandOnAnotherCamel(aCamel);
+        CheckCamelLandOnAnotherCamel(aCamel, aDice < 0);
 
-        if (aCamel.CamelOnTop != null)
+        if (aCamel.CamelOnTop != null && aDice > 0)
         {
             MoveCamel(aCamel.CamelOnTop, aDice, false);
         }
 
         IsLandingOnTrap(aCamel);
+
+        aCamel.IsMoving = false;
     }
 
     private void RemoveCamelOnTop(Camel aCamel)
@@ -126,16 +130,47 @@ public class CamelsMovement
         }
     }
 
-    private void CheckCamelLandOnAnotherCamel(Camel aCamel)
+    private void CheckCamelLandOnAnotherCamel(Camel aCamel, bool aFromMinusTrap)
     {
-        for (int i = 0; i < m_Camels.Count; i++)
+        if (!aFromMinusTrap)
         {
-            if (m_Camels[i] != aCamel &&
-                m_Camels[i].Pos == aCamel.Pos &&
-                m_Camels[i].CamelOnTop == null)
+            for (int i = 0; i < m_Camels.Count; i++)
             {
-                m_Camels[i].CamelOnTop = aCamel;
+                if (m_Camels[i] != aCamel &&
+                    m_Camels[i].Pos == aCamel.Pos &&
+                    m_Camels[i].CamelOnTop == null)                
+                        m_Camels[i].CamelOnTop = aCamel;                  
             }
+        }
+        else
+        {
+            //TODO faire des tests
+            string camelsOnTop = aCamel.Id.ToString();
+            string camelsOnPos = string.Empty;
+            List<Camel> orderedStartingCamel = SortCamelInOrderPos(m_Camels);
+            Camel tempCamel = aCamel.CamelOnTop;
+
+            while(tempCamel != null)
+            {
+                camelsOnTop += tempCamel.Id;
+                tempCamel = tempCamel.CamelOnTop;
+            }             
+
+            for (int i = 0; i < orderedStartingCamel.Count; i++)
+            {
+                if (!camelsOnTop.Contains(orderedStartingCamel[i].Id.ToString()) 
+                    && orderedStartingCamel[i].Pos == aCamel.Pos
+                    && !GetCurrentCamel(orderedStartingCamel[i].Id).IsMoving)
+                    camelsOnPos += orderedStartingCamel[i].Id;
+            }
+
+            if (!string.IsNullOrEmpty(camelsOnPos))
+            {
+                aCamel.CamelOnTop = GetCurrentCamel(camelsOnPos[camelsOnPos.Length - 1]);
+
+                if (aCamel.CamelOnTop == null || aCamel.CamelOnTop == aCamel)
+                    GameRules.Log("Peut etre un bug....");
+            }               
         }
     }
 
@@ -179,6 +214,17 @@ public class CamelsMovement
         }
         
         return retval;
+    }
+
+    private Camel GetCurrentCamel(char aId)
+    {
+        for (int i = 0; i < m_Camels.Count; i++)
+        {
+            if (m_Camels[i].Id == aId)
+                return m_Camels[i];
+        }
+
+        return null;
     }
 
     private List<Camel> SortCamelInOrderPos(List<Camel> aCamel)

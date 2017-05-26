@@ -5,7 +5,7 @@ using System.Linq;
 
 
 //TODO MAIN
-//Traps => CamelMovement.cs - private void IsLandingOnTrap(Camel aCamel)
+//Tester avec CamelUpUnityTest les traps: Va falloir faire 2e facon pour les minus traps
 //Pour les positions des traps...repenser le calcul et attendre les traps. fait des tests.
 //Long terme decision. Tester sur un bon ordi le temps
 //Merge avec CamelUpUnity pour le visuel
@@ -20,6 +20,8 @@ namespace CamelUpData
         private static Dictionary<string, List<Board>> m_BoardsByDiceOrder = new Dictionary<string, List<Board>>();
         private static List<Board> m_FinishBoard = new List<Board>();
 
+        private static int m_ToDelete = 0;
+
         static void Main(string[] args)
         {
             EraseTextFile();
@@ -29,7 +31,7 @@ namespace CamelUpData
 
             PopulatePattern();           
 
-            //Board test = new Board(";OBWGY");
+            Board test = new Board(";OBWG");
             //Board test = new Board(";GW");
 
             //TestMultipleBoard();
@@ -67,11 +69,11 @@ namespace CamelUpData
 
         private static void PopulatePattern()
         {
-            /*if(SaveManager.Instance.IsPatternSaved)
+            if(SaveManager.Instance.IsPatternSaved)
             {
                 GameRules.Patterns = SaveManager.Instance.Load();
                 return;
-            }*/
+            }
 
             TestPopulatePattern();
         }
@@ -79,7 +81,7 @@ namespace CamelUpData
         private static void TestPopulatePattern()
         {
             PatternGenerator m_PatternGenerator = new PatternGenerator();
-            m_PatternGenerator.Init();
+            m_PatternGenerator.Init(";ABCDE");
             bool isGeneratingPattern = true;
             while (isGeneratingPattern)
             {
@@ -100,7 +102,7 @@ namespace CamelUpData
         {
             List<string> test = new List<string>();
           
-            test.Add(";GWO");
+            test.Add(";YGWBO");
             /*test.Add(";;;;;;GWOBY");
             test.Add(";G;W;O;B;Y");
             
@@ -130,14 +132,17 @@ namespace CamelUpData
             {
                 Board aBoard = new Board(test[i]);
                 tw.WriteLine(i + "\n" + aBoard.ToStringOldCamelUpFormat() + "\n" + "-------------------");
-                GameRules.Log(i + "\n" + aBoard.ToString() + "\n" + "-------------------");
+                //GameRules.Log(i + "\n" + aBoard.ToString() + "\n" + "-------------------");
             }
             tw.Close();
         }
 
         private static void CustomTest()
         {
-            string test = ";YWOG;B";
+            //TODO ";YBGW;;;;;O;" manque des boards 28674 => 29160
+            // ";YBG;w;;;;O;" a jusque 9 subboard => 12
+            //string test = ";YBG;w;;;;O;";
+            string test = ";YBGWO;;;;;";
 
             Board board = new Board(test);
             PopulateBoardByDiceOrder(board);
@@ -148,13 +153,19 @@ namespace CamelUpData
             List<string> log = new List<string>();
             //i = dice number 1-1-1-1-1
             //j = dice order  W-O-B-Y-G
-
+            HashSet<string> wrongDiceOrder = new HashSet<string>();
             for (int i = 0; i < diceNumberCount; i++)
             {
                 string newLog = string.Empty;
                 for (int j = 0; j < list.Count; j++)
                 {
-                    newLog += m_BoardsByDiceOrder[list[j]][i].ToStringOldCamelUpFormat() + "\t";
+                    if (m_BoardsByDiceOrder[list[j]].Count <= i)
+                    {
+                        List<Board> ttest = m_BoardsByDiceOrder[list[j]];
+                        wrongDiceOrder.Add(list[j]);
+                        continue;
+                    }
+                    newLog += m_BoardsByDiceOrder[list[j]][i].ToStringOldCamelUpFormat() + "";
                 }
 
                 log.Add(newLog);
@@ -163,19 +174,22 @@ namespace CamelUpData
             TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + TextFileName, true);
 
             for(int i = 0; i < log.Count; i++)
-                tw.WriteLine(log[i] + "");
+                tw.WriteLine(log[i] + "\t");
 
             tw.Close();
         }
 
         private static void PopulateBoardByDiceOrder(Board aBoard)
         {          
-            if(aBoard.GetUnrolledCamelByRank().Length == 0)
+            if (aBoard.GetUnrolledCamelByRank().Length == 0)
             {
                 if(!m_BoardsByDiceOrder.ContainsKey(aBoard.DicesHistory))
                 {
                     m_BoardsByDiceOrder.Add(aBoard.DicesHistory, new List<Board>());
                 }
+
+                m_ToDelete++;
+
 
                 m_BoardsByDiceOrder[aBoard.DicesHistory].Add(aBoard);
             }

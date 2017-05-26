@@ -4,6 +4,9 @@ using System.Text;
 
 public class Board
 {
+    public readonly bool POPULATE_SUBBOARD = true;
+    public readonly bool POPULATE_TILL_FINISH = true;
+
     public string BoardState { get; private set; }
     public int[] CasesLandedOn { get; private set; }
     public string DicesHistory { get; private set; } //Start from initial board. Used for debugging
@@ -74,11 +77,15 @@ public class Board
 
         int camelIndex = BoardState.IndexOf(Char.ToLower(aRolledCamel));
         if (BoardState[BoardState.IndexOf(Char.ToLower(aRolledCamel)) - 1] == GameRules.CASE_SEPARATOR)
-            CasesLandedOn[GetCamelPos(aRolledCamel)]++;
+        {
+            int caseLanded = GetCamelPos(aRolledCamel);
+            if(caseLanded < CasesLandedOn.Length)
+                CasesLandedOn[caseLanded]++;
+        }
 
         PopulateNeighbouring();
 
-        if (!IsCamelReachEnd)
+        if (POPULATE_SUBBOARD && !IsCamelReachEnd)
             PopulateSubBoard();
     }
 
@@ -122,19 +129,20 @@ public class Board
     }
 
     private void PopulateSubBoard(bool aPopulateStillRaceEnd = false)
-    {
+    {       
         if (IsCamelReachEnd)
             return;
 
         string unRollCamel = GetUnrolledCamelByRank();
         //TODO hardcoder pour short term seulement soit quand tous les dés sont lancées. (Pas de reroll)
+        aPopulateStillRaceEnd = POPULATE_TILL_FINISH;
         if (String.IsNullOrEmpty(unRollCamel) && aPopulateStillRaceEnd)
         {        
             SetAllCamelUnroll();
             unRollCamel = GetUnrolledCamelByRank();
         }
 
-        List<Pattern> pattern = ToPattern(); 
+        List<Pattern> pattern = ToPattern();
 
         // i = pattern
         // j = movingCamel in pattern
@@ -143,16 +151,18 @@ public class Board
         {
             for (int j = 0; j < pattern[i].NbCamel && j < unRollCamel.Length; j++)
             {
-                if (!pattern[i].CamelsIdentity.Contains(unRollCamel[j].ToString()))
+                char unrollCamel = unRollCamel[j];
+                if (!pattern[i].CamelsIdentity.Contains(unrollCamel.ToString()))
                 {
+                    //GameRules.Log("TEST");
                     continue;
                 }
 
-                List <string> results = pattern[i].GetResultsForDice(unRollCamel[j]);
+                List <string> results = pattern[i].GetResultsForDice(unrollCamel);
                 for (int k = 0; k < results.Count; k++)
                 {
-                    string dicesHistory = DicesHistory + unRollCamel[j];
-                    Board subBoard = new Board(this, results[k], unRollCamel[j], dicesHistory);
+                    string dicesHistory = DicesHistory + unrollCamel;
+                    Board subBoard = new Board(this, results[k], unrollCamel, dicesHistory);
                     m_SubBoard.Add(subBoard);
                     CamelUpData.Program.HardPopulateFinishBoard(subBoard);
                 }
@@ -281,7 +291,7 @@ public class Board
         {
             retval += m_SubBoard[i].ToStringOldCamelUpFormat();
         }
-        return retval;
+        return retval + "\t";
     }
 
     public void PopulateNeighbouring()
