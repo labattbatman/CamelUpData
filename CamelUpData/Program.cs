@@ -5,6 +5,9 @@ using System.Linq;
 
 
 //TODO MAIN
+//Peut etre faire des tests automatic
+//;OBW;-; bug
+//AutoPopulate si ya l'a pas
 //Tester avec CamelUpUnityTest les traps: Va falloir faire 2e facon pour les minus traps
 //Pour les positions des traps...repenser le calcul et attendre les traps. fait des tests.
 //Long terme decision. Tester sur un bon ordi le temps
@@ -31,7 +34,7 @@ namespace CamelUpData
 
             PopulatePattern();           
 
-            Board test = new Board(";OBWG");
+            Board test = new Board(";OBW;;");
             //Board test = new Board(";GW");
 
             //TestMultipleBoard();
@@ -49,7 +52,7 @@ namespace CamelUpData
 
         public static void HardPopulateFinishBoard(Board aBoard)
         {
-            if (aBoard.IsCamelReachEnd)
+            //if (aBoard.IsCamelReachEnd)
             {
                 m_FinishBoard.Add(aBoard);
 
@@ -69,11 +72,11 @@ namespace CamelUpData
 
         private static void PopulatePattern()
         {
-            if(SaveManager.Instance.IsPatternSaved)
+            /*if(SaveManager.Instance.IsPatternSaved)
             {
                 GameRules.Patterns = SaveManager.Instance.Load();
                 return;
-            }
+            }*/
 
             TestPopulatePattern();
         }
@@ -81,7 +84,7 @@ namespace CamelUpData
         private static void TestPopulatePattern()
         {
             PatternGenerator m_PatternGenerator = new PatternGenerator();
-            m_PatternGenerator.Init(";ABCDE");
+            m_PatternGenerator.Init(";ABC;-");
             bool isGeneratingPattern = true;
             while (isGeneratingPattern)
             {
@@ -139,14 +142,11 @@ namespace CamelUpData
 
         private static void CustomTest()
         {
-            //TODO ";YBGW;;;;;O;" manque des boards 28674 => 29160
-            // ";YBG;w;;;;O;" a jusque 9 subboard => 12
-            //string test = ";YBG;w;;;;O;";
-            string test = ";YBGWO;;;;;";
+            string test = ";YBGW;;;;;O;";
 
             Board board = new Board(test);
             PopulateBoardByDiceOrder(board);
-
+            
             var list = m_BoardsByDiceOrder.Keys.ToList();
             list.Sort();
             int diceNumberCount = m_BoardsByDiceOrder[list[0]].Count;
