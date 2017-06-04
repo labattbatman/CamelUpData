@@ -16,3 +16,9 @@ C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\D
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.exe
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.pdb
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.csprojResolveAssemblyReference.cache
+C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\bin\Debug\CamelUpData.exe.config
+C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\bin\Debug\CamelUpData.exe
+C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\bin\Debug\CamelUpData.pdb
+C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.csprojResolveAssemblyReference.cache
+C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.exe
+C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.pdb

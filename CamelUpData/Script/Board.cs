@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 public class Board
 {
     public readonly bool POPULATE_SUBBOARD = true;
-    public readonly bool POPULATE_TILL_FINISH = true;
+    public readonly bool POPULATE_TILL_FINISH = false;
 
     public string BoardState { get; private set; }
     public int[] CasesLandedOn { get; private set; }
@@ -149,16 +150,18 @@ public class Board
         // k = result
         for (int i = 0; i < pattern.Count; i++)
         {
+            string rolledCamel = string.Empty;
             for (int j = 0; j < pattern[i].NbCamel && j < unRollCamel.Length; j++)
             {
                 char unrollCamel = unRollCamel[j];
                 if (!pattern[i].CamelsIdentity.Contains(unrollCamel.ToString()))
                 {
-                    //GameRules.Log("TEST");
+                    //GameRules.Log("TEST" + unrollCamel + "\n");
                     continue;
                 }
 
-                List <string> results = pattern[i].GetResultsForDice(unrollCamel);
+                List<string> results = pattern[i].GetResultsForDice(unrollCamel);
+                rolledCamel += unRollCamel[j];
                 for (int k = 0; k < results.Count; k++)
                 {
                     string dicesHistory = DicesHistory + unrollCamel;
@@ -167,6 +170,11 @@ public class Board
                     CamelUpData.Program.HardPopulateFinishBoard(subBoard);
                 }
             }
+
+            for (int j = 0; j < rolledCamel.Length; j++)
+                unRollCamel = Regex.Replace(unRollCamel, rolledCamel[j].ToString(), string.Empty);
+
+            rolledCamel = string.Empty;
         }
     }
 
@@ -256,7 +264,7 @@ public class Board
         {
             retval += m_SubBoard[i].ToString() ;
         }
-
+        return BoardState;
         return retval;
     }
 

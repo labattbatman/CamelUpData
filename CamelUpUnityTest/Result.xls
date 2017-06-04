@@ -1,0 +1,17 @@
+
+- Green 4 
+- Blue 3 
+- Orange 2 DiceIsRoll 
+- White 2 DiceIsRoll sous ->Orange 
+- Yellow 2 DiceIsRoll sous ->White 
+
+,Blue-Green,Green-Blue,
+1-1,Yellow2->W  White2->O  Orange2 Green5->B  Blue5 ,Yellow2->W  White2->O  Orange2 Blue4 Green5 ,
+1-2,Yellow2->W  White2->O  Orange2 Green6->B  Blue6 ,Yellow2->W  White2->O  Orange2 Green5->B  Blue5 ,
+1-3,Yellow2->W  White2->O  Orange2 Green7->B  Blue7 ,Yellow2->W  White2->O  Orange2 Green5 Blue6 ,
+2-1,Yellow2->W  White2->O  Orange2 Blue5->G  Green5 ,Yellow2->W  White2->O  Orange2 Blue4 Green6 ,
+2-2,Yellow2->W  White2->O  Orange2 Blue5 Green6 ,Yellow2->W  White2->O  Orange2 Blue5 Green6 ,
+2-3,Yellow2->W  White2->O  Orange2 Blue5 Green7 ,Yellow2->W  White2->O  Orange2 Green6->B  Blue6 ,
+3-1,Yellow2->W  White2->O  Orange2 Green5 Blue6 ,Yellow2->W  White2->O  Orange2 Blue4 Green7 ,
+3-2,Yellow2->W  White2->O  Orange2 Blue6->G  Green6 ,Yellow2->W  White2->O  Orange2 Blue5 Green7 ,
+3-3,Yellow2->W  White2->O  Orange2 Blue6 Green7 ,Yellow2->W  White2->O  Orange2 Blue6 Green7 ,

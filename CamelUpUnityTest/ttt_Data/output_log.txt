@@ -1,0 +1,46 @@
+Initialize engine version: 5.4.0f3 (a6d8d714de6f)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 970 (ID=0x13c2)
+    Vendor:   NVIDIA
+    VRAM:     3072 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.041 seconds
+Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1200 59Hz; virtual: 3840x1200 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 0.608856 ms
+
+Green: 	First 11/18 0.61  	Second 07/18 0.39  	Third 00/18 0.00  	Fourth 00/18 0.00  	Fifth 00/18 0.00  	
+Blue: 	First 07/18 0.39  	Second 11/18 0.61  	Third 00/18 0.00  	Fourth 00/18 0.00  	Fifth 00/18 0.00  	
+Orange: 	First 00/18 0.00  	Second 00/18 0.00  	Third 18/18 1.00  	Fourth 00/18 0.00  	Fifth 00/18 0.00  	
+White: 	First 00/18 0.00  	Second 00/18 0.00  	Third 00/18 0.00  	Fourth 18/18 1.00  	Fifth 00/18 0.00  	
+Yellow: 	First 00/18 0.00  	Second 00/18 0.00  	Third 00/18 0.00  	Fourth 00/18 0.00  	Fifth 18/18 1.00  	
+
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+
+- Green 4 
+- Blue 3 
+- Orange 2 DiceIsRoll 
+- White 2 DiceIsRoll sous ->Orange 
+- Yellow 2 DiceIsRoll sous ->White 
+
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
+
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: 2d1c -> priority: 1 
