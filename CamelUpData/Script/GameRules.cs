@@ -159,7 +159,7 @@ public class GameRules
                 isCamelSameCase = false;
             }
             else if (holePattern[i] != GameRules.TRAP_MINUS && holePattern[i] != GameRules.TRAP_PLUS)
-            {                           
+            {                          
                 if (IsCamelsAreTooFar(nbCamelsOnLastPile, caseSinceLastCamel))
                 {
                     retval.Add(holePattern.Substring(0, i - caseSinceLastCamel));
@@ -182,6 +182,11 @@ public class GameRules
                 holePattern = sb.ToString();
 
                 caseSinceLastCamel = 0;
+            }
+            else
+            {
+	            //TODO BUG ICI mauvais pattern ;A;+;+ -> ;A; pas sur si cest la bonne solution
+				caseSinceLastCamel = 0;
             }
 
             //Debug.Log(string.Format(" {4} -> camelNb: {0}, caseSinceLastCamel: {1}, nbCamelsOnLastPile: {2}, isCamelSameCase: {3}",

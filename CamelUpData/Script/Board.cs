@@ -14,6 +14,8 @@ public class Board
 
     private Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
     public List<Board> m_SubBoard = new List<Board>();   
+
+	private Board m_ParentBoard { get; set; } //Used for debugging
     
     public bool IsCamelReachEnd { get { return FirstCamelPos >= GameRules.CASE_NUMBER; } }  
 
@@ -52,7 +54,9 @@ public class Board
     
     private Board(Board aInitialBoard, string aPattern, char aRolledCamel, string aDicesHistory)
     {
-        StringBuilder pattern = new StringBuilder(aPattern);     
+	    m_ParentBoard = aInitialBoard;
+
+		StringBuilder pattern = new StringBuilder(aPattern);     
         string camels = aInitialBoard.GetCamelsNeighbouring(aRolledCamel);
 
         for (int i = 0; i < pattern.Length; i++)
@@ -77,7 +81,7 @@ public class Board
         CasesLandedOn = (int[])aInitialBoard.CasesLandedOn.Clone();
 
         int camelIndex = BoardState.IndexOf(Char.ToLower(aRolledCamel));
-        if (BoardState[BoardState.IndexOf(Char.ToLower(aRolledCamel)) - 1] == GameRules.CASE_SEPARATOR)
+        if (BoardState[camelIndex - 1] == GameRules.CASE_SEPARATOR)
         {
             int caseLanded = GetCamelPos(aRolledCamel);
             if(caseLanded < CasesLandedOn.Length)
@@ -87,7 +91,7 @@ public class Board
         PopulateNeighbouring();
 
         if (POPULATE_SUBBOARD && !IsCamelReachEnd)
-            PopulateSubBoard();
+            PopulateSubBoard();	    
     }
 
     private int GetNbCamelInPattern(string aPattern)
@@ -281,7 +285,7 @@ public class Board
             {
                 if(BoardState[i] == GameRules.CASE_SEPARATOR)
                     caseIndex++;
-                else
+                else if (GameRules.IsCharIdentityCamel(BoardState[i]))
                 {
                     retval += GameRules.FullNameCamel(BoardState[i]) + caseIndex;
 
@@ -323,7 +327,7 @@ public class Board
 
             for (int i = 0; i < splittedBoard.Count; i++)
             {
-                if (string.IsNullOrEmpty(splittedBoard[i]))
+                if (string.IsNullOrEmpty(splittedBoard[i]) || !GameRules.IsCharIdentityCamel(splittedBoard[i][0]))
                     continue;
 
                 if (splittedBoard[i].Contains(aCamel.ToString()))

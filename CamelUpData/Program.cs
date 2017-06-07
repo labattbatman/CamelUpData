@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 
 //TODO MAIN
-//Peut etre faire des tests automatic
-//;OBW;-; bug
+//faire des test avec camelUp Unity pour les +. (il y a un bug avec camelupunity avec les +)
+//Faire les - et tester
+//Peut etre faire des tests automatic ca bug et je ne sias pas pkoi
 //AutoPopulate si ya l'a pas
 //Tester avec CamelUpUnityTest les traps: Va falloir faire 2e facon pour les minus traps
 //Pour les positions des traps...repenser le calcul et attendre les traps. fait des tests.
@@ -18,7 +20,8 @@ namespace CamelUpData
 {
     class Program
     {
-        private static string TextFileName = "/test.txt";
+	    private static string UnityCamelUpResultFolder = "/UnityResult";
+		private static string TextFileName = "/test.txt";
         private static DateTime m_StartingTime;
         private static Dictionary<string, List<Board>> m_BoardsByDiceOrder = new Dictionary<string, List<Board>>();
         private static List<Board> m_FinishBoard = new List<Board>();
@@ -32,17 +35,18 @@ namespace CamelUpData
             m_StartingTime = DateTime.Now;
             GameRules.Log("this is a test \n");
 
-            PopulatePattern();           
+			PopulatePattern(";A;B;C;D;E;");
 
-            Board test = new Board(";OBW;;");
-            //Board test = new Board(";GW");
+			//Board test = new Board(";OBW;;");
+			//Board test = new Board(";GW");
+			//Board test = new Board(";OBWGY");
 
-            //TestMultipleBoard();
-            //CustomTest();
-            //TestAnalyseBoard(test);
+			//TestMultipleBoard();
+			CustomTest(";O;B;W;YG;", TextFileName);	                      
+			//TestAnalyseBoard(test);
 
 
-            string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
+			string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
             GameRules.Log(log);
             GameRules.Log(m_FinishBoard.Count + "\n");
 
@@ -70,21 +74,21 @@ namespace CamelUpData
                 PopulateFinishBoard(aBoard.m_SubBoard[i]);
         }
 
-        private static void PopulatePattern()
+        private static void PopulatePattern(string aBoard)
         {
-            /*if(SaveManager.Instance.IsPatternSaved)
+           /* if(SaveManager.Instance.IsPatternSaved)
             {
                 GameRules.Patterns = SaveManager.Instance.Load();
                 return;
             }*/
 
-            TestPopulatePattern();
+            TestPopulatePattern(aBoard);
         }
 
-        private static void TestPopulatePattern()
+        private static void TestPopulatePattern(string aBoard)
         {
             PatternGenerator m_PatternGenerator = new PatternGenerator();
-            m_PatternGenerator.Init(";ABC;-");
+            m_PatternGenerator.Init(aBoard);
             bool isGeneratingPattern = true;
             while (isGeneratingPattern)
             {
@@ -140,11 +144,10 @@ namespace CamelUpData
             tw.Close();
         }
 
-        private static void CustomTest()
+        private static void CustomTest(string aBoard, string aName)
         {
-            string test = ";YBGW;;;;;O;";
-
-            Board board = new Board(test);
+	        m_BoardsByDiceOrder.Clear();
+			Board board = new Board(aBoard);
             PopulateBoardByDiceOrder(board);
             
             var list = m_BoardsByDiceOrder.Keys.ToList();
@@ -153,7 +156,6 @@ namespace CamelUpData
             List<string> log = new List<string>();
             //i = dice number 1-1-1-1-1
             //j = dice order  W-O-B-Y-G
-            HashSet<string> wrongDiceOrder = new HashSet<string>();
             for (int i = 0; i < diceNumberCount; i++)
             {
                 string newLog = string.Empty;
@@ -161,8 +163,6 @@ namespace CamelUpData
                 {
                     if (m_BoardsByDiceOrder[list[j]].Count <= i)
                     {
-                        List<Board> ttest = m_BoardsByDiceOrder[list[j]];
-                        wrongDiceOrder.Add(list[j]);
                         continue;
                     }
                     newLog += m_BoardsByDiceOrder[list[j]][i].ToStringOldCamelUpFormat() + "";
@@ -171,10 +171,12 @@ namespace CamelUpData
                 log.Add(newLog);
             }
 
-            TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + TextFileName, true);
+            TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + aName, true);
 
-            for(int i = 0; i < log.Count; i++)
-                tw.WriteLine(log[i] + "\t");
+	        for (int i = 0; i < log.Count; i++)
+	        {
+					tw.WriteLine(log[i] + "\t");
+	        }
 
             tw.Close();
         }
@@ -214,5 +216,26 @@ namespace CamelUpData
             boardAnal.SetCamelCard("B0O0W0Y0G0");
             GameRules.Log(boardAnal.ToString() + "\n");
         }
+	
+	    private static void TestBoardWithUnityCamelUp()
+	    {
+		    //Ne Marche pas ???? je ne sias pas pkoi
+			string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UnityCamelUpResultFolder);
+		    string filePostFix = "MYRESULT";
+			
+			for (int i = 0; i < 1/*files.Length*/; i++)
+			{
+				if (files[i].Contains(filePostFix) || files[i].Contains(TextFileName))
+					continue;
+				m_BoardsByDiceOrder.Clear();
+
+				string[] tempString = files[i].Split('/');
+			    string board = tempString[tempString.Length - 1];
+			    board = board.Remove(0,UnityCamelUpResultFolder.Length);
+			    board = board.Substring(0, board.Length - 4);
+
+			    CustomTest(board, UnityCamelUpResultFolder + "/" + board + filePostFix + ".txt");
+		    }			
+	    }
     }
 }
