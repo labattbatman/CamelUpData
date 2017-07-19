@@ -1,0 +1,37 @@
+
+
+2017/04/10 ~5h 2/sessions (CGI)
+					-Fini Save/Load Pattern
+					-Commencer UpdateSubBoard with Pattern
+
+2017/03/06 ~2h30 2/sessions
+					-planification écrite: 2017-03-06_Note_1 2017-03-06_Note_2 2017-03-06_Note_3
+
+2017/03/01 ~1h30/ 2sessions
+					-J'ai commencé à séparer les patterns.
+					-Encore des bugs dans la séparation;
+					-Prochaine étape: github
+
+2017/02/2x - 2017/02/28 2.5h/6 session
+PatternGenerator    -Je loop pour trouver les patterns non-complêtés.
+					-J'ai pas reussi à tous les trouver sans bug.
+					-PatternDict_FIRST.txt:588mb avec bcp de pattern et resultats qui comment par: ";ABCDE". 
+					-Le fichier semblant bien mort, sans avoir fini avec la solution complête.
+					-Solution1: Changer les char en bytes et saver le tout en bytes.
+					-Solution2: Ma loop est infinie; Il faut séparer les patterns 
+					-PatternDict.txt: fichier avec 10k patterns qui comment par: ";ABCDE";
+					-Prochaine étape: github
+
+2017/02/19 ~ 3.5h/3 session
+SaveManager 		- Save/Load un Dictionary<string, Pattern>
+CamelMovement 		- Pris du code de Camelup. Fait avance les camels par un dés à la fois
+GameRules			- Magic Number. func: Result to Pattern 
+Pattern				- Id + results par dés/nb
+PatternGenerator	- TODO: boucle poru connaitre les patterns et saver tout ca
+
+
+	
+	
+	
+	
+					
