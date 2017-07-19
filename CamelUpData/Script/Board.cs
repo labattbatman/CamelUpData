@@ -63,10 +63,8 @@ public class Board
         {
             if (GameRules.IsCharPatternCamel(pattern[i]))
             {
-                int test = GameRules.PATTER_NAME_NUMBER(pattern[i]);
                 char camel = camels[GameRules.PATTER_NAME_NUMBER(pattern[i])];
                 pattern[i] = camel == aRolledCamel ? Char.ToLower(camel) : camel;
-                camels.Remove(0, 1);
             }
         }
 
@@ -189,9 +187,7 @@ public class Board
         for (int i = 0; i < BoardState.Length; i++)
         {
             if (GameRules.IsCharIdentityCamel(BoardState[i]))
-            {
                 board += GameRules.PATTERN_CAMEL_NAME[camelIndex++];
-            }
             else
                 board += BoardState[i];
         }
@@ -203,8 +199,13 @@ public class Board
 
         for (int i = 0; i < patterns.Count; i++)
         {
-            string camelIdentity = camels.Substring(camelsIndex, GameRules.Patterns[patterns[i]].NbCamel);
-            Pattern newPattern = new Pattern(GameRules.Patterns[patterns[i]], camelIdentity);
+	        if (!PatternGenerator.Instance.Patterns.ContainsKey(patterns[i]))
+	        {
+				PatternGenerator.Instance.StartGeneratePattern(patterns[i]);
+			}
+
+			string camelIdentity = camels.Substring(camelsIndex, PatternGenerator.Instance.Patterns[patterns[i]].NbCamel);
+            Pattern newPattern = new Pattern(PatternGenerator.Instance.Patterns[patterns[i]], camelIdentity);
             camelsIndex += newPattern.NbCamel;
             retval.Add(newPattern);
         }
@@ -267,8 +268,8 @@ public class Board
         for(int i = 0; i < m_SubBoard.Count; i++)
         {
             retval += m_SubBoard[i].ToString() ;
-        }
-        return BoardState;
+        }		
+
         return retval;
     }
 

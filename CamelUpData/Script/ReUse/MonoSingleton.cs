@@ -39,10 +39,13 @@ public abstract class MonoSingleton<T> where T : MonoSingleton<T>, new()
             if (_instance == null)
             {
                 _instance = new T();
+	            _instance.Init();
             }
 
             return _instance;
         }
     }
+
+	protected virtual void Init() { }
 }
 #endif

@@ -132,8 +132,6 @@ public class GameRules
     }
     #endregion
 
-    public static Dictionary<string, Pattern> Patterns = new Dictionary<string, Pattern>();
-
     //todo find another place
     public static List<string> PatternResultToPattern(string result)
     {

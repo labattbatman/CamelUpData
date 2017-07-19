@@ -25,6 +25,6 @@ C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\o
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\bin\Debug\CamelUpData.exe.config
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\bin\Debug\CamelUpData.exe
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\bin\Debug\CamelUpData.pdb
-C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.csprojResolveAssemblyReference.cache
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.exe
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.pdb
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll

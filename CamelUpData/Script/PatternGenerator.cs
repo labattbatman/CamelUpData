@@ -1,22 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-public class PatternGenerator
+public class PatternGenerator : MonoSingleton<PatternGenerator>
 {
     private readonly double m_AllowedTimeByFrame = 16d;
     private readonly int m_PatternDiscoveredToSave = 10000;
 
-    private int m_PatternDiscoveredSinceSave;
     private Stopwatch m_Stopwatch = new Stopwatch();
 
     private List<string> m_PatternsToDiscover = new List<string>();
     private List<Pattern> m_PatternsDiscoveredButNotSaved = new List<Pattern>();
-    public Dictionary<string, Pattern> m_Patterns = new Dictionary<string, Pattern>();
+    private Dictionary<string, Pattern> m_Patterns = new Dictionary<string, Pattern>();
 
-    public int PatternsCount { get { return m_Patterns.Count; } }
+	public Dictionary<string, Pattern> Patterns { get { return m_Patterns; } }
+
+	public int PatternsCount { get { return m_Patterns.Count; } }
     public int RemainingPatternsToDiscover { get { return m_PatternsToDiscover.Count; } }
 
-    private Pattern PopulatePatternDict(string aParttern)
+	protected override void Init()
+	{
+		base.Init();
+
+		if (SaveManager.Instance.IsPatternSaved)
+		{
+			m_Patterns = SaveManager.Instance.Load();
+		}
+	}
+
+	private Pattern PopulatePatternDict(string aParttern)
     {
         Pattern newPattern = GeneratePatternData(aParttern);
 
@@ -76,12 +87,7 @@ public class PatternGenerator
         m_PatternsDiscoveredButNotSaved.Clear();
     }
 
-    public void Init(string aInitialBoard)
-    {
-        m_PatternsToDiscover.Add(aInitialBoard);
-    }
-
-    public void Update()
+    private void Update()
     {
         m_Stopwatch.Reset();
         GeneratePatterns();
@@ -91,4 +97,23 @@ public class PatternGenerator
     {
         SaveNewPatterns();
     }
+
+	public void StartGeneratePattern(string aInitialBoard)
+	{
+		m_PatternsToDiscover.Add(aInitialBoard);
+
+		bool isGeneratingPattern = true;
+		while (isGeneratingPattern)
+		{
+			if (RemainingPatternsToDiscover > 0)
+			{
+				Update();
+			}
+			else
+			{
+				isGeneratingPattern = false;
+				SaveLastPatterns();
+			}
+		}
+	}
 }
