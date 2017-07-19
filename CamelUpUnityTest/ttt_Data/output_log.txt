@@ -6,28 +6,28 @@ Direct3D:
     Vendor:   NVIDIA
     VRAM:     3072 MB
 Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
-Loading C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.041 seconds
-Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpUnityTest\ttt_Data\Managed\System.dll (this message is harmless)
+Platform assembly: C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.039 seconds
+Platform assembly: C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\alexis\Desktop\TEST\ttt_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1200 59Hz; virtual: 3840x1200 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 0.608856 ms
+UnloadTime: 0.643942 ms
 
-Green: 	First 11/18 0.61  	Second 07/18 0.39  	Third 00/18 0.00  	Fourth 00/18 0.00  	Fifth 00/18 0.00  	
-Blue: 	First 07/18 0.39  	Second 11/18 0.61  	Third 00/18 0.00  	Fourth 00/18 0.00  	Fifth 00/18 0.00  	
-Orange: 	First 00/18 0.00  	Second 00/18 0.00  	Third 18/18 1.00  	Fourth 00/18 0.00  	Fifth 00/18 0.00  	
-White: 	First 00/18 0.00  	Second 00/18 0.00  	Third 00/18 0.00  	Fourth 18/18 1.00  	Fifth 00/18 0.00  	
-Yellow: 	First 00/18 0.00  	Second 00/18 0.00  	Third 00/18 0.00  	Fourth 00/18 0.00  	Fifth 18/18 1.00  	
+Orange: 	First 7709/29160 0.26  	Second 6735/29160 0.23  	Third 5682/29160 0.19  	Fourth 4922/29160 0.17  	Fifth 4112/29160 0.14  	
+Green: 	First 7166/29160 0.25  	Second 6767/29160 0.23  	Third 7111/29160 0.24  	Fourth 5679/29160 0.19  	Fifth 2437/29160 0.08  	
+White: 	First 7062/29160 0.24  	Second 6069/29160 0.21  	Third 5436/29160 0.19  	Fourth 5275/29160 0.18  	Fifth 5318/29160 0.18  	
+Blue: 	First 5294/29160 0.18  	Second 5358/29160 0.18  	Third 5897/29160 0.20  	Fourth 6491/29160 0.22  	Fifth 6120/29160 0.21  	
+Yellow: 	First 1929/29160 0.07  	Second 4231/29160 0.15  	Third 5034/29160 0.17  	Fourth 6793/29160 0.23  	Fifth 11173/29160 0.38  	
 
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
@@ -35,12 +35,13 @@ Yellow: 	First 00/18 0.00  	Second 00/18 0.00  	Third 00/18 0.00  	Fourth 00/18 
 
 - Green 4 
 - Blue 3 
-- Orange 2 DiceIsRoll 
-- White 2 DiceIsRoll sous ->Orange 
-- Yellow 2 DiceIsRoll sous ->White 
+- Orange 2 
+- White 2 sous ->Orange 
+- Yellow 2 sous ->White 
+- Trap: + 6 
 
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 42)
 
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 2d1c -> priority: 1 
+  Thread -> id: ba58 -> priority: 1 
