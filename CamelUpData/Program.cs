@@ -6,13 +6,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 //TODO MAIN
-//Test les +
-//Faire les - et tester
+//Test les + (ya un bug avec CamelUpUnity)
+//Tester les -
 
-//Tester avec CamelUpUnityTest les traps: Va falloir faire 2e facon pour les minus traps
 //Pour les positions des traps...repenser le calcul et attendre les traps. fait des tests.
 //Long terme decision. Tester sur un bon ordi le temps
 //Merge avec CamelUpUnity pour le visuel
+//GameRules.IS_SHUTTLE_WHEN_HITTING_MINUS_TRAP. Je le fais????
 
 
 namespace CamelUpData
@@ -33,7 +33,7 @@ namespace CamelUpData
             m_StartingTime = DateTime.Now;
             GameRules.Log("this is a test \n");
 
-			CustomTest(";O;B;W;Y;G;+;", TextFileName);
+	        CustomTest(";YG;;", TextFileName);
 			//TestAnalyseBoard(test);
 
 			string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);

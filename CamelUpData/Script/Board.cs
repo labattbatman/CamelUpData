@@ -10,7 +10,36 @@ public class Board
 
     public string BoardState { get; private set; }
     public int[] CasesLandedOn { get; private set; }
-    public string DicesHistory { get; private set; } //Start from initial board. Used for debugging
+
+	public string HighestCaseLandedOn
+	{
+		get
+		{
+			int highestCase = 0;
+
+			for(int i = 1; i < CasesLandedOn.Length; i++)
+				if (CasesLandedOn[i] > CasesLandedOn[highestCase])
+					highestCase = i;
+
+			return string.Format("Case: {0}. Time: {1}" ,highestCase, CasesLandedOn[highestCase]);
+		}
+	}
+
+	public int HighestTimeLandedOnSameCase
+	{
+		get
+		{
+			int highest = 0;
+
+			for (int i = 1; i < CasesLandedOn.Length; i++)
+				if (CasesLandedOn[i] > highest)
+					highest = CasesLandedOn[i];
+
+			return highest;
+		}
+	}
+
+	public string DicesHistory { get; private set; } //Start from initial board. Used for debugging
 
     private Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
     public List<Board> m_SubBoard = new List<Board>();   
@@ -78,13 +107,9 @@ public class Board
         DicesHistory = aDicesHistory;
         CasesLandedOn = (int[])aInitialBoard.CasesLandedOn.Clone();
 
-        int camelIndex = BoardState.IndexOf(Char.ToLower(aRolledCamel));
-        if (BoardState[camelIndex - 1] == GameRules.CASE_SEPARATOR)
-        {
-            int caseLanded = GetCamelPos(aRolledCamel);
-            if(caseLanded < CasesLandedOn.Length)
-                CasesLandedOn[caseLanded]++;
-        }
+        int caseLanded = GetCamelPos(aRolledCamel);
+        if(caseLanded < CasesLandedOn.Length)
+            CasesLandedOn[caseLanded]++;
 
         PopulateNeighbouring();
 
@@ -166,7 +191,7 @@ public class Board
                 rolledCamel += unRollCamel[j];
                 for (int k = 0; k < results.Count; k++)
                 {
-                    string dicesHistory = DicesHistory + unrollCamel;
+                    string dicesHistory = DicesHistory + unrollCamel + (k + 1);
                     Board subBoard = new Board(this, results[k], unrollCamel, dicesHistory);
                     m_SubBoard.Add(subBoard);
                     CamelUpData.Program.HardPopulateFinishBoard(subBoard);
@@ -263,7 +288,7 @@ public class Board
         string retval = string.Empty;
 
         if(GetUnrolledCamelByRank().Length == 0)
-            retval += BoardState + "->" + DicesHistory + "\n";
+            retval += BoardState + "->" + DicesHistory + " " + HighestCaseLandedOn + "\n";
 
         for(int i = 0; i < m_SubBoard.Count; i++)
         {

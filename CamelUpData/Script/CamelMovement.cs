@@ -144,9 +144,16 @@ public class CamelsMovement
 
             if (!string.IsNullOrEmpty(camelsOnPos))
             {
-                aCamel.CamelOnTop = GetCurrentCamel(camelsOnPos[camelsOnPos.Length - 1]);
+				Camel test = aCamel;
 
-                if (aCamel.CamelOnTop == null || aCamel.CamelOnTop == aCamel)
+	            while (test.CamelOnTop != null)
+	            {
+		            test = test.CamelOnTop;
+	            }
+
+	            test.CamelOnTop = GetCurrentCamel(camelsOnPos[camelsOnPos.Length - 1]);
+
+				if (aCamel.CamelOnTop == null || aCamel.CamelOnTop == aCamel)
                     GameRules.Log("Peut etre un bug....");
             }               
         }
@@ -298,9 +305,7 @@ public class CamelsMovement
         {
             if(m_Traps[i].Pos == aCamel.Pos)
             {
-                //TODO Trap: check minus test && IS_SHUTTLE_WHEN_HITTING_MINUS_TRAP
                 int modifMovement = m_Traps[i].IsPlusTrap ? GameRules.TRAP_PLUS_MODIFIER : GameRules.TRAP_MINUS_MODIFIER;
-                //MoveCamel(aCamel, modifMovement, true);
 	            aCamel.Pos += modifMovement;
 	            CheckCamelLandOnAnotherCamel(aCamel, modifMovement < 0);
 			}
@@ -319,11 +324,12 @@ public class CamelsMovement
 
 		IsLandingOnTrap(aCamel);
 
-		CheckCamelLandOnAnotherCamel(aCamel, aDice < 0);		
+		Camel camelOnTop = aCamel.CamelOnTop;
 
-		if (aCamel.CamelOnTop != null && aDice > 0)
+		while (camelOnTop != null)
 		{
-			MoveCamel(aCamel.CamelOnTop, aDice, false);
+			camelOnTop.Pos = aCamel.Pos;
+			camelOnTop = camelOnTop.CamelOnTop;
 		}
 
 		aCamel.IsMoving = false;
