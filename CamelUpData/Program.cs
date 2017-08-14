@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 //Test les + (ya un bug avec CamelUpUnity)
 //Tester les -
 
+//Faire Roll dice decision
 //Pour les positions des traps...repenser le calcul et attendre les traps. fait des tests.
 //Long terme decision. Tester sur un bon ordi le temps
 //Merge avec CamelUpUnity pour le visuel
@@ -22,7 +23,8 @@ namespace CamelUpData
     {
 	    private static string UNITY_CAMELUP_RESULT_FOLDER = "/UnityResult";
 		private static string TEXT_FILE_NAME = "/test.txt";
-        private static DateTime m_StartingTime;
+	    private static string BOARD_ANALYZER_FILE_NAME = "/analyzer.txt";
+		private static DateTime m_StartingTime;
         private static Dictionary<string, List<Board>> m_BoardsByDiceOrder = new Dictionary<string, List<Board>>();
         private static List<Board> m_FinishBoard = new List<Board>();
 
@@ -33,8 +35,8 @@ namespace CamelUpData
             m_StartingTime = DateTime.Now;
             GameRules.Log("this is a test \n");
 
-	        CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
-			//TestAnalyseBoard(new Board(";Y;GWB;O;;"));
+	        //CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
+			TestAnalyseBoard(new Board(";Y;gwb;O;;"));
 
 			string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
             GameRules.Log(log);
@@ -121,7 +123,11 @@ namespace CamelUpData
         {
             BoardAnalyzer boardAnal = new BoardAnalyzer(aBoard, "B0O0W0Y0G0");
             GameRules.Log(boardAnal + "\n");
-        }
+
+	        TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + BOARD_ANALYZER_FILE_NAME, false);
+	        tw.Write(boardAnal.ToStringLong());
+	        tw.Close();
+		}
 
 	    public static void HardPopulateFinishBoard(Board aBoard)
         {
