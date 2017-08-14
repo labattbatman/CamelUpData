@@ -1,39 +1,30 @@
+using System;
 using System.Collections.Generic;
 
 public class BoardAnalyzer
 {
-    public Dictionary<char, CamelRank> m_CamelRanks = new Dictionary<char, CamelRank>();
+	public Ev[] m_Evs = new Ev[Enum.GetNames(typeof(GameRules.PlayerAction)).Length];
 
-    private Dictionary<char, int> m_CamelCard = new Dictionary<char, int>();
-    private int[] m_CasesLandedOn { get; set; }
-    private int m_TotalCasesLandedOn { get; set; }
+    private Dictionary<char, CamelRank> m_CamelRanks = new Dictionary<char, CamelRank>();
+	private Dictionary<char, int> m_CamelCard = new Dictionary<char, int>();
+	private Board m_Board;
+	private List<Board> m_FinishBoards = new List<Board>();
 
-    public BoardAnalyzer(List<Board> aFinishBoard)
+	private int[] m_CasesLandedOn { get; set; }
+	private int m_TotalCasesLandedOn { get; set; }
+
+    public BoardAnalyzer(Board aBoard, string aCards)
     {
-        CreateCamelRanks(aFinishBoard[0].GetRank().ToLower());
-        m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
-
-        for (int i = 0; i < aFinishBoard.Count; i++)
-        {
-            string rank = aFinishBoard[i].GetRank().ToLower();
-
-            for (int j = 0; j < rank.Length; j++)
-            {
-                int currentRank = rank.Length - j - 1;
-                m_CamelRanks[rank[j]].UpdateFinish(currentRank);
-            }
-
-            for (int j = 0; j < aFinishBoard[i].CasesLandedOn.Length; j++)
-                m_CasesLandedOn[j] += aFinishBoard[i].CasesLandedOn[j];
-        }
-
-        m_TotalCasesLandedOn = 0;
-
-        for (int i = 0; i < m_CasesLandedOn.Length; i++)
-            m_TotalCasesLandedOn += m_CasesLandedOn[i];
+	    m_Board = aBoard;
+		CreateCamelRanks();
+	    PopulateFinishBoard(m_Board);
+		m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
+	    SetCamelCard(aCards);
+	    PopulateCamelsRank();
+	    GenerateEvs();
     }
 
-    public void SetCamelCard(string aCards)
+    private void SetCamelCard(string aCards)
     {
         //Format: B0O1W2Y0G0
         for(int i = 0; i < aCards.Length; i += 2)
@@ -47,31 +38,112 @@ public class BoardAnalyzer
         }
     }
 
-    private void CreateCamelRanks(string aCamels)
+	private void PopulateFinishBoard(Board aBoard)
+	{
+		if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
+			m_FinishBoards.Add(aBoard);
+
+		for (int i = 0; i < aBoard.m_SubBoard.Count; i++)
+			PopulateFinishBoard(aBoard.m_SubBoard[i]);
+	}
+
+	private void CreateCamelRanks()
     {
-        for(int i = 0; i < aCamels.Length; i++)
+	    string camels = m_Board.GetRank().ToLower();
+
+		for (int i = 0; i < camels.Length; i++)
         {
-            m_CamelRanks.Add(aCamels[i], new CamelRank(aCamels[i]));
+            m_CamelRanks.Add(camels[i], new CamelRank(camels[i]));
         }
     }
 
-    private int GetHighLandedCase()
-    {
-        int retval = 0;
+	private void PopulateCamelsRank()
+	{
+		for (int i = 0; i < m_FinishBoards.Count; i++)
+		{
+			string rank = m_FinishBoards[i].GetRank().ToLower();
 
-        for(int i = 0; i < m_CasesLandedOn.Length; i++)
-        {
-            if (m_CasesLandedOn[i] > m_CasesLandedOn[retval])
-                retval = i;
-        }
+			for (int j = 0; j < rank.Length; j++)
+			{
+				int currentRank = rank.Length - j - 1;
+				m_CamelRanks[rank[j]].UpdateFinish(currentRank);
+			}
 
-        return retval;
-    }
+			if (m_FinishBoards[i].m_SubBoard.Count == 0)
+			{
+				m_TotalCasesLandedOn++;
+				for (int j = 0; j < m_FinishBoards[i].CasesLandedOn.Length; j++)
+				{
+					m_CasesLandedOn[j] += m_FinishBoards[i].CasesLandedOn[j];
+				}
+			}
+		}
+	}
 
-    private float GetEvForCase(int aCase)
-    {      
-        return (float)m_CasesLandedOn[aCase] / (float)m_TotalCasesLandedOn * GameRules.TRAP_REWARD;
-    }
+	private void GenerateEvs()
+	{
+		//Hardcoder??? meilleur facon?
+		m_Evs[0] = GenerateShortTermCardEv();
+		m_Evs[1] = GeneratePutTrapEv();
+		m_Evs[2] = GenerateLongTermCardEv();
+		m_Evs[3] = GenerateRollDiceEv();
+	}
+
+	private Ev GenerateShortTermCardEv()
+	{	
+		char highestCard = 'Z';
+		float highestEv = -10;
+		foreach (var camelRank in m_CamelRanks)
+		{
+			float current = camelRank.Value.EVShortTerm(m_CamelCard[char.ToUpper(camelRank.Key)]);
+			if (current > highestEv)
+			{
+				highestCard = camelRank.Key;
+				highestEv = current;
+			}
+		}
+
+		Ev retval = new Ev();
+		retval.m_PlayerAction = GameRules.PlayerAction.PickShortTermCard;
+		retval.m_Ev = highestEv;
+		retval.m_Info = highestCard;
+		return retval;
+	}
+
+	private Ev GeneratePutTrapEv()
+	{
+		int highestCaseLandedOn = 0;
+
+		for (int i = 0; i < m_CasesLandedOn.Length; i++)
+		{
+			if (m_CasesLandedOn[i] > m_CasesLandedOn[highestCaseLandedOn])
+				highestCaseLandedOn = i;
+		}
+
+		Ev retval = new Ev();
+		retval.m_PlayerAction = GameRules.PlayerAction.PutTrap;
+		retval.m_Ev = (float)m_CasesLandedOn[highestCaseLandedOn] / (float)m_TotalCasesLandedOn * GameRules.TRAP_REWARD; ;
+		retval.m_Info = highestCaseLandedOn;
+		return retval;
+	}
+
+	private Ev GenerateLongTermCardEv()
+	{
+		Ev retval = new Ev();
+		retval.m_PlayerAction = GameRules.PlayerAction.PickLongTermCard;
+		retval.m_Ev = -100;
+		retval.m_Info = "TODO!!!!!!";
+		return retval;
+	}
+
+	private Ev GenerateRollDiceEv()
+	{
+		Ev retval = new Ev();
+		retval.m_PlayerAction = GameRules.PlayerAction.RollDice;
+		retval.m_Ev = -100;
+		retval.m_Info = "TODO!!!!!!";
+		return retval;
+	}
 
     public override string ToString()
     {
@@ -81,12 +153,15 @@ public class BoardAnalyzer
         {
             char camel = char.ToUpper(camelRank.Key);
             int cardNb = m_CamelCard.ContainsKey(camel) ? m_CamelCard[camel] : 0;
-            retval += camelRank.Value.EVShortTerm(cardNb) + " " + camelRank.ToString() + "\n";
+            retval += camelRank.Value.EVShortTerm(cardNb).ToString("N2") + " " + camelRank.ToString() + "\n";
         }
-        int highestCase = GetHighLandedCase();
-        retval += string.Format("$$Case = {0}: EV: {1} TotalLanded: {2} \n", highestCase, GetEvForCase(highestCase), m_TotalCasesLandedOn);
 
-        return retval;
+	    retval += string.Format("\nHighest card short term is: {0} avec ev: {1}\n", GameRules.FullNameCamel((char)m_Evs[0].m_Info), m_Evs[0].m_Ev.ToString("N2"));
+        retval += string.Format("HighestCase = {0}: EV: {1} TotalLanded: {2} \n", m_Evs[1].m_Info, m_Evs[1].m_Ev.ToString("N2"), m_TotalCasesLandedOn);
+		retval += string.Format("Highest card long term is: {0} avec ev: {1}\n", m_Evs[2].m_Info, m_Evs[2].m_Ev.ToString("N2"));
+	    retval += string.Format("RollDice ev: {0}. {1}\n", m_Evs[3].m_Ev.ToString("N2"), m_Evs[3].m_Info);
+
+		return retval;
     }
 }
 
@@ -135,4 +210,11 @@ public class CamelRank
         return retval;
     }
 
+}
+
+public struct Ev
+{
+	public GameRules.PlayerAction m_PlayerAction;
+	public float m_Ev;
+	public object m_Info;
 }

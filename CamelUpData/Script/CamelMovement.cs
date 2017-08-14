@@ -144,14 +144,14 @@ public class CamelsMovement
 
             if (!string.IsNullOrEmpty(camelsOnPos))
             {
-				Camel test = aCamel;
+				Camel toppestCamel = aCamel;
 
-	            while (test.CamelOnTop != null)
+	            while (toppestCamel.CamelOnTop != null)
 	            {
-		            test = test.CamelOnTop;
+		            toppestCamel = toppestCamel.CamelOnTop;
 	            }
 
-	            test.CamelOnTop = GetCurrentCamel(camelsOnPos[camelsOnPos.Length - 1]);
+	            toppestCamel.CamelOnTop = GetCurrentCamel(camelsOnPos[camelsOnPos.Length - 1]);
 
 				if (aCamel.CamelOnTop == null || aCamel.CamelOnTop == aCamel)
                     GameRules.Log("Peut etre un bug....");

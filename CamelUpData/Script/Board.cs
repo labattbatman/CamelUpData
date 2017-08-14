@@ -191,11 +191,11 @@ public class Board
                 rolledCamel += unRollCamel[j];
                 for (int k = 0; k < results.Count; k++)
                 {
-                    string dicesHistory = DicesHistory + unrollCamel + (k + 1);
+	                //string dicesHistory = DicesHistory + unrollCamel + (k + 1); Ca faut bugger TestMethod
+					string dicesHistory = DicesHistory + unrollCamel;
                     Board subBoard = new Board(this, results[k], unrollCamel, dicesHistory);
                     m_SubBoard.Add(subBoard);
-                    CamelUpData.Program.HardPopulateFinishBoard(subBoard);
-                }
+				}
             }
 
             for (int j = 0; j < rolledCamel.Length; j++)

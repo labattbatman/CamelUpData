@@ -20,7 +20,7 @@ public class PatternGenerator : MonoSingleton<PatternGenerator>
 	protected override void Init()
 	{
 		base.Init();
-
+		
 		if (SaveManager.Instance.IsPatternSaved)
 		{
 			m_Patterns = SaveManager.Instance.Load();

@@ -20,8 +20,8 @@ namespace CamelUpData
 	[TestClass]
     public class Program
     {
-	    private static string UnityCamelUpResultFolder = "/UnityResult";
-		private static string TextFileName = "/test.txt";
+	    private static string UNITY_CAMELUP_RESULT_FOLDER = "/UnityResult";
+		private static string TEXT_FILE_NAME = "/test.txt";
         private static DateTime m_StartingTime;
         private static Dictionary<string, List<Board>> m_BoardsByDiceOrder = new Dictionary<string, List<Board>>();
         private static List<Board> m_FinishBoard = new List<Board>();
@@ -33,8 +33,8 @@ namespace CamelUpData
             m_StartingTime = DateTime.Now;
             GameRules.Log("this is a test \n");
 
-	        CustomTest(";YG;;", TextFileName);
-			//TestAnalyseBoard(test);
+	        CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
+			//TestAnalyseBoard(new Board(";Y;GWB;O;;"));
 
 			string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
             GameRules.Log(log);
@@ -42,17 +42,6 @@ namespace CamelUpData
 
             GameRules.Log("test is over \n");
             Console.ReadKey();
-        }
-
-        public static void HardPopulateFinishBoard(Board aBoard)
-        {
-            //if (aBoard.IsCamelReachEnd)
-            {
-                m_FinishBoard.Add(aBoard);
-
-                if (m_FinishBoard.Count % 100000 == 0)
-                   GameRules.Log(m_FinishBoard.Count + "\n");
-            }
         }
 
         private static void PopulateFinishBoard(Board aBoard)
@@ -68,7 +57,9 @@ namespace CamelUpData
         {
 	        m_BoardsByDiceOrder.Clear();
 			Board board = new Board(aBoard);
-            PopulateBoardByDiceOrder(board);
+	        PopulateFinishBoard(board);
+
+			PopulateBoardByDiceOrder(board);
             
             var list = m_BoardsByDiceOrder.Keys.ToList();
             list.Sort();
@@ -121,23 +112,32 @@ namespace CamelUpData
 
         private static void EraseTextFile()
         {
-            TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + TextFileName, false);
+            TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + TEXT_FILE_NAME, false);
             tw.Write(String.Empty);
             tw.Close();
         }
 
         private static void TestAnalyseBoard(Board aBoard)
         {
-            PopulateFinishBoard(aBoard);
-            BoardAnalyzer boardAnal = new BoardAnalyzer(m_FinishBoard);
-            boardAnal.SetCamelCard("B0O0W0Y0G0");
+            BoardAnalyzer boardAnal = new BoardAnalyzer(aBoard, "B0O0W0Y0G0");
             GameRules.Log(boardAnal + "\n");
         }
 
-	    [TestMethod]
+	    public static void HardPopulateFinishBoard(Board aBoard)
+        {
+            //if (aBoard.IsCamelReachEnd)
+            {		
+                m_FinishBoard.Add(aBoard);
+
+	                if (m_FinishBoard.Count % 100000 == 0)
+	                   GameRules.Log(m_FinishBoard.Count + "\n");
+            }
+        }
+
+[TestMethod]
 	    public void TestBoards()
 	    {
-		    string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UnityCamelUpResultFolder);
+		    string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
 
 			//PopulatePattern(";A;B;C;D;E;");
 
@@ -147,22 +147,22 @@ namespace CamelUpData
 				    continue;
 
 			    EraseTextFile();
-				CustomTest(Path.GetFileNameWithoutExtension(file), TextFileName);
+				CustomTest(Path.GetFileNameWithoutExtension(file), TEXT_FILE_NAME);
 
 				string[] compared = File.ReadAllLines(file);
-				string[] result = File.ReadAllLines(Directory.GetCurrentDirectory() + "/" + TextFileName);
+				string[] result = File.ReadAllLines(Directory.GetCurrentDirectory() + "/" + TEXT_FILE_NAME);
 
-				Assert.AreEqual(compared.Length, result.Length);
+				Assert.AreEqual(compared.Length, result.Length, string.Format("Fail at {0}", Path.GetFileNameWithoutExtension(file)));
 				
 				for(int i = 0; i < compared.Length; i++)
-					Assert.AreEqual(compared[i], result[i]);
+					Assert.AreEqual(compared[i], result[i], string.Format("Fail at {0}", Path.GetFileNameWithoutExtension(file)));
 			}	    
 		}
 
 	    [TestMethod]
 	    public void TestBoardHardcoder()
 	    {
-		    string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UnityCamelUpResultFolder);
+		    string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
 
 		    foreach (var file in files)
 		    {
@@ -170,10 +170,10 @@ namespace CamelUpData
 				    continue;
 
 			    EraseTextFile();
-			    CustomTest(Path.GetFileNameWithoutExtension(file), TextFileName);
+			    CustomTest(Path.GetFileNameWithoutExtension(file), TEXT_FILE_NAME);
 
 			    string[] compared = File.ReadAllLines(file);
-			    string[] result = File.ReadAllLines(Directory.GetCurrentDirectory() + "/" + TextFileName);
+			    string[] result = File.ReadAllLines(Directory.GetCurrentDirectory() + "/" + TEXT_FILE_NAME);
 
 			    Assert.AreEqual(compared.Length, result.Length);
 
