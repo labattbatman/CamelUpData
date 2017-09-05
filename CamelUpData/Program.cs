@@ -5,12 +5,13 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-//TODO MAIN
+//TODO fait à moitié
 //Test les + (ya un bug avec CamelUpUnity)
 //Tester les -
-
 //Faire Roll dice decision
 //Pour les positions des traps...repenser le calcul et attendre les traps. fait des tests.
+
+//TODO MAIN
 //Long terme decision. Tester sur un bon ordi le temps
 //Merge avec CamelUpUnity pour le visuel
 //GameRules.IS_SHUTTLE_WHEN_HITTING_MINUS_TRAP. Je le fais????
@@ -36,7 +37,7 @@ namespace CamelUpData
             GameRules.Log("this is a test \n");
 
 	        //CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
-			TestAnalyseBoard(new Board(";Y;gwb;O;;"));
+			TestAnalyseBoard(new Board(";YGWBO;;"));
 
 			string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
             GameRules.Log(log);

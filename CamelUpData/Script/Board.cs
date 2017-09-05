@@ -5,9 +5,6 @@ using System.Text.RegularExpressions;
 
 public class Board
 {
-    public readonly bool POPULATE_SUBBOARD = true;
-    public readonly bool POPULATE_TILL_FINISH = false;
-
     public string BoardState { get; private set; }
     public int[] CasesLandedOn { get; private set; }
 
@@ -113,7 +110,7 @@ public class Board
 
         PopulateNeighbouring();
 
-        if (POPULATE_SUBBOARD && !IsCamelReachEnd)
+        if (GameRules.POPULATE_SUBBOARD && !IsCamelReachEnd)
             PopulateSubBoard();	    
     }
 
@@ -163,7 +160,7 @@ public class Board
 
         string unRollCamel = GetUnrolledCamelByRank();
         //TODO hardcoder pour short term seulement soit quand tous les dés sont lancées. (Pas de reroll)
-        aPopulateStillRaceEnd = POPULATE_TILL_FINISH;
+        aPopulateStillRaceEnd = GameRules.POPULATE_TILL_FINISH;
         if (String.IsNullOrEmpty(unRollCamel) && aPopulateStillRaceEnd)
         {        
             SetAllCamelUnroll();

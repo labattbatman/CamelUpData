@@ -27,7 +27,6 @@ public class BoardAnalyzer
 	    SetCamelCard();
 	    PopulateCamelsRank();
 	    GenerateEvs();
-	    int ttt = 0;
     }
 
     private void SetCamelCard()
@@ -109,10 +108,12 @@ public class BoardAnalyzer
 			}
 		}
 
-		Ev retval = new Ev();
-		retval.m_PlayerAction = GameRules.PlayerAction.PickShortTermCard;
-		retval.m_Ev = highestEv;
-		retval.m_Info = highestCard;
+		Ev retval = new Ev
+		{
+			m_PlayerAction = GameRules.PlayerAction.PickShortTermCard,
+			m_Ev = highestEv,
+			m_Info = highestCard
+		};
 		return retval;
 	}
 
@@ -126,34 +127,62 @@ public class BoardAnalyzer
 				highestCaseLandedOn = i;
 		}
 
-		Ev retval = new Ev();
-		retval.m_PlayerAction = GameRules.PlayerAction.PutTrap;
-		retval.m_Ev = (float)m_CasesLandedOn[highestCaseLandedOn] / (float)m_TotalCasesLandedOn * GameRules.TRAP_REWARD; ;
-		retval.m_Info = highestCaseLandedOn;
+		Ev retval = new Ev
+		{
+			m_PlayerAction = GameRules.PlayerAction.PutTrap,
+			m_Ev = (float) m_CasesLandedOn[highestCaseLandedOn] / (float) m_TotalCasesLandedOn * GameRules.TRAP_REWARD,
+			m_Info = highestCaseLandedOn
+		};
 		return retval;
 	}
 
 	private Ev GenerateLongTermCardEv()
 	{
-		Ev retval = new Ev();
-		retval.m_PlayerAction = GameRules.PlayerAction.PickLongTermCard;
-		retval.m_Ev = -100;
-		retval.m_Info = "TODO!!!!!!";
+		Ev retval = new Ev
+		{
+			m_PlayerAction = GameRules.PlayerAction.PickLongTermCard,
+			m_Ev = -100,
+			m_Info = "TODO!!!!!!"
+		};
 		return retval;
 	}
 
 	private Ev GenerateRollDiceEv()
 	{
+		Ev retval = new Ev
+		{
+			m_PlayerAction = GameRules.PlayerAction.RollDice,
+			m_Ev = GameRules.TRAP_REWARD,
+			m_Info = "TODO!!!!!!"
+		};
+
+		List<Ev> sortedEvs = GetSortedtEvs();
+		Ev ev = sortedEvs[0].m_PlayerAction != GameRules.PlayerAction.RollDice ? sortedEvs[0] : sortedEvs[1];
+		PopulateSubBoard();
+		
+		List<float> diffEv = new List<float>();
+
+		foreach (var sub in m_SubBoardAnalyzer)
+		{
+			diffEv.Add(ev.m_Ev - sub.GetSortedtEvs()[0].m_Ev);
+		}
+		float avgDiff = 0;
+
+		foreach (var diff in diffEv)
+			avgDiff += diff;
+
+		avgDiff = avgDiff / diffEv.Count;
+		//TODO CONTINUER
+
+		return retval;
+	}
+
+	private void PopulateSubBoard()
+	{
 		foreach (var board in m_initialBoard.m_SubBoard)
 		{
 			m_SubBoardAnalyzer.Add(new BoardAnalyzer(board, m_InitialCard));
 		}
-
-		Ev retval = new Ev();
-		retval.m_PlayerAction = GameRules.PlayerAction.RollDice;
-		retval.m_Ev = GameRules.TRAP_REWARD;
-		retval.m_Info = "TODO!!!!!!";
-		return retval;
 	}
 
     public override string ToString()
@@ -164,7 +193,7 @@ public class BoardAnalyzer
         {
             char camel = char.ToUpper(camelRank.Key);
             int cardNb = m_CamelCard.ContainsKey(camel) ? m_CamelCard[camel] : 0;
-            retval += camelRank.Value.EVShortTerm(cardNb).ToString("N2") + " " + camelRank.ToString() + "\n";
+            retval += camelRank.Value.EVShortTerm(cardNb).ToString("N2") + " " + camelRank + "\n";
         }
 
 	    retval += string.Format("\nHighest card short term is: {0} avec ev: {1}\n", GameRules.FullNameCamel((char)m_Evs[0].m_Info), m_Evs[0].m_Ev.ToString("N2"));
@@ -172,7 +201,7 @@ public class BoardAnalyzer
 		retval += string.Format("Highest card long term is: {0} avec ev: {1}\n", m_Evs[2].m_Info, m_Evs[2].m_Ev.ToString("N2"));
 	    retval += string.Format("RollDice ev: {0}. {1}\n", m_Evs[3].m_Ev.ToString("N2"), m_Evs[3].m_Info);
 
-	    Ev biggestEv = GetBiggestEv();
+	    Ev biggestEv = GetSortedtEvs()[0];
 		retval += string.Format("\nBiggestEv: {0} avec {1}. {2} \n", biggestEv.m_PlayerAction, biggestEv.m_Ev, biggestEv.m_Info);
 
 		return retval;
@@ -192,15 +221,17 @@ public class BoardAnalyzer
 		return retval;
 	}
 
-	public Ev GetBiggestEv()
+	public List<Ev> GetSortedtEvs()
 	{
-		Ev retval = new Ev();
+		List<Ev> retval = new List<Ev>();
 
 		foreach (var ev in m_Evs)
+			retval.Add(ev);
+
+		retval.Sort(delegate(Ev x, Ev y)
 		{
-			if (ev.m_Ev > retval.m_Ev)
-				retval = ev;
-		}
+			return y.m_Ev.CompareTo(x.m_Ev);
+		});
 
 		return retval;
 	}
