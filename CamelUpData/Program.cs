@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,20 +33,50 @@ namespace CamelUpData
         static void Main(string[] args)
         {
             EraseTextFile();
-
             m_StartingTime = DateTime.Now;
-            GameRules.Log("this is a test \n");
 
-	        //CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
-			TestAnalyseBoard(new Board(";YGWBO;;"));
+	        if (args.Length == 0)
+	        {
+				//CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
+				//TestAnalyseBoard(new Board(";YGWBO;;"), "B0O0W0Y0G0");
+		        UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
+				Console.ReadLine();
+			}
+	        else
+	        {
+				TestAnalyseBoard(new Board(args[0]), args[1]);
+	        }
 
-			string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
-            GameRules.Log(log);
-            GameRules.Log(m_FinishBoard.Count + "\n");
-
-            GameRules.Log("test is over \n");
-            Console.ReadKey();
+	        //string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
         }
+
+	    private static void UNITY_CallCamelUpExe(string aBoard, string aCards)
+	    {
+		    Process process = new Process();
+			try
+			{
+				process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+				process.StartInfo.CreateNoWindow = true;
+				process.StartInfo.UseShellExecute = false;
+				process.EnableRaisingEvents = true;
+				process.StartInfo.RedirectStandardOutput = true;
+
+				process.StartInfo.FileName = Directory.GetCurrentDirectory() + "/CamelUpData.exe";
+				process.StartInfo.Arguments = aBoard + " " + aCards;
+				
+				process.Start();
+
+				string result = process.StandardOutput.ReadToEnd();
+
+				GameRules.Log(string.Format("CamelEXE Result: {0}", result));
+				process.Close();
+			}
+			catch (Exception ex)
+			{
+				GameRules.Log(string.Format("CamelEXE Exception: {0}", ex.Message));
+				process.Close();
+			}
+		}
 
         private static void PopulateFinishBoard(Board aBoard)
         {
@@ -120,14 +151,14 @@ namespace CamelUpData
             tw.Close();
         }
 
-        private static void TestAnalyseBoard(Board aBoard)
+        private static void TestAnalyseBoard(Board aBoard, string aCards)
         {
-            BoardAnalyzer boardAnal = new BoardAnalyzer(aBoard, "B0O0W0Y0G0");
+            BoardAnalyzer boardAnal = new BoardAnalyzer(aBoard, aCards);
             GameRules.Log(boardAnal + "\n");
 
-	        TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + BOARD_ANALYZER_FILE_NAME, false);
+	        /*TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + BOARD_ANALYZER_FILE_NAME, false);
 	        tw.Write(boardAnal.ToStringLong());
-	        tw.Close();
+	        tw.Close();*/
 		}
 
 	    public static void HardPopulateFinishBoard(Board aBoard)

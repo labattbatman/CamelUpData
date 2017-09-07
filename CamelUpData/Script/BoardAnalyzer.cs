@@ -131,7 +131,7 @@ public class BoardAnalyzer
 		{
 			m_PlayerAction = GameRules.PlayerAction.PutTrap,
 			m_Ev = (float) m_CasesLandedOn[highestCaseLandedOn] / (float) m_TotalCasesLandedOn * GameRules.TRAP_REWARD,
-			m_Info = highestCaseLandedOn
+			m_Info = highestCaseLandedOn + " Minus Trap NOTE: Ce n'est pas la ev Exacte. Ne prendre pas en compte l'effet de la trap"
 		};
 		return retval;
 	}
@@ -153,7 +153,7 @@ public class BoardAnalyzer
 		{
 			m_PlayerAction = GameRules.PlayerAction.RollDice,
 			m_Ev = GameRules.TRAP_REWARD,
-			m_Info = "TODO!!!!!!"
+			m_Info = "NOTE: Pas le bon ev. Il faut prendre compte de l'info qu'on donne au prochain joueur"
 		};
 
 		List<Ev> sortedEvs = GetSortedtEvs();
@@ -187,7 +187,7 @@ public class BoardAnalyzer
 
     public override string ToString()
     {
-        string retval = m_initialBoard.BoardState + "\n";
+	    string retval = m_initialBoard.BoardState + "\n";
 
         foreach (var camelRank in m_CamelRanks)
         {
@@ -202,7 +202,7 @@ public class BoardAnalyzer
 	    retval += string.Format("RollDice ev: {0}. {1}\n", m_Evs[3].m_Ev.ToString("N2"), m_Evs[3].m_Info);
 
 	    Ev biggestEv = GetSortedtEvs()[0];
-		retval += string.Format("\nBiggestEv: {0} avec {1}. {2} \n", biggestEv.m_PlayerAction, biggestEv.m_Ev, biggestEv.m_Info);
+		retval += string.Format("\nBiggestEv: {0} avec {1}. {2} \n", biggestEv.m_PlayerAction, biggestEv.m_Ev.ToString("N2"), biggestEv.m_Info);
 
 		return retval;
     }
