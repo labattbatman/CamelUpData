@@ -96,7 +96,7 @@ namespace CamelUpData
 	        m_BoardsByDiceOrder.Clear();
 			Board board = new Board(aBoard);
 	        PopulateFinishBoard(board);
-			/*
+			
 			PopulateBoardByDiceOrder(board);
             
             var list = m_BoardsByDiceOrder.Keys.ToList();
@@ -127,7 +127,7 @@ namespace CamelUpData
 					tw.WriteLine(log[i].Remove(log[i].Length - 2));
 	        }
 
-            tw.Close();*/
+            tw.Close();
         }
 
         private static void PopulateBoardByDiceOrder(Board aBoard)
@@ -176,7 +176,7 @@ namespace CamelUpData
             }
         }
 
-[TestMethod]
+		[TestMethod]
 	    public void TestBoards()
 	    {
 		    string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
