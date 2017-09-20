@@ -98,7 +98,7 @@ public class Pattern
 
     private char CamelIdentityToPattern(char aIdentity)
     {
-        int idIndex = CamelsIdentity.IndexOf(aIdentity);
+        int idIndex = CamelsIdentity.ToUpper().IndexOf(char.ToUpper(aIdentity));
         int patternIndex = 0;
 
         for(int i = 0; i < Id.Length; i++)

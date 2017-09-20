@@ -38,8 +38,10 @@ public class Board
 
 	public string DicesHistory { get; private set; } //Start from initial board. Used for debugging
 
-    private Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
-    public List<Board> m_SubBoard = new List<Board>();   
+	private Dictionary<char, int> m_Position = new Dictionary<char, int>();
+	private Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
+    public List<Board> m_SubBoard = new List<Board>();
+	private string m_Rank = string.Empty;
 
 	private Board m_ParentBoard { get; set; } //Used for debugging
     
@@ -125,20 +127,22 @@ public class Board
 
     private int GetCamelPos(char aRolledCamel)
     {
-        int retval = 0;
-        for (int i = 0; i < BoardState.Length; i++)
-        {
-            if (Char.ToLower(BoardState[i]) == Char.ToLower(aRolledCamel))
-            {
-                return retval;
-            }
-            else if(BoardState[i] == GameRules.CASE_SEPARATOR)
-            {
-                retval++;
-            }
-        }
-
-        return -1;
+	    if (!m_Position.ContainsKey(aRolledCamel))
+	    {
+		    int retval = 0;
+		    for (int i = 0; i < BoardState.Length; i++)
+		    {
+			    if (Char.ToLower(BoardState[i]) == Char.ToLower(aRolledCamel))
+			    {
+					m_Position.Add(aRolledCamel, retval);
+				}
+			    else if (BoardState[i] == GameRules.CASE_SEPARATOR)
+			    {
+				    retval++;
+			    }
+		    }
+	    }
+	    return m_Position[aRolledCamel];
     }
 
     private void SetAllCamelUnroll()
@@ -178,7 +182,7 @@ public class Board
             for (int j = 0; j < pattern[i].NbCamel && j < unRollCamel.Length; j++)
             {
                 char unrollCamel = unRollCamel[j];
-                if (!pattern[i].CamelsIdentity.Contains(unrollCamel.ToString()))
+                if (!pattern[i].CamelsIdentity.ToUpper().Contains(unrollCamel.ToString().ToUpper()))
                 {
                     //GameRules.Log("TEST" + unrollCamel + "\n");
                     continue;
@@ -264,15 +268,17 @@ public class Board
         return GameRules.PATTERN_CAMEL_NAME[camelIndex];
     }
 
-    public string GetRank()
-    {
-        string retval = string.Empty;
-        for (int i = 0; i < BoardState.Length; i++)
-        {
-            if (GameRules.IsCharIdentityCamel(BoardState[i]))
-                retval += BoardState[i];
-        }
-        return retval;
+	public string GetRank()
+	{
+		if (string.IsNullOrWhiteSpace(m_Rank))
+		{
+			for (int i = 0; i < BoardState.Length; i++)
+			{
+				if (GameRules.IsCharIdentityCamel(BoardState[i]))
+					m_Rank += BoardState[i];
+			}
+		}
+		return m_Rank;
     }
 
     public bool IsCamelRolled(char aCamel)

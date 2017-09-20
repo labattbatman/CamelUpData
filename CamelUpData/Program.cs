@@ -37,17 +37,18 @@ namespace CamelUpData
 
 	        if (args.Length == 0)
 	        {
+				CustomTest(";O;;b;;w;;y;;G;", TEXT_FILE_NAME);
 				//CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
 				//TestAnalyseBoard(new Board(";YGWBO;;"), "B0O0W0Y0G0");
-		        UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
+				//UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
+		        string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
+				GameRules.Log(log);
 				Console.ReadLine();
 			}
 	        else
 	        {
 				TestAnalyseBoard(new Board(args[0]), args[1]);
 	        }
-
-	        //string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
         }
 
 	    private static void UNITY_CallCamelUpExe(string aBoard, string aCards)
@@ -80,19 +81,22 @@ namespace CamelUpData
 
         private static void PopulateFinishBoard(Board aBoard)
         {
-            if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
+	        //if (m_FinishBoard.Count % 7000 == 0)
+		    //    GameRules.Log(m_FinishBoard.Count.ToString());
+
+			if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
                 m_FinishBoard.Add(aBoard);
 
             for (int i = 0; i < aBoard.m_SubBoard.Count; i++)
                 PopulateFinishBoard(aBoard.m_SubBoard[i]);
-        }
+		}
 
         private static void CustomTest(string aBoard, string aFileName)
         {
 	        m_BoardsByDiceOrder.Clear();
 			Board board = new Board(aBoard);
 	        PopulateFinishBoard(board);
-
+			/*
 			PopulateBoardByDiceOrder(board);
             
             var list = m_BoardsByDiceOrder.Keys.ToList();
@@ -123,7 +127,7 @@ namespace CamelUpData
 					tw.WriteLine(log[i].Remove(log[i].Length - 2));
 	        }
 
-            tw.Close();
+            tw.Close();*/
         }
 
         private static void PopulateBoardByDiceOrder(Board aBoard)

@@ -19,11 +19,11 @@ public class GameRules
 	}
 
 	public static readonly bool POPULATE_SUBBOARD = true;
-	public static readonly bool POPULATE_TILL_FINISH = false;
+	public static readonly bool POPULATE_TILL_FINISH = true;
 
 	#region Game Rules
 	public static readonly int DICE_NB_FACES = 3;
-    public static readonly int CASE_NUMBER = 20;
+	public static readonly int CASE_NUMBER = 11;
 
     public static readonly int[] SHORT_TERM_FIRST_PRICE = new int[] { 5, 3, 2 };
     public static readonly int SHORT_TERM_SECOND_PRICE = 1;
@@ -62,7 +62,6 @@ public class GameRules
         {
             if (String.IsNullOrEmpty(m_PatternCamelNames))
             {
-                string retval = string.Empty;
                 for (int i = 0; i < PATTERN_CAMEL_NAME.Length; i++)
                 {
                     m_PatternCamelNames += PATTERN_CAMEL_NAME[i];
