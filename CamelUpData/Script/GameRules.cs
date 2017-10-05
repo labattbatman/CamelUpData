@@ -18,8 +18,7 @@ public class GameRules
 		PutTrap,
 	}
 
-	public static readonly bool POPULATE_SUBBOARD = true;
-	public static readonly bool POPULATE_TILL_FINISH = false;
+	public static readonly int MAX_ROUND_ANALYSE = 1;
 
 	#region Game Rules
 	public static readonly int DICE_NB_FACES = 3;

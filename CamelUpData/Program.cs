@@ -29,19 +29,21 @@ namespace CamelUpData
 		private static DateTime m_StartingTime;
         private static Dictionary<string, List<Board>> m_BoardsByDiceOrder = new Dictionary<string, List<Board>>();
         private static List<Board> m_FinishBoard = new List<Board>();
+	    private static List<Board> m_UnfinishBoardByMaxRound = new List<Board>();
 
-        static void Main(string[] args)
+		static void Main(string[] args)
         {
             EraseTextFile();
             m_StartingTime = DateTime.Now;
 
 	        if (args.Length == 0)
 	        {
-				CustomTest(";O;;b;;w;;y;;G;", TEXT_FILE_NAME);
+				//CustomTest(";O;;b;;w;;y;;G;", TEXT_FILE_NAME);
 				//CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
-				//TestAnalyseBoard(new Board(";YGWBO;;"), "B0O0W0Y0G0");
+				//TestAnalyseBoard(new Board(";YGBWO;;"), "B0O0W0Y0G0");
+		        TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");
 				//UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
-		        string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
+				string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
 				GameRules.Log(log);
 				Console.ReadLine();
 			}
@@ -79,7 +81,7 @@ namespace CamelUpData
 			}
 		}
 
-        private static void PopulateFinishBoard(Board aBoard)
+        public static void PopulateFinishBoard(Board aBoard)
         {
 	        //if (m_FinishBoard.Count % 7000 == 0)
 		    //    GameRules.Log(m_FinishBoard.Count.ToString());
@@ -89,6 +91,12 @@ namespace CamelUpData
 
             for (int i = 0; i < aBoard.m_SubBoard.Count; i++)
                 PopulateFinishBoard(aBoard.m_SubBoard[i]);
+		}
+
+	    public static void PopulateUnfinishBoardbyMaxRound(Board aBoard)
+	    {
+			m_UnfinishBoardByMaxRound.Add(aBoard);
+
 		}
 
         private static void CustomTest(string aBoard, string aFileName)

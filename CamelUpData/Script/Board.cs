@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using CamelUpData;
 
 public class Board
 {
@@ -42,6 +43,7 @@ public class Board
 	private Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
     public List<Board> m_SubBoard = new List<Board>();
 	private string m_Rank = string.Empty;
+	private int m_NbRound;
 
 	private Board m_ParentBoard { get; set; } //Used for debugging
     
@@ -80,7 +82,7 @@ public class Board
         PopulateSubBoard();
     } 
     
-    private Board(Board aInitialBoard, string aPattern, char aRolledCamel, string aDicesHistory)
+    private Board(Board aInitialBoard, string aPattern, char aRolledCamel, string aDicesHistory, int aRoundNb)
     {
 	    m_ParentBoard = aInitialBoard;
 
@@ -104,16 +106,24 @@ public class Board
 
         BoardState = newBoardState.ToString();
         DicesHistory = aDicesHistory;
+
+	    m_NbRound = aRoundNb;
+		if (String.IsNullOrEmpty(GetUnrolledCamelByRank()))
+		    m_NbRound++;
+
         CasesLandedOn = (int[])aInitialBoard.CasesLandedOn.Clone();
 
         int caseLanded = GetCamelPos(aRolledCamel);
         if(caseLanded < CasesLandedOn.Length)
             CasesLandedOn[caseLanded]++;
 
-        PopulateNeighbouring();
+        PopulateNeighbouring(); 
 
-        if (GameRules.POPULATE_SUBBOARD && !IsCamelReachEnd)
-            PopulateSubBoard();	    
+		if (IsCamelReachEnd)
+			Program.PopulateFinishBoard(this);
+        else if (m_NbRound < GameRules.MAX_ROUND_ANALYSE)
+            PopulateSubBoard();
+		else Program.PopulateUnfinishBoardbyMaxRound(this);
     }
 
     private int GetNbCamelInPattern(string aPattern)
@@ -157,21 +167,21 @@ public class Board
         BoardState = tempBoard.ToString();
     }
 
-    private void PopulateSubBoard(bool aPopulateStillRaceEnd = false)
+    private void PopulateSubBoard()
     {       
         if (IsCamelReachEnd)
             return;
 
         string unRollCamel = GetUnrolledCamelByRank();
         //TODO hardcoder pour short term seulement soit quand tous les dés sont lancées. (Pas de reroll)
-        aPopulateStillRaceEnd = GameRules.POPULATE_TILL_FINISH;
-        if (String.IsNullOrEmpty(unRollCamel) && aPopulateStillRaceEnd)
+
+        if (String.IsNullOrEmpty(unRollCamel))
         {        
             SetAllCamelUnroll();
             unRollCamel = GetUnrolledCamelByRank();
-        }
+		}
 
-        List<Pattern> pattern = ToPattern();
+		List<Pattern> pattern = ToPattern();
 
         // i = pattern
         // j = movingCamel in pattern
@@ -192,9 +202,9 @@ public class Board
                 rolledCamel += unRollCamel[j];
                 for (int k = 0; k < results.Count; k++)
                 {
-	                //string dicesHistory = DicesHistory + unrollCamel + (k + 1); Ca faut bugger TestMethod
-					string dicesHistory = DicesHistory + unrollCamel;
-                    Board subBoard = new Board(this, results[k], unrollCamel, dicesHistory);
+	                string dicesHistory = DicesHistory + unrollCamel + (k + 1); // Ca faut bugger TestMethod
+					//string dicesHistory = DicesHistory + unrollCamel;
+                    Board subBoard = new Board(this, results[k], unrollCamel, dicesHistory, m_NbRound);
                     m_SubBoard.Add(subBoard);
 				}
             }
