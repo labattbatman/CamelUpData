@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using CamelUpData.Script;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
@@ -40,10 +41,11 @@ namespace CamelUpData
 	        {
 				//CustomTest(";O;;b;;w;;y;;G;", TEXT_FILE_NAME);
 				//CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
-				//TestAnalyseBoard(new Board(";YGBWO;;"), "B0O0W0Y0G0");
-		        TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");
+				TestAnalyseBoard(new Board(";YGBWO;;"), "B0O0W0Y0G0");
+		        //TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");
 				//UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
 				string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
+
 				GameRules.Log(log);
 				Console.ReadLine();
 			}
@@ -89,9 +91,9 @@ namespace CamelUpData
 			if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
                 m_FinishBoard.Add(aBoard);
 
-            for (int i = 0; i < aBoard.m_SubBoard.Count; i++)
-                PopulateFinishBoard(aBoard.m_SubBoard[i]);
-		}
+	        foreach (Board board in aBoard.m_SubBoard)
+		        PopulateFinishBoard(board);
+        }
 
 	    public static void PopulateUnfinishBoardbyMaxRound(Board aBoard)
 	    {
@@ -106,8 +108,8 @@ namespace CamelUpData
 	        PopulateFinishBoard(board);
 			
 			PopulateBoardByDiceOrder(board);
-            
-            var list = m_BoardsByDiceOrder.Keys.ToList();
+
+	        List<string> list = m_BoardsByDiceOrder.Keys.ToList();
             list.Sort();
             int diceNumberCount = m_BoardsByDiceOrder[list[0]].Count;
             List<string> log = new List<string>();
@@ -116,13 +118,13 @@ namespace CamelUpData
             for (int i = 0; i < diceNumberCount; i++)
             {
                 string newLog = string.Empty;
-                for (int j = 0; j < list.Count; j++)
+                foreach (string b in list)
                 {
-                    if (m_BoardsByDiceOrder[list[j]].Count <= i)
-                    {
-                        continue;
-                    }
-                    newLog += m_BoardsByDiceOrder[list[j]][i].ToStringOldCamelUpFormat() + "";
+	                if (m_BoardsByDiceOrder[b].Count <= i)
+	                {
+		                continue;
+	                }
+	                newLog += m_BoardsByDiceOrder[b][i].ToStringOldCamelUpFormat() + "";
                 }
 
                 log.Add(newLog);
@@ -130,17 +132,17 @@ namespace CamelUpData
 
             TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + aFileName, true);
 
-	        for (int i = 0; i < log.Count; i++)
+	        foreach (string l in log)
 	        {
-					tw.WriteLine(log[i].Remove(log[i].Length - 2));
+		        tw.WriteLine(l.Remove(l.Length - 2));
 	        }
 
             tw.Close();
         }
 
         private static void PopulateBoardByDiceOrder(Board aBoard)
-        {          
-            if (aBoard.GetUnrolledCamelByRank().Length == 0)
+        {
+	        if (aBoard.GetUnrolledCamelByRank().Length == 0)
             {
                 if(!m_BoardsByDiceOrder.ContainsKey(aBoard.DicesHistory))
                 {
@@ -150,10 +152,10 @@ namespace CamelUpData
                 m_BoardsByDiceOrder[aBoard.DicesHistory].Add(aBoard);
             }
 
-            for (int i = 0; i < aBoard.m_SubBoard.Count; i++)
-            {
-                PopulateBoardByDiceOrder(aBoard.m_SubBoard[i]);
-            }
+	        foreach (Board sub in aBoard.m_SubBoard)
+	        {
+		        PopulateBoardByDiceOrder(sub);
+	        }
         }
 
         private static void EraseTextFile()
@@ -191,7 +193,7 @@ namespace CamelUpData
 
 			//PopulatePattern(";A;B;C;D;E;");
 
-		    foreach (var file in files)
+		    foreach (string file in files)
 		    {
 			    if (file.Contains("+"))
 				    continue;
@@ -214,7 +216,7 @@ namespace CamelUpData
 	    {
 		    string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
 
-		    foreach (var file in files)
+		    foreach (string file in files)
 		    {
 			    if (Path.GetFileNameWithoutExtension(file) != ";O;B;W;YG;+")
 				    continue;
