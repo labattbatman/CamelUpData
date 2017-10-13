@@ -39,13 +39,15 @@ namespace CamelUpData
 
 	        if (args.Length == 0)
 	        {
-				//CustomTest(";O;;b;;w;;y;;G;", TEXT_FILE_NAME);
-				//CustomTest(";O;;B;;W;;Y;;G;", TEXT_FILE_NAME);
-				TestAnalyseBoard(new Board(";YGBWO;;"), "B0O0W0Y0G0");
-		        //TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");
+		        string testBoard = ";Y;G;B;w;o;;";
+				BoardManager.Instance.CreateBoard(testBoard);
+
+
+				//ComparaisonPourBoardManager();
+				//TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");
 				//UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
 				string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
-
+		        
 				GameRules.Log(log);
 				Console.ReadLine();
 			}
@@ -186,10 +188,48 @@ namespace CamelUpData
             }
         }
 
+	    private static void ComparaisonPourBoardManager()
+	    {
+		    string testBoard = ";YGBWO;;";
+
+			GameRules.USE_DICE_NB_IN_DICE_HSITORY = false;
+		    TestAnalyseBoard(new Board(testBoard), "B0O0W0Y0G0");
+
+		    GameRules.USE_DICE_NB_IN_DICE_HSITORY = true;
+		    BoardManager.Instance.CreateBoard(testBoard);
+
+		    var groupBy = m_UnfinishBoardByMaxRound.GroupBy(c => c.BoardState).ToList();
+		    var dict = new Dictionary<string, int>();
+		    var total = m_UnfinishBoardByMaxRound.Count;
+		    var dict2 = new Dictionary<string, int>();
+		    var total2 = 0;
+
+		    var diceHistoryForCustom = new Dictionary<string, List<string>>();
+
+		    foreach (var all in groupBy)
+		    {
+			    var diceHistory = new List<string>();
+			    dict.Add(all.Key, all.Count());
+
+			    foreach (var board in all)
+				    diceHistory.Add(board.DicesHistory);
+
+			    diceHistoryForCustom.Add(all.Key, diceHistory);
+		    }
+
+		    foreach (var board in BoardManager.Instance.m_UnfinishBoardByMaxRound)
+		    {
+			    dict2.Add(board.Key, board.Value.Weight);
+			    total2 += board.Value.Weight;
+		    }
+		}
+
 		[TestMethod]
 	    public void TestBoards()
-	    {
-		    string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
+		{
+			GameRules.USE_DICE_NB_IN_DICE_HSITORY = false;
+
+			string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
 
 			//PopulatePattern(";A;B;C;D;E;");
 
@@ -214,7 +254,9 @@ namespace CamelUpData
 	    [TestMethod]
 	    public void TestBoardHardcoder()
 	    {
-		    string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
+		    GameRules.USE_DICE_NB_IN_DICE_HSITORY = false;
+
+			string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
 
 		    foreach (string file in files)
 		    {
