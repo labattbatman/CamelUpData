@@ -23,7 +23,7 @@ namespace CamelUpData.Script
 
 		public static bool USE_DICE_NB_IN_DICE_HSITORY = true;
 
-		public static readonly int MAX_ROUND_ANALYSE = 3;
+		public static readonly int MAX_ROUND_ANALYSE = 2;
 
 		#region Game Rules
 		public static readonly int DICE_NB_FACES = 3;

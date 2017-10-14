@@ -28,3 +28,4 @@ C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\bin\Debug\CamelUp
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.exe
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.pdb
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll

@@ -39,7 +39,7 @@ namespace CamelUpData
 
 	        if (args.Length == 0)
 	        {
-		        string testBoard = ";Y;G;B;w;o;;";
+		        string testBoard = ";Y;G;B;W;o;;";
 				BoardManager.Instance.CreateBoard(testBoard);
 
 
