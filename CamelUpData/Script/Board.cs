@@ -38,9 +38,6 @@ namespace CamelUpData.Script
 			}
 		}
 
-		public string DicesHistory { get; private set; } //Start from initial board. Used for debugging
-		public List<string> DicesHistories = new List<string>();
-
 		private Dictionary<char, int> m_Position = new Dictionary<char, int>();
 		private Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
 		public List<Board> m_SubBoard = new List<Board>();
@@ -48,8 +45,6 @@ namespace CamelUpData.Script
 		public int NbRound{ get; private set; }
 
 		public int Weight { get; private set; }
-
-		private Board m_ParentBoard { get; set; } //Used for debugging
     
 		public bool IsCamelReachEnd { get { return FirstCamelPos >= GameRules.CASE_NUMBER; } }  
 
@@ -89,10 +84,8 @@ namespace CamelUpData.Script
 				PopulateSubBoard();
 		} 
     
-		private Board(Board aInitialBoard, string aPattern, char aRolledCamel, string aDicesHistory)
+		protected Board(Board aInitialBoard, string aPattern, char aRolledCamel)
 		{
-			m_ParentBoard = aInitialBoard;
-
 			StringBuilder pattern = new StringBuilder(aPattern);     
 			string camels = aInitialBoard.GetCamelsNeighbouring(aRolledCamel);
 
@@ -112,7 +105,6 @@ namespace CamelUpData.Script
 			newBoardState.Insert(startingPos, pattern);
 
 			BoardState = newBoardState.ToString();
-			DicesHistory = aDicesHistory;
 
 			NbRound = aInitialBoard.NbRound;
 			Weight = aInitialBoard.Weight;
@@ -127,15 +119,6 @@ namespace CamelUpData.Script
 				CasesLandedOn[caseLanded]++;
 
 			PopulateNeighbouring();
-
-			if (!GameRules.USE_DICE_NB_IN_DICE_HSITORY)
-			{
-				if (IsCamelReachEnd)
-					Program.PopulateFinishBoard(this);
-				else if (NbRound < GameRules.MAX_ROUND_ANALYSE)
-					PopulateSubBoard();
-				else Program.PopulateUnfinishBoardbyMaxRound(this);
-			}
 		}
 
 		private int GetNbCamelInPattern(string aPattern)
@@ -214,13 +197,7 @@ namespace CamelUpData.Script
 					unrolledCamels += unRollCamel[j];
 					for (int k = 0; k < results.Count; k++)
 					{
-						string dicesHistory = DicesHistory + unrollCamel;
-
-						if (GameRules.USE_DICE_NB_IN_DICE_HSITORY)
-							dicesHistory += k + 1;
-
-						Board subBoard = new Board(this, results[k], unrollCamel, dicesHistory);
-						m_SubBoard.Add(subBoard);
+						CreateSubboard(results[k], unrollCamel, k + 1);
 					}
 				}
 
@@ -229,6 +206,12 @@ namespace CamelUpData.Script
 
 				unrolledCamels = string.Empty;
 			}
+		}
+
+		protected virtual void CreateSubboard(string aResult, char aUnrollCamel, int aDiceNb)
+		{
+			Board subBoard = new Board(this, aResult, aUnrollCamel);
+			m_SubBoard.Add(subBoard);
 		}
 
 		private List<Pattern> ToPattern()
@@ -309,55 +292,6 @@ namespace CamelUpData.Script
 		private bool IsCamelRolled(char aCamel)
 		{
 			return BoardState.Contains((char.ToLower(aCamel).ToString()));
-		}
-
-		public override string ToString()
-		{
-			string retval = string.Empty;
-
-			if(GetUnrolledCamelByRank().Length == 0)
-				retval += BoardState + "->" + DicesHistory + " " + HighestCaseLandedOn + "\n";
-
-			foreach (Board subBoard in m_SubBoard)
-			{
-				retval += subBoard.ToString() ;
-			}		
-
-			return retval;
-		}
-
-		public string ToStringOldCamelUpFormat()
-		{
-			//White2->Y  Yellow2 Blue3->O Orange3 Green4
-			//;;wy;bo;g
-			string retval = string.Empty;
-
-			if (GetUnrolledCamelByRank().Length == 0)
-			{
-				int caseIndex = 0;
-				for(int i = 0; i < BoardState.Length; i++)
-				{
-					if(BoardState[i] == GameRules.CASE_SEPARATOR)
-						caseIndex++;
-					else if (GameRules.IsCharIdentityCamel(BoardState[i]))
-					{
-						retval += GameRules.FullNameCamel(BoardState[i]) + caseIndex;
-
-						if(BoardState.Length - 1 > i && GameRules.IsCharIdentityCamel(BoardState[i + 1]))
-						{
-							retval += "->" + Char.ToUpper(BoardState[i + 1]) + " ";
-						}
-
-						retval += " ";
-					}
-				}
-			}
-
-			foreach (Board suBoard in m_SubBoard)
-			{
-				retval += suBoard.ToStringOldCamelUpFormat();
-			}
-			return retval + "\t";
 		}
 
 		private void PopulateNeighbouring()

@@ -28,9 +28,9 @@ namespace CamelUpData
 		private static string TEXT_FILE_NAME = "/test.txt";
 	    private static string BOARD_ANALYZER_FILE_NAME = "/analyzer.txt";
 		private static DateTime m_StartingTime;
-        private static Dictionary<string, List<Board>> m_BoardsByDiceOrder = new Dictionary<string, List<Board>>();
-        private static List<Board> m_FinishBoard = new List<Board>();
-	    private static List<Board> m_UnfinishBoardByMaxRound = new List<Board>();
+        private static Dictionary<string, List<BoardDebug>> m_BoardsByDiceOrder = new Dictionary<string, List<BoardDebug>>();
+        private static List<BoardDebug> m_FinishBoard = new List<BoardDebug>();
+	    private static List<BoardDebug> m_UnfinishBoardByMaxRound = new List<BoardDebug>();
 
 		static void Main(string[] args)
         {
@@ -39,9 +39,8 @@ namespace CamelUpData
 
 	        if (args.Length == 0)
 	        {
-		        string testBoard = ";Y;G;B;W;o;;";
-				BoardManager.Instance.CreateBoard(testBoard);
-
+		        string testBoard = ";Y;G;B;W;O;;";
+				BoardManager.Instance.CreateBoardDebug(testBoard);
 
 				//ComparaisonPourBoardManager();
 				//TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");
@@ -85,7 +84,7 @@ namespace CamelUpData
 			}
 		}
 
-        public static void PopulateFinishBoard(Board aBoard)
+        public static void PopulateFinishBoard(BoardDebug aBoard)
         {
 	        //if (m_FinishBoard.Count % 7000 == 0)
 		    //    GameRules.Log(m_FinishBoard.Count.ToString());
@@ -93,11 +92,11 @@ namespace CamelUpData
 			if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
                 m_FinishBoard.Add(aBoard);
 
-	        foreach (Board board in aBoard.m_SubBoard)
+	        foreach (BoardDebug board in aBoard.m_SubBoard)
 		        PopulateFinishBoard(board);
         }
 
-	    public static void PopulateUnfinishBoardbyMaxRound(Board aBoard)
+	    public static void PopulateUnfinishBoardbyMaxRound(BoardDebug aBoard)
 	    {
 			m_UnfinishBoardByMaxRound.Add(aBoard);
 
@@ -106,7 +105,7 @@ namespace CamelUpData
         private static void CustomTest(string aBoard, string aFileName)
         {
 	        m_BoardsByDiceOrder.Clear();
-			Board board = new Board(aBoard);
+			BoardDebug board = new BoardDebug(aBoard);
 	        PopulateFinishBoard(board);
 			
 			PopulateBoardByDiceOrder(board);
@@ -142,19 +141,19 @@ namespace CamelUpData
             tw.Close();
         }
 
-        private static void PopulateBoardByDiceOrder(Board aBoard)
+        private static void PopulateBoardByDiceOrder(BoardDebug aBoard)
         {
 	        if (aBoard.GetUnrolledCamelByRank().Length == 0)
             {
                 if(!m_BoardsByDiceOrder.ContainsKey(aBoard.DicesHistory))
                 {
-                    m_BoardsByDiceOrder.Add(aBoard.DicesHistory, new List<Board>());
+                    m_BoardsByDiceOrder.Add(aBoard.DicesHistory, new List<BoardDebug>());
                 }
 
                 m_BoardsByDiceOrder[aBoard.DicesHistory].Add(aBoard);
             }
 
-	        foreach (Board sub in aBoard.m_SubBoard)
+	        foreach (BoardDebug sub in aBoard.m_SubBoard)
 	        {
 		        PopulateBoardByDiceOrder(sub);
 	        }
@@ -177,7 +176,7 @@ namespace CamelUpData
 	        tw.Close();*/
 		}
 
-	    public static void HardPopulateFinishBoard(Board aBoard)
+	    public static void HardPopulateFinishBoard(BoardDebug aBoard)
         {
             //if (aBoard.IsCamelReachEnd)
             {		

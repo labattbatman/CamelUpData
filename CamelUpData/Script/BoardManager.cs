@@ -21,8 +21,18 @@ namespace CamelUpData.Script
 
 		public void CreateBoard(string aBoard)
 		{
-			Board firstBoard = new Board(aBoard);
-			m_UncompleteBoards.Add(firstBoard.BoardState, firstBoard);
+			CreateBoard(new Board(aBoard));
+			
+		}
+
+		public void CreateBoardDebug(string aBoard)
+		{
+			CreateBoard(new BoardDebug(aBoard));
+		}
+
+		private void CreateBoard(Board aBoard)
+		{
+			m_UncompleteBoards.Add(aBoard.BoardState, aBoard);
 
 			while (m_UncompleteBoards.Count > 0)
 			{
@@ -51,7 +61,6 @@ namespace CamelUpData.Script
 			if (aDict.ContainsKey(aBoard.BoardState))
 			{
 				aDict[aBoard.BoardState].AddWeight(aBoard);
-				aDict[aBoard.BoardState].DicesHistories.Add(aBoard.DicesHistory);
 			}
 			else
 			{
