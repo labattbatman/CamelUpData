@@ -5,9 +5,12 @@ using System.Text.RegularExpressions;
 
 namespace CamelUpData.Script
 {
-	public class Board
+	public class Board : IBoard
 	{
 		public string BoardState { get; private set; }
+
+		public string BoardStateString { get { return BoardState; } }
+
 		public int[] CasesLandedOn { get; private set; }
 
 		public string HighestCaseLandedOn
@@ -40,12 +43,13 @@ namespace CamelUpData.Script
 
 		private Dictionary<char, int> m_Position = new Dictionary<char, int>();
 		private Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
-		public List<Board> m_SubBoard = new List<Board>();
+		public List<IBoard> m_SubBoard { get; set; }
+		
 		private string m_Rank = string.Empty;
 		public int NbRound{ get; private set; }
 
 		public int Weight { get; private set; }
-    
+
 		public bool IsCamelReachEnd { get { return FirstCamelPos >= GameRules.CASE_NUMBER; } }  
 
 		public bool IsAllCamelRolled
@@ -74,6 +78,7 @@ namespace CamelUpData.Script
 
 		public Board(string aBoardId)
 		{
+			m_SubBoard = new List<IBoard>();
 			BoardState = aBoardId;
 			CasesLandedOn = new int[GameRules.CASE_NUMBER];
 			Weight = 1;
@@ -86,6 +91,7 @@ namespace CamelUpData.Script
     
 		protected Board(Board aInitialBoard, string aPattern, char aRolledCamel)
 		{
+			m_SubBoard = new List<IBoard>();
 			StringBuilder pattern = new StringBuilder(aPattern);     
 			string camels = aInitialBoard.GetCamelsNeighbouring(aRolledCamel);
 
@@ -168,7 +174,6 @@ namespace CamelUpData.Script
 				return;
 
 			string unRollCamel = GetUnrolledCamelByRank();
-			//TODO hardcoder pour short term seulement soit quand tous les dés sont lancées. (Pas de reroll)
 
 			if (String.IsNullOrEmpty(unRollCamel))
 			{        
@@ -362,7 +367,7 @@ namespace CamelUpData.Script
 			return m_Neighbouring[aCamel];
 		}
 
-		public void AddWeight(Board aBoard)
+		public void AddWeight(IBoard aBoard)
 		{
 			Weight += aBoard.Weight;
 		}

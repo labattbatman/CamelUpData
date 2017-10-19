@@ -75,6 +75,8 @@ namespace CamelUpData.Script
 			m_NbCamelInPattern = aPattern.m_NbCamelInPattern;
 		}
 
+		public Pattern(Pattern aPattern, byte[] aCamelIdentity) : this(aPattern, GameRules.ByteToString(aCamelIdentity)){ }
+
 		private void PopulateDict(List<string> aResult)
 		{
 			m_Results = new Dictionary<char, Dictionary<int, string>>();

@@ -18,6 +18,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 //Merge avec CamelUpUnity pour le visuel
 //GameRules.IS_SHUTTLE_WHEN_HITTING_MINUS_TRAP. Je le fais????
 
+//NOTE
+//Transformer Pattern en byte pour performance
+//Ajouter le CasesLandedOn dans AddWeight?
+
 
 namespace CamelUpData
 {
@@ -39,8 +43,10 @@ namespace CamelUpData
 
 	        if (args.Length == 0)
 	        {
-		        string testBoard = ";Y;G;B;W;O;;";
-				BoardManager.Instance.CreateBoardDebug(testBoard);
+		        string testBoard = ";Y;G;R;W;O;;";
+				//BoardManager.Instance.CreateBoardByte(testBoard);
+				//BoardManager.Instance.CreateBoard(testBoard);
+		        BoardManager.Instance.CreateBoardDebug(testBoard);
 
 				//ComparaisonPourBoardManager();
 				//TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");

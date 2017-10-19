@@ -183,7 +183,8 @@ namespace CamelUpData.Script
 		{
 			foreach (var board in m_initialBoard.m_SubBoard)
 			{
-				m_SubBoardAnalyzer.Add(new BoardAnalyzer(board, m_InitialCard));
+				//TODO EN GROS ET MAJUSCULE
+				//m_SubBoardAnalyzer.Add(new BoardAnalyzer(board, m_InitialCard));
 			}
 		}
 
@@ -250,7 +251,7 @@ namespace CamelUpData.Script
 		public CamelRank(char aCamelName)
 		{
 			CamelName = aCamelName;
-			m_TimeFinish = new int[GameRules.IDENTITY_CAMEL_NAME.Length];
+			m_TimeFinish = new int[GameRules.IDENTITY_CAMEL_NAME_ROLLED.Length];
 		}
 
 		public void UpdateFinish(int aRank)

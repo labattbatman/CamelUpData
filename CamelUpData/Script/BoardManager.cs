@@ -4,9 +4,9 @@ namespace CamelUpData.Script
 {
 	public class BoardManager : MonoSingleton<BoardManager>
 	{
-		public readonly Dictionary<string, Board> m_UnfinishBoardByMaxRound = new Dictionary<string, Board>();
-		private readonly Dictionary<string, Board> m_FinishBoard = new Dictionary<string, Board>();
-		private Dictionary<string, Board> m_UncompleteBoards= new Dictionary<string, Board>();
+		public readonly Dictionary<string, IBoard> m_UnfinishBoardByMaxRound = new Dictionary<string, IBoard>();
+		private readonly Dictionary<string, IBoard> m_FinishBoard = new Dictionary<string, IBoard>();
+		private Dictionary<string, IBoard> m_UncompleteBoards= new Dictionary<string, IBoard>();
 
 		public int TotalWeigh
 		{
@@ -30,13 +30,18 @@ namespace CamelUpData.Script
 			CreateBoard(new BoardDebug(aBoard));
 		}
 
-		private void CreateBoard(Board aBoard)
+		public void CreateBoardByte(string aBoard)
 		{
-			m_UncompleteBoards.Add(aBoard.BoardState, aBoard);
+			CreateBoard(new BoardByte(aBoard));
+		}
+
+		private void CreateBoard(IBoard aBoard)
+		{
+			m_UncompleteBoards.Add(aBoard.BoardStateString, aBoard);
 
 			while (m_UncompleteBoards.Count > 0)
 			{
-				Dictionary<string, Board> newUncompleteBoards = new Dictionary<string, Board>();
+				Dictionary<string, IBoard> newUncompleteBoards = new Dictionary<string, IBoard>();
 
 				foreach (var unCompleted in m_UncompleteBoards)
 				{
@@ -56,15 +61,15 @@ namespace CamelUpData.Script
 			}
 		}
 
-		private void AddBoardIntoDict(Board aBoard, Dictionary<string, Board> aDict)
+		private void AddBoardIntoDict(IBoard aBoard, Dictionary<string, IBoard> aDict)
 		{
-			if (aDict.ContainsKey(aBoard.BoardState))
+			if (aDict.ContainsKey(aBoard.BoardStateString))
 			{
-				aDict[aBoard.BoardState].AddWeight(aBoard);
+				aDict[aBoard.BoardStateString].AddWeight(aBoard);
 			}
 			else
 			{
-				aDict.Add(aBoard.BoardState, aBoard);
+				aDict.Add(aBoard.BoardStateString, aBoard);
 			}
 		}
 	}
