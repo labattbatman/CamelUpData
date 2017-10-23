@@ -45,8 +45,17 @@ namespace CamelUpData
 	        {
 		        string testBoard = ";Y;G;R;W;O;;";
 				//BoardManager.Instance.CreateBoardByte(testBoard);
-				//BoardManager.Instance.CreateBoard(testBoard);
-		        BoardManager.Instance.CreateBoardDebug(testBoard);
+		        try
+		        {
+			        BoardManager.Instance.CreateBoard(testBoard);
+		        }
+		        catch (Exception)
+		        {
+					string logg = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
+
+			        GameRules.Log(logg);
+				}
+		        //BoardManager.Instance.CreateBoardDebug(testBoard);
 
 				//ComparaisonPourBoardManager();
 				//TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");
@@ -98,7 +107,7 @@ namespace CamelUpData
 			if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
                 m_FinishBoard.Add(aBoard);
 
-	        foreach (BoardDebug board in aBoard.m_SubBoard)
+			foreach (BoardDebug board in aBoard.PopulateSubBoard())
 		        PopulateFinishBoard(board);
         }
 
@@ -159,7 +168,7 @@ namespace CamelUpData
                 m_BoardsByDiceOrder[aBoard.DicesHistory].Add(aBoard);
             }
 
-	        foreach (BoardDebug sub in aBoard.m_SubBoard)
+	        foreach (BoardDebug sub in aBoard.PopulateSubBoard())
 	        {
 		        PopulateBoardByDiceOrder(sub);
 	        }
@@ -222,11 +231,11 @@ namespace CamelUpData
 			    diceHistoryForCustom.Add(all.Key, diceHistory);
 		    }
 
-		    foreach (var board in BoardManager.Instance.m_UnfinishBoardByMaxRound)
+		    /*foreach (var board in BoardManager.Instance.m_UnfinishBoardByMaxRound)
 		    {
 			    dict2.Add(board.Key, board.Value.Weight);
 			    total2 += board.Value.Weight;
-		    }
+		    }*/
 		}
 
 		[TestMethod]

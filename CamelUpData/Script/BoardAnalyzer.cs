@@ -50,8 +50,8 @@ namespace CamelUpData.Script
 			if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
 				m_FinishBoards.Add(aBoard);
 
-			foreach (Board sub in aBoard.m_SubBoard)
-				PopulateFinishBoard(sub);
+			//foreach (Board sub in aBoard.m_SubBoard)
+			//	PopulateFinishBoard(sub);
 		}
 
 		private void CreateCamelRanks()
@@ -76,14 +76,14 @@ namespace CamelUpData.Script
 					m_CamelRanks[rank[j]].UpdateFinish(currentRank);
 				}
 
-				if (board.m_SubBoard.Count == 0)
+				/*if (board.m_SubBoard.Count == 0)
 				{
 					m_TotalCasesLandedOn++;
 					for (int j = 0; j < board.CasesLandedOn.Length; j++)
 					{
 						m_CasesLandedOn[j] += board.CasesLandedOn[j];
 					}
-				}
+				}*/
 			}
 		}
 
@@ -181,7 +181,7 @@ namespace CamelUpData.Script
 
 		private void PopulateSubBoard()
 		{
-			foreach (var board in m_initialBoard.m_SubBoard)
+			//foreach (var board in m_initialBoard.m_SubBoard)
 			{
 				//TODO EN GROS ET MAJUSCULE
 				//m_SubBoardAnalyzer.Add(new BoardAnalyzer(board, m_InitialCard));

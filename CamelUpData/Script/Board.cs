@@ -43,7 +43,6 @@ namespace CamelUpData.Script
 
 		private Dictionary<char, int> m_Position = new Dictionary<char, int>();
 		private Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
-		public List<IBoard> m_SubBoard { get; set; }
 		
 		private string m_Rank = string.Empty;
 		public int NbRound{ get; private set; }
@@ -78,7 +77,6 @@ namespace CamelUpData.Script
 
 		public Board(string aBoardId)
 		{
-			m_SubBoard = new List<IBoard>();
 			BoardState = aBoardId;
 			CasesLandedOn = new int[GameRules.CASE_NUMBER];
 			Weight = 1;
@@ -91,7 +89,6 @@ namespace CamelUpData.Script
     
 		protected Board(Board aInitialBoard, string aPattern, char aRolledCamel)
 		{
-			m_SubBoard = new List<IBoard>();
 			StringBuilder pattern = new StringBuilder(aPattern);     
 			string camels = aInitialBoard.GetCamelsNeighbouring(aRolledCamel);
 
@@ -168,10 +165,11 @@ namespace CamelUpData.Script
 			BoardState = tempBoard.ToString();
 		}
 
-		public void PopulateSubBoard()
-		{       
+		public List<IBoard> PopulateSubBoard()
+		{
+			List <IBoard> retval = new List<IBoard>();
 			if (IsCamelReachEnd)
-				return;
+				return retval;
 
 			string unRollCamel = GetUnrolledCamelByRank();
 
@@ -202,7 +200,7 @@ namespace CamelUpData.Script
 					unrolledCamels += unRollCamel[j];
 					for (int k = 0; k < results.Count; k++)
 					{
-						CreateSubboard(results[k], unrollCamel, k + 1);
+						retval.Add(CreateSubboard(results[k], unrollCamel, k + 1));
 					}
 				}
 
@@ -211,12 +209,13 @@ namespace CamelUpData.Script
 
 				unrolledCamels = string.Empty;
 			}
+
+			return retval;
 		}
 
-		protected virtual void CreateSubboard(string aResult, char aUnrollCamel, int aDiceNb)
+		protected virtual Board CreateSubboard(string aResult, char aUnrollCamel, int aDiceNb)
 		{
-			Board subBoard = new Board(this, aResult, aUnrollCamel);
-			m_SubBoard.Add(subBoard);
+			return new Board(this, aResult, aUnrollCamel);
 		}
 
 		private List<Pattern> ToPattern()
@@ -370,6 +369,11 @@ namespace CamelUpData.Script
 		public void AddWeight(IBoard aBoard)
 		{
 			Weight += aBoard.Weight;
+		}
+
+		public SmallBoard GetSmallBoard()
+		{
+			return new SmallBoard(this);
 		}
 	}
 }

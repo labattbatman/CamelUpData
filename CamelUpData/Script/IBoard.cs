@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CamelUpData.Script
 {
 	public interface IBoard
 	{
-		void PopulateSubBoard();
-
-		List<IBoard> m_SubBoard { get; set; }
+		List<IBoard> PopulateSubBoard();
 
 		bool IsCamelReachEnd { get; }
 
@@ -18,5 +15,28 @@ namespace CamelUpData.Script
 		string BoardStateString { get;}
 
 		void AddWeight(IBoard aBoard);
+
+		SmallBoard GetSmallBoard();
+	}
+
+	public class SmallBoard
+	{
+		public string BoardState { get; private set; }
+
+		public SmallBoard(IBoard aBoard)
+		{
+			BoardState = aBoard.BoardStateString;
+		}
+
+		public SmallBoard(string aBoard)
+		{
+			BoardState = aBoard;
+		}
+
+		public List<IBoard> PopulateSubBoard()
+		{
+			Board newBoard = new Board(BoardState);
+			return newBoard.PopulateSubBoard();
+		}
 	}
 }

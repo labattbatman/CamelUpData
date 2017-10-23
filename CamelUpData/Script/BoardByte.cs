@@ -53,8 +53,6 @@ namespace CamelUpData.Script
 		private Dictionary<byte, int> m_Position = new Dictionary<byte, int>();
 		private Dictionary<byte, byte[]> m_Neighbouring = new Dictionary<byte, byte[]>();
 
-		public List<IBoard> m_SubBoard { get; set; }
-
 		private byte[] m_Rank;
 		public int NbRound { get; private set; }
 
@@ -88,7 +86,6 @@ namespace CamelUpData.Script
 
 		public BoardByte(string aBoardId)
 		{
-			m_SubBoard = new List<IBoard>();
 			BoardState = GameRules.StringToByte(aBoardId);
 			CasesLandedOn = new int[GameRules.CASE_NUMBER];
 			Weight = 1;
@@ -101,7 +98,6 @@ namespace CamelUpData.Script
 
 		protected BoardByte(BoardByte aInitialBoard, string aPattern, byte aRolledCamel)
 		{
-			m_SubBoard = new List<IBoard>();
 			byte[] pattern = GameRules.StringToByte(aPattern);
 			byte[] camels = aInitialBoard.GetCamelsNeighbouring(aRolledCamel);
 			
@@ -179,10 +175,12 @@ namespace CamelUpData.Script
 			BoardState = tempBoard;
 		}
 
-		public void PopulateSubBoard()
+		public List<IBoard> PopulateSubBoard()
 		{
+			List<IBoard> retval = new List<IBoard>();
+
 			if (IsCamelReachEnd)
-				return;
+				return retval;
 
 			byte[] unRollCamel = GetUnrolledCamelByRank();
 
@@ -213,7 +211,7 @@ namespace CamelUpData.Script
 					unrolledCamels += GameRules.ByteToString(unRollCamel[j]);
 					for (int k = 0; k < results.Count; k++)
 					{
-						CreateSubboard(results[k], unrollCamel, k + 1);
+						retval.Add(new BoardByte(this, results[k], unrollCamel));
 					}
 				}
 
@@ -222,12 +220,8 @@ namespace CamelUpData.Script
 
 				unrolledCamels = string.Empty;
 			}
-		}
 
-		protected virtual void CreateSubboard(string aResult, byte aUnrollCamel, int aDiceNb)
-		{
-			BoardByte subBoard = new BoardByte(this, aResult, aUnrollCamel);
-			m_SubBoard.Add(subBoard);
+			return retval;
 		}
 
 		private List<Pattern> ToPattern()
@@ -404,6 +398,11 @@ namespace CamelUpData.Script
 		public void AddWeight(IBoard aBoard)
 		{
 			Weight += aBoard.Weight;
+		}
+
+		public SmallBoard GetSmallBoard()
+		{
+			return new SmallBoard(this);
 		}
 
 		#region Byte Logic
