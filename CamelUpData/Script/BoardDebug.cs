@@ -10,6 +10,8 @@ namespace CamelUpData.Script
 		public string DicesHistory { get; private set; }
 		public List<string> DicesHistories = new List<string>();
 
+		private List<BoardDebug> m_SubBoard = new List<BoardDebug>();
+
 		public BoardDebug(string aBoardId) : base (aBoardId)
 		{
 			
@@ -34,7 +36,7 @@ namespace CamelUpData.Script
 			if (GetUnrolledCamelByRank().Length == 0)
 				retval += BoardState + "->" + DicesHistory + " " + HighestCaseLandedOn + "\n";
 
-			foreach (Board subBoard in m_SubBoard)
+			foreach (BoardDebug subBoard in m_SubBoard)
 			{
 				retval += subBoard.ToString();
 			}
@@ -76,15 +78,14 @@ namespace CamelUpData.Script
 			return retval + "\t";
 		}
 
-		protected override void CreateSubboard(string aResult, char aUnrollCamel, int aDiceNb)
+		protected override Board CreateSubboard(string aResult, char aUnrollCamel, int aDiceNb)
 		{
 			string dicesHistory = DicesHistory + aUnrollCamel;
 
 			if (GameRules.USE_DICE_NB_IN_DICE_HSITORY)
 				dicesHistory += aDiceNb;
 
-			BoardDebug subBoard = new BoardDebug(this, aResult, aUnrollCamel, dicesHistory);
-			m_SubBoard.Add(subBoard);
+			return new BoardDebug(this, aResult, aUnrollCamel, dicesHistory);
 		}
 	}
 }

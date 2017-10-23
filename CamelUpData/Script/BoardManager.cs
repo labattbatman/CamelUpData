@@ -4,50 +4,49 @@ namespace CamelUpData.Script
 {
 	public class BoardManager : MonoSingleton<BoardManager>
 	{
-		public readonly Dictionary<string, IBoard> m_UnfinishBoardByMaxRound = new Dictionary<string, IBoard>();
-		private readonly Dictionary<string, IBoard> m_FinishBoard = new Dictionary<string, IBoard>();
-		private Dictionary<string, IBoard> m_UncompleteBoards= new Dictionary<string, IBoard>();
+		public readonly Dictionary<string, SmallBoard> m_UnfinishBoardByMaxRound = new Dictionary<string, SmallBoard>();
+		private readonly Dictionary<string, SmallBoard> m_FinishBoard = new Dictionary<string, SmallBoard>();
+		private Dictionary<string, SmallBoard> m_UncompleteBoards= new Dictionary<string, SmallBoard>();
 
 		public int TotalWeigh
 		{
 			get
 			{
 				int retval = 0;
-				foreach (var board in m_UnfinishBoardByMaxRound)
-					retval += board.Value.Weight;
+				//foreach (var board in m_UnfinishBoardByMaxRound)
+					//retval += board.Value.Weight;
 				return retval;
 			}
 		}
 
 		public void CreateBoard(string aBoard)
 		{
-			CreateBoard(new Board(aBoard));
+			CreateBoard(new SmallBoard(aBoard));
 			
 		}
 
 		public void CreateBoardDebug(string aBoard)
 		{
-			CreateBoard(new BoardDebug(aBoard));
+			CreateBoard(new SmallBoard(aBoard));
 		}
 
 		public void CreateBoardByte(string aBoard)
 		{
-			CreateBoard(new BoardByte(aBoard));
+			CreateBoard(new SmallBoard(aBoard));
 		}
 
-		private void CreateBoard(IBoard aBoard)
+		private void CreateBoard(SmallBoard aBoard)
 		{
-			m_UncompleteBoards.Add(aBoard.BoardStateString, aBoard);
+			m_UncompleteBoards.Add(aBoard.BoardState, aBoard);
 
 			while (m_UncompleteBoards.Count > 0)
 			{
-				Dictionary<string, IBoard> newUncompleteBoards = new Dictionary<string, IBoard>();
+				Dictionary<string, SmallBoard> newUncompleteBoards = new Dictionary<string, SmallBoard>();
 
 				foreach (var unCompleted in m_UncompleteBoards)
 				{
-					unCompleted.Value.PopulateSubBoard();
-
-					foreach (var subBoard in unCompleted.Value.m_SubBoard)
+					List<IBoard> m_SubBoard = unCompleted.Value.PopulateSubBoard();
+					foreach (var subBoard in m_SubBoard)
 					{
 						if (subBoard.IsCamelReachEnd)
 							AddBoardIntoDict(subBoard, m_FinishBoard);
@@ -70,6 +69,18 @@ namespace CamelUpData.Script
 			else
 			{
 				aDict.Add(aBoard.BoardStateString, aBoard);
+			}
+		}
+
+		private void AddBoardIntoDict(IBoard aBoard, Dictionary<string, SmallBoard> aDict)
+		{
+			if (aDict.ContainsKey(aBoard.BoardStateString))
+			{
+				//aDict[aBoard.BoardStateString].AddWeight(aBoard);
+			}
+			else
+			{
+				aDict.Add(aBoard.BoardStateString, aBoard.GetSmallBoard());
 			}
 		}
 	}
