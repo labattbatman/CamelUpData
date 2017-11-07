@@ -9,54 +9,39 @@ namespace CamelUpData.Script
 
 		private Dictionary<char, CamelRank> m_CamelRanks = new Dictionary<char, CamelRank>();
 		private Dictionary<char, int> m_CamelCard = new Dictionary<char, int>();
-		private Board m_initialBoard;
-		private string m_InitialCard;
-		private List<Board> m_FinishBoards = new List<Board>();
-
-		List<BoardAnalyzer> m_SubBoardAnalyzer = new List<BoardAnalyzer>();
+		private List<IBoard> m_Boards;
 
 		private int[] m_CasesLandedOn { get; set; }
 		private int m_TotalCasesLandedOn { get; set; }
 
-		public BoardAnalyzer(Board aBoard, string aCards)
+		public BoardAnalyzer(List<IBoard> aBoards, string aCards)
 		{
-			m_initialBoard = aBoard;
-			m_InitialCard = aCards;
+			m_Boards = new List<IBoard>(aBoards);
 
 			CreateCamelRanks();
-			PopulateFinishBoard(m_initialBoard);
 			m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
-			SetCamelCard();
+			SetCamelCard(aCards);
 			PopulateCamelsRank();
 			GenerateEvs();
 		}
 
-		private void SetCamelCard()
+		private void SetCamelCard(string aCards)
 		{
-			//Format: B0O1W2Y0G0
-			for(int i = 0; i < m_InitialCard.Length; i += 2)
+			//Format: R0O1W2Y0G0
+			for (int i = 0; i < aCards.Length; i += 2)
 			{
-				char camel = char.ToUpper(m_InitialCard[i]);
+				char camel = char.ToUpper(aCards[i]);
 
 				if (!m_CamelCard.ContainsKey(camel))
 					m_CamelCard.Add(camel, -1);
 
-				m_CamelCard[camel] = (int)char.GetNumericValue(m_InitialCard[i + 1]);
+				m_CamelCard[camel] = (int)char.GetNumericValue(aCards[i + 1]);
 			}
-		}
-
-		private void PopulateFinishBoard(Board aBoard)
-		{
-			if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
-				m_FinishBoards.Add(aBoard);
-
-			foreach (Board sub in aBoard.m_SubBoard)
-				PopulateFinishBoard(sub);
 		}
 
 		private void CreateCamelRanks()
 		{
-			string camels = m_initialBoard.GetRank().ToLower();
+			string camels = m_Boards[0].GetRankString().ToUpper();
 
 			foreach (char camel in camels)
 			{
@@ -66,9 +51,9 @@ namespace CamelUpData.Script
 
 		private void PopulateCamelsRank()
 		{
-			foreach (Board board in m_FinishBoards)
+			foreach (IBoard board in m_Boards)
 			{
-				string rank = board.GetRank().ToLower();
+				string rank = board.GetRankString().ToUpper();
 
 				for (int j = 0; j < rank.Length; j++)
 				{
@@ -102,7 +87,7 @@ namespace CamelUpData.Script
 			float highestEv = -10;
 			foreach (var camelRank in m_CamelRanks)
 			{
-				float current = camelRank.Value.EVShortTerm(m_CamelCard[char.ToUpper(camelRank.Key)]);
+				float current = camelRank.Value.EVShortTerm(m_CamelCard[camelRank.Key]);
 				if (current > highestEv)
 				{
 					highestCard = camelRank.Key;
@@ -133,7 +118,7 @@ namespace CamelUpData.Script
 			{
 				m_PlayerAction = GameRules.PlayerAction.PutTrap,
 				m_Ev = (float) m_CasesLandedOn[highestCaseLandedOn] / (float) m_TotalCasesLandedOn * GameRules.TRAP_REWARD,
-				m_Info = highestCaseLandedOn + " Minus Trap NOTE: Ce n'est pas la ev Exacte. Ne prendre pas en compte l'effet de la trap"
+				m_Info = highestCaseLandedOn + " Minus Trap NOTE: Ce n'est pas la ev Exacte. Ne prend pas en compte l'effet de la trap"
 			};
 			return retval;
 		}
@@ -158,39 +143,12 @@ namespace CamelUpData.Script
 				m_Info = "NOTE: Pas le bon ev. Il faut prendre compte de l'info qu'on donne au prochain joueur"
 			};
 
-			List<Ev> sortedEvs = GetSortedtEvs();
-			Ev ev = sortedEvs[0].m_PlayerAction != GameRules.PlayerAction.RollDice ? sortedEvs[0] : sortedEvs[1];
-			PopulateSubBoard();
-		
-			List<float> diffEv = new List<float>();
-
-			foreach (var sub in m_SubBoardAnalyzer)
-			{
-				diffEv.Add(ev.m_Ev - sub.GetSortedtEvs()[0].m_Ev);
-			}
-			float avgDiff = 0;
-
-			foreach (var diff in diffEv)
-				avgDiff += diff;
-
-			avgDiff = avgDiff / diffEv.Count;
-			//TODO CONTINUER
-
 			return retval;
-		}
-
-		private void PopulateSubBoard()
-		{
-			foreach (var board in m_initialBoard.m_SubBoard)
-			{
-				//TODO EN GROS ET MAJUSCULE
-				//m_SubBoardAnalyzer.Add(new BoardAnalyzer(board, m_InitialCard));
-			}
 		}
 
 		public override string ToString()
 		{
-			string retval = m_initialBoard.BoardState + "\n";
+			string retval = string.Format("Analyze of {0} boards\n", m_Boards.Count);
 
 			foreach (var camelRank in m_CamelRanks)
 			{
@@ -206,20 +164,6 @@ namespace CamelUpData.Script
 
 			Ev biggestEv = GetSortedtEvs()[0];
 			retval += string.Format("\nBiggestEv: {0} avec {1}. {2} \n", biggestEv.m_PlayerAction, biggestEv.m_Ev.ToString("N2"), biggestEv.m_Info);
-
-			return retval;
-		}
-
-		public string ToStringLong()
-		{
-			string retval = ToString();
-
-			retval += "\nSUB BOARD ANALYZER \n";
-
-			foreach (var boardAnalyzer in m_SubBoardAnalyzer)
-			{
-				retval += boardAnalyzer + "\n";
-			}
 
 			return retval;
 		}
@@ -284,7 +228,6 @@ namespace CamelUpData.Script
 
 			return retval;
 		}
-
 	}
 
 	public struct Ev

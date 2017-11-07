@@ -15,8 +15,13 @@ namespace CamelUpData.Script
 
 		int Weight { get; }
 
+		int[] CasesLandedOn { get; }
+
 		string BoardStateString { get;}
 
 		void AddWeight(IBoard aBoard);
+
+		string GetRankString();
+
 	}
 }

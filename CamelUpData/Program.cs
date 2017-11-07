@@ -19,7 +19,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 //GameRules.IS_SHUTTLE_WHEN_HITTING_MINUS_TRAP. Je le fais????
 
 //NOTE
-//Transformer Pattern en byte pour performance
 //Ajouter le CasesLandedOn dans AddWeight?
 
 
@@ -46,7 +45,7 @@ namespace CamelUpData
 		        string testBoard = ";Y;G;R;W;O;;";
 				//BoardManager.Instance.CreateBoardByte(testBoard);
 				//BoardManager.Instance.CreateBoard(testBoard);
-		        BoardManager.Instance.CreateBoardDebug(testBoard);
+		        BoardManager.Instance.CreateBoard(testBoard);
 
 				//ComparaisonPourBoardManager();
 				//TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");
@@ -174,8 +173,9 @@ namespace CamelUpData
 
         private static void TestAnalyseBoard(Board aBoard, string aCards)
         {
-            BoardAnalyzer boardAnal = new BoardAnalyzer(aBoard, aCards);
-            GameRules.Log(boardAnal + "\n");
+			//TODO
+            //BoardAnalyzer boardAnal = new BoardAnalyzer(aBoard, aCards);
+            //GameRules.Log(boardAnal + "\n");
 
 	        /*TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + BOARD_ANALYZER_FILE_NAME, false);
 	        tw.Write(boardAnal.ToStringLong());

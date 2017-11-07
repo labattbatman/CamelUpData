@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace CamelUpData.Script
 {
@@ -22,17 +23,24 @@ namespace CamelUpData.Script
 		public void CreateBoard(string aBoard)
 		{
 			CreateBoard(new Board(aBoard));
-			
+			AnalyseBoards();
 		}
 
 		public void CreateBoardDebug(string aBoard)
 		{
 			CreateBoard(new BoardDebug(aBoard));
+			AnalyseBoards();
 		}
 
 		public void CreateBoardByte(string aBoard)
 		{
 			CreateBoard(new BoardByte(aBoard));
+			AnalyseBoards();
+		}
+
+		private void AnalyseBoards()
+		{
+			BoardAnalyzer anal = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.ToList(), "R0O0W0Y0G0");
 		}
 
 		private void CreateBoard(IBoard aBoard)

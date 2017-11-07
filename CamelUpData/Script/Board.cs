@@ -127,6 +127,24 @@ namespace CamelUpData.Script
 			PopulateNeighbouring();
 		}
 
+		/*private bool IsPosHasTwoOrMoreCamel(int aPos)
+		{
+			bool isCamelOnPos = false;
+			string camels = GetRank();
+
+			foreach (var camel in camels)
+			{
+				if (GetCamelPos(camel) == aPos)
+				{
+					if (isCamelOnPos)
+						return true;
+					isCamelOnPos = true;
+				}
+			}
+
+			return false;
+		}*/
+
 		private int GetNbCamelInPattern(string aPattern)
 		{
 			int nbOfCamelInPattern = 0;
@@ -294,6 +312,11 @@ namespace CamelUpData.Script
 			return m_Rank;
 		}
 
+		public string GetRankString()
+		{
+			return GetRank();
+		}
+
 		private bool IsCamelRolled(char aCamel)
 		{
 			return BoardState.Contains((char.ToLower(aCamel).ToString()));
@@ -370,6 +393,9 @@ namespace CamelUpData.Script
 		public void AddWeight(IBoard aBoard)
 		{
 			Weight += aBoard.Weight;
+
+			//for (int i = 0; i < CasesLandedOn.Length; i++)
+			//	CasesLandedOn[i] += aBoard.CasesLandedOn[i];
 		}
 	}
 }
