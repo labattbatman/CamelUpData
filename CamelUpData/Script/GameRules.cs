@@ -482,6 +482,8 @@ namespace CamelUpData.Script
 
 		public static void Log(string aLog)
 		{
+			if (string.IsNullOrWhiteSpace(aLog))
+				return;
 #if UsingUnity
         UnityEngine.Debug.Log(aLog);
 #else

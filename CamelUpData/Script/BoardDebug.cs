@@ -22,9 +22,8 @@ namespace CamelUpData.Script
 
 			if (IsCamelReachEnd)
 				Program.PopulateFinishBoard(this);
-			else if (NbRound < GameRules.MAX_ROUND_ANALYSE)
-				PopulateSubBoard();
-			else Program.PopulateUnfinishBoardbyMaxRound(this);
+			else if (NbRound >= GameRules.MAX_ROUND_ANALYSE)
+				 Program.PopulateUnfinishBoardbyMaxRound(this);
 		}
 
 		public override string ToString()

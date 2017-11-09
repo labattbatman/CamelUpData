@@ -131,10 +131,24 @@ namespace CamelUpData.Script
 			CasesLandedOn = (int[])aInitialBoard.CasesLandedOn.Clone();
 
 			int caseLanded = GetCamelPos(aRolledCamel);
-			if (caseLanded < CasesLandedOn.Length)
+			if (caseLanded < CasesLandedOn.Length && IsCamelLandEmptyCase(aRolledCamel))
 				CasesLandedOn[caseLanded]++;
 
 			PopulateNeighbouring();
+		}
+
+		private bool IsCamelLandEmptyCase(byte aCamel)
+		{
+			//todo byteboard
+			byte[] rank = GetRank();
+			aCamel = GameRules.ByteRollToUnroll(aCamel);
+			for (int i = 1; i < rank.Length; i++)
+			{
+				if (GameRules.ByteRollToUnroll(rank[i]) == aCamel)
+					return GetCamelPos(aCamel) != GetCamelPos(rank[i - 1]);
+			}
+
+			return true;
 		}
 
 		private int GetNbCamelInPattern(string aPattern)

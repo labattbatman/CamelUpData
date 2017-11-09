@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -121,29 +122,25 @@ namespace CamelUpData.Script
 			CasesLandedOn = (int[])aInitialBoard.CasesLandedOn.Clone();
 
 			int caseLanded = GetCamelPos(aRolledCamel);
-			if(caseLanded < CasesLandedOn.Length)
+			if(caseLanded < CasesLandedOn.Length && IsCamelLandEmptyCase(aRolledCamel))
 				CasesLandedOn[caseLanded]++;
 
 			PopulateNeighbouring();
 		}
 
-		/*private bool IsPosHasTwoOrMoreCamel(int aPos)
+		private bool IsCamelLandEmptyCase(char aCamel)
 		{
-			bool isCamelOnPos = false;
-			string camels = GetRank();
-
-			foreach (var camel in camels)
+			//todo byteboard
+			string rank = GetRank();
+			aCamel = char.ToUpper(aCamel);
+			for (int i = 1; i < rank.Length; i++)
 			{
-				if (GetCamelPos(camel) == aPos)
-				{
-					if (isCamelOnPos)
-						return true;
-					isCamelOnPos = true;
-				}
+				if (char.ToUpper(rank[i]) == aCamel)
+					return GetCamelPos(aCamel) != GetCamelPos(rank[i - 1]);
 			}
 
-			return false;
-		}*/
+			return true;
+		}
 
 		private int GetNbCamelInPattern(string aPattern)
 		{
@@ -393,9 +390,6 @@ namespace CamelUpData.Script
 		public void AddWeight(IBoard aBoard)
 		{
 			Weight += aBoard.Weight;
-
-			//for (int i = 0; i < CasesLandedOn.Length; i++)
-			//	CasesLandedOn[i] += aBoard.CasesLandedOn[i];
 		}
 	}
 }
