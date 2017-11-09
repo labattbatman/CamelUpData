@@ -41,6 +41,7 @@ namespace CamelUpData.Script
 		private void AnalyseBoards()
 		{
 			BoardAnalyzer anal = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.ToList(), "R0O0W0Y0G0");
+			GameRules.Log(anal.ToString());
 		}
 
 		private void CreateBoard(IBoard aBoard)

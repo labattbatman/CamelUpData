@@ -12,7 +12,7 @@ namespace CamelUpData.Script
 		private List<IBoard> m_Boards;
 
 		private int[] m_CasesLandedOn { get; set; }
-		private int m_TotalSubBoard { get; set; }
+		private int m_TotalSubBoardWithWeight { get; set; }
 
 		public BoardAnalyzer(List<IBoard> aBoards, string aCards)
 		{
@@ -63,7 +63,7 @@ namespace CamelUpData.Script
 
 				if (board.m_SubBoard.Count == 0)
 				{
-					m_TotalSubBoard+= board.Weight;
+					m_TotalSubBoardWithWeight+= board.Weight;
 					for (int j = 0; j < board.CasesLandedOn.Length; j++)
 					{
 						m_CasesLandedOn[j] += board.CasesLandedOn[j] * board.Weight;
@@ -99,26 +99,35 @@ namespace CamelUpData.Script
 			{
 				m_PlayerAction = GameRules.PlayerAction.PickShortTermCard,
 				m_Ev = highestEv,
-				m_Info = highestCard
+				m_Info = GameRules.FullNameCamel(highestCard)
 			};
 			return retval;
 		}
 
 		private Ev GeneratePutTrapEv()
 		{
-			int highestCaseLandedOn = 0;
+			List<int> highestCases = new List<int> {0};
 
 			for (int i = 0; i < m_CasesLandedOn.Length; i++)
 			{
-				if (m_CasesLandedOn[i] > m_CasesLandedOn[highestCaseLandedOn])
-					highestCaseLandedOn = i;
+				if (m_CasesLandedOn[i] >= m_CasesLandedOn[highestCases[0]])
+				{
+					if(m_CasesLandedOn[i] > m_CasesLandedOn[highestCases[0]])
+						highestCases.Clear();
+
+					highestCases.Add(i);
+				}
 			}
+
+			string casesRank = string.Empty;
+			foreach (var highestCase in highestCases)
+				casesRank += highestCase + " ";
 
 			Ev retval = new Ev
 			{
 				m_PlayerAction = GameRules.PlayerAction.PutTrap,
-				m_Ev = (float) m_CasesLandedOn[highestCaseLandedOn] / (float) m_TotalSubBoard * GameRules.TRAP_REWARD,
-				m_Info = highestCaseLandedOn + " Minus Trap NOTE: Ce n'est pas la ev Exacte. Ne prend pas en compte l'effet de la trap"
+				m_Ev = (float) m_CasesLandedOn[highestCases[0]] / (float) m_TotalSubBoardWithWeight * GameRules.TRAP_REWARD,
+				m_Info = string.Format("Case(s): {0} Minus Trap. Pas EV exacte", casesRank)
 			};
 			return retval;
 		}
@@ -128,7 +137,7 @@ namespace CamelUpData.Script
 			Ev retval = new Ev
 			{
 				m_PlayerAction = GameRules.PlayerAction.PickLongTermCard,
-				m_Ev = -100,
+				m_Ev = -9,
 				m_Info = "TODO!!!!!!"
 			};
 			return retval;
@@ -136,11 +145,12 @@ namespace CamelUpData.Script
 
 		private Ev GenerateRollDiceEv()
 		{
+			//NOTE: Pas le bon ev. Il faut prendre compte de l'info qu'on donne au prochain joueur
 			Ev retval = new Ev
 			{
 				m_PlayerAction = GameRules.PlayerAction.RollDice,
 				m_Ev = GameRules.TRAP_REWARD,
-				m_Info = "NOTE: Pas le bon ev. Il faut prendre compte de l'info qu'on donne au prochain joueur"
+				m_Info = "Pas le bon EV"
 			};
 
 			return retval;
@@ -148,22 +158,29 @@ namespace CamelUpData.Script
 
 		public override string ToString()
 		{
-			string retval = string.Format("Analyze of {0} boards\n", m_Boards.Count);
+			string retval = string.Format("Analyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
+
+			retval += "---------------------------------\n";
 
 			foreach (var camelRank in m_CamelRanks)
 			{
 				char camel = char.ToUpper(camelRank.Key);
 				int cardNb = m_CamelCard.ContainsKey(camel) ? m_CamelCard[camel] : 0;
-				retval += camelRank.Value.EVShortTerm(cardNb).ToString("N2") + " " + camelRank + "\n";
+				retval += string.Format("{0} {1} \tCarteST: {2} \n", camelRank.Value.EVShortTerm(cardNb).ToString("N2"), camelRank,
+					GameRules.GetRankPrice(0, cardNb));
 			}
 
-			retval += string.Format("\nHighest card short term is: {0} avec ev: {1}\n", GameRules.FullNameCamel((char)m_Evs[0].m_Info), m_Evs[0].m_Ev.ToString("N2"));
-			retval += string.Format("HighestCase = {0}: EV: {1} TotalLanded: {2} \n", m_Evs[1].m_Info, m_Evs[1].m_Ev.ToString("N2"), m_TotalSubBoard);
-			retval += string.Format("Highest card long term is: {0} avec ev: {1}\n", m_Evs[2].m_Info, m_Evs[2].m_Ev.ToString("N2"));
-			retval += string.Format("RollDice ev: {0}. {1}\n", m_Evs[3].m_Ev.ToString("N2"), m_Evs[3].m_Info);
+			retval += "---------------------------------\n";
+
+			retval += string.Format("Highest card short term is\nEV: {1} {0}\n\n", m_Evs[0].m_Info, m_Evs[0].m_Ev.ToString("N2"));
+			retval += string.Format("HighestCase               \nEV: {1} {0}\n\n", m_Evs[1].m_Info, m_Evs[1].m_Ev.ToString("N2"));
+			retval += string.Format("Highest card long term is \nEV: {1} {0}\n\n", m_Evs[2].m_Info, m_Evs[2].m_Ev.ToString("N2"));
+			retval += string.Format("RollDice                  \nEV: {0} {1}\n\n", m_Evs[3].m_Ev.ToString("N2"), m_Evs[3].m_Info);
+
+			retval += "---------------------------------\n";
 
 			Ev biggestEv = GetSortedtEvs()[0];
-			retval += string.Format("\nBiggestEv: {0} avec {1}. {2} \n", biggestEv.m_PlayerAction, biggestEv.m_Ev.ToString("N2"), biggestEv.m_Info);
+			retval += string.Format("BestAction: {0} EV: {1}. {2} \n", biggestEv.m_PlayerAction, biggestEv.m_Ev.ToString("N2"), biggestEv.m_Info);
 
 			return retval;
 		}

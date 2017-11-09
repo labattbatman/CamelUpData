@@ -150,6 +150,8 @@ namespace CamelUpData.Script
 				case 'w':
 				case 'W': return "White";
 
+				case 'r':
+				case 'R':
 				case 'b':
 				case 'B': return "Blue";
 
