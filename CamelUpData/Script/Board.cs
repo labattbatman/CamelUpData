@@ -48,7 +48,7 @@ namespace CamelUpData.Script
 		private string m_Rank = string.Empty;
 		public int NbRound{ get; private set; }
 
-		public int Weight { get; private set; }
+		public int Weight { get; set; }
 
 		public bool IsCamelReachEnd { get { return FirstCamelPos >= GameRules.CASE_NUMBER; } }  
 

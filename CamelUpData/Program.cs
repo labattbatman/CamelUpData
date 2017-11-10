@@ -44,7 +44,7 @@ namespace CamelUpData
 				string testBoard = ";YGRWO;;";
 				//BoardManager.Instance.CreateBoardByte(testBoard);
 				//BoardManager.Instance.CreateBoard(testBoard);
-		        BoardManager.Instance.CreateBoardByte(testBoard);
+		        BoardManager.Instance.CreateBoardDebug(testBoard);
 
 				//ComparaisonPourBoardManager();
 				//TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");

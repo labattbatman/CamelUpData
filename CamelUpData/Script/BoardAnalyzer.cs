@@ -9,7 +9,7 @@ namespace CamelUpData.Script
 
 		private Dictionary<char, CamelRank> m_CamelRanks = new Dictionary<char, CamelRank>();
 		private Dictionary<char, int> m_CamelCard = new Dictionary<char, int>();
-		private List<IBoard> m_Boards;
+		private List<IBoard> m_Boards = new List<IBoard>();
 
 		private int[] m_CasesLandedOn { get; set; }
 		private int m_TotalSubBoardWithWeight { get; set; }
@@ -17,6 +17,30 @@ namespace CamelUpData.Script
 		public BoardAnalyzer(List<IBoard> aBoards, string aCards)
 		{
 			m_Boards = new List<IBoard>(aBoards);
+
+			CreateCamelRanks();
+			m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
+			SetCamelCard(aCards);
+			PopulateCamelsRank();
+			GenerateEvs();
+		}
+
+		public BoardAnalyzer(List<BoardDebug> aBoards, string aCards, string aRules)
+		{
+			foreach (var aBoard in aBoards)
+			{
+				int newWeight = 0;
+				foreach (var hist in aBoard.DicesHistories)
+				{
+					if (hist.StartsWith(aRules))
+						newWeight++;
+				}
+				if (newWeight > 0)
+				{
+					aBoard.Weight = newWeight;
+					m_Boards.Add(aBoard);
+				}
+			}
 
 			CreateCamelRanks();
 			m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
@@ -158,8 +182,11 @@ namespace CamelUpData.Script
 
 		public override string ToString()
 		{
-			string retval = string.Format("Analyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
+			//todo remove
+			//Ev biggestEvv = GetSortedtEvs()[0];
+			//string retval = string.Format("BestAction: {0} EV: {1}. {2} \n", biggestEvv.m_PlayerAction, biggestEvv.m_Ev.ToString("N2"), biggestEvv.m_Info);
 
+			string retval = string.Format("Analyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
 			retval += "---------------------------------\n";
 
 			foreach (var camelRank in m_CamelRanks)
