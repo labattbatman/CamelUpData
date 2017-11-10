@@ -386,7 +386,7 @@ namespace CamelUpData.Script
 			return m_Neighbouring[aCamel];
 		}
 
-		public void AddWeight(IBoard aBoard)
+		public virtual void AddWeight(IBoard aBoard)
 		{
 			Weight += aBoard.Weight;
 		}
