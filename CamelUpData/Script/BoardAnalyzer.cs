@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CamelUpData.Script
 {
@@ -14,18 +15,15 @@ namespace CamelUpData.Script
 		private int[] m_CasesLandedOn { get; set; }
 		private int m_TotalSubBoardWithWeight { get; set; }
 
+        private string m_CamelCardString;
+
 		public BoardAnalyzer(List<IBoard> aBoards, string aCards)
 		{
 			m_Boards = new List<IBoard>(aBoards);
-
-			CreateCamelRanks();
-			m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
-			SetCamelCard(aCards);
-			PopulateCamelsRank();
-			GenerateEvs();
+            Setup(aCards, true);
 		}
 
-		public BoardAnalyzer(List<BoardDebug> aBoards, string aCards, string aRules)
+		private BoardAnalyzer(List<IBoard> aBoards, string aCards, string aRules)
 		{
 			foreach (var aBoard in aBoards)
 			{
@@ -37,22 +35,28 @@ namespace CamelUpData.Script
 				}
 				if (newWeight > 0)
 				{
-					aBoard.Weight = newWeight;
+					aBoard.RemoveWeight(newWeight);
 					m_Boards.Add(aBoard);
 				}
 			}
 
-			CreateCamelRanks();
-			m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
-			SetCamelCard(aCards);
-			PopulateCamelsRank();
-			GenerateEvs();
-		}
+            Setup(aCards, false);
+        }
+
+        private void Setup(string aCards, bool aIsCalculatingRollDice)
+        {
+            CreateCamelRanks();
+            m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
+            SetCamelCard(aCards);
+            PopulateCamelsRank();
+            GenerateEvs(aIsCalculatingRollDice);
+        }
 
 		private void SetCamelCard(string aCards)
 		{
-			//Format: R0O1W2Y0G0
-			for (int i = 0; i < aCards.Length; i += 2)
+            //Format: R0O1W2Y0G0
+            m_CamelCardString = aCards;
+            for (int i = 0; i < aCards.Length; i += 2)
 			{
 				char camel = char.ToUpper(aCards[i]);
 
@@ -96,13 +100,14 @@ namespace CamelUpData.Script
 			}
 		}
 
-		private void GenerateEvs()
+		private void GenerateEvs(bool aIsCalculatingRollDice)
 		{
 			//Hardcoder??? meilleur facon?
 			m_Evs[0] = GenerateShortTermCardEv();
 			m_Evs[1] = GeneratePutTrapEv();
 			m_Evs[2] = GenerateLongTermCardEv();
-			m_Evs[3] = GenerateRollDiceEv();
+            if(aIsCalculatingRollDice)
+			    m_Evs[3] = GenerateRollDiceEv();
 		}
 
 		private Ev GenerateShortTermCardEv()
@@ -169,24 +174,33 @@ namespace CamelUpData.Script
 
 		private Ev GenerateRollDiceEv()
 		{
-			//NOTE: Pas le bon ev. Il faut prendre compte de l'info qu'on donne au prochain joueur
-			Ev retval = new Ev
-			{
-				m_PlayerAction = GameRules.PlayerAction.RollDice,
-				m_Ev = GameRules.TRAP_REWARD,
-				m_Info = "Pas le bon EV"
-			};
+            float evNextTurn = 0;
+            List<BoardAnalyzer> evNext = new List<BoardAnalyzer>();//TODO debugger pour BYte != BOard . BYte n'a pas le bon weight
+            foreach (var camel in GameRules.IDENTITY_CAMEL_NAME_UNROLLED)
+            {
+                evNextTurn += new BoardAnalyzer(m_Boards, m_CamelCardString, camel.ToString()).GetSortedtEvs()[0].m_Ev;
+                evNext.Add(new BoardAnalyzer(m_Boards, m_CamelCardString, camel.ToString()));
+            }
 
-			return retval;
+            evNextTurn = evNextTurn / GameRules.IDENTITY_CAMEL_NAME_UNROLLED.Length;
+            float secondEv = GetSortedtEvs()[1].m_Ev;
+            Ev retval = new Ev
+            {
+                m_PlayerAction = GameRules.PlayerAction.RollDice,
+                m_Ev = GameRules.TRAP_REWARD - (evNextTurn - secondEv),
+                m_Info = "Marche pas avec BoardByte"
+            };
+
+            return retval;
 		}
 
 		public override string ToString()
 		{
 			//todo remove
-			//Ev biggestEvv = GetSortedtEvs()[0];
-			//string retval = string.Format("BestAction: {0} EV: {1}. {2} \n", biggestEvv.m_PlayerAction, biggestEvv.m_Ev.ToString("N2"), biggestEvv.m_Info);
+			Ev biggestEvv = GetSortedtEvs()[0];
+			string retval = string.Format("BestAction: {0} EV: {1}. {2} \n", biggestEvv.m_PlayerAction, biggestEvv.m_Ev.ToString("N2"), biggestEvv.m_Info);
 
-			string retval = string.Format("Analyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
+			//string retval = string.Format("Analyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
 			retval += "---------------------------------\n";
 
 			foreach (var camelRank in m_CamelRanks)
@@ -212,6 +226,7 @@ namespace CamelUpData.Script
 			return retval;
 		}
 
+
 		public List<Ev> GetSortedtEvs()
 		{
 			List<Ev> retval = new List<Ev>();
@@ -230,7 +245,7 @@ namespace CamelUpData.Script
 
 	public class CamelRank
 	{
-		public char CamelName { private get; set; }
+		public char CamelName { private get; set; } 
 
 		private int m_TotalFinish;
 		private int[] m_TimeFinish;

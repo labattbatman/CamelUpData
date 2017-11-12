@@ -76,26 +76,35 @@ namespace CamelUpData.Script
 			}
 		}
 
-		public Board(string aBoardId)
+        public string DicesHistory
+        {
+            get { return DicesHistories[0]; }
+        }
+
+        public List<string> DicesHistories { get; }
+
+        public Board(string aBoardId)
 		{
 			m_SubBoard = new List<IBoard>();
 			BoardState = aBoardId;
 			CasesLandedOn = new int[GameRules.CASE_NUMBER];
 			Weight = 1;
+            DicesHistories = new List<string> { string.Empty };
 
-			PopulateNeighbouring();
+            PopulateNeighbouring();
 
 			if(!GameRules.USE_DICE_NB_IN_DICE_HSITORY)
 				PopulateSubBoard();
 		} 
     
-		protected Board(Board aInitialBoard, string aPattern, char aRolledCamel)
+		protected Board(Board aInitialBoard, string aPattern, char aRolledCamel, List<string> aDicesHistories)
 		{
 			m_SubBoard = new List<IBoard>();
 			StringBuilder pattern = new StringBuilder(aPattern);     
 			string camels = aInitialBoard.GetCamelsNeighbouring(aRolledCamel);
+            DicesHistories = aDicesHistories;
 
-			for (int i = 0; i < pattern.Length; i++)
+            for (int i = 0; i < pattern.Length; i++)
 			{
 				if (GameRules.IsCharPatternCamel(pattern[i]))
 				{
@@ -229,7 +238,7 @@ namespace CamelUpData.Script
 
 		protected virtual void CreateSubboard(string aResult, char aUnrollCamel, int aDiceNb)
 		{
-			Board subBoard = new Board(this, aResult, aUnrollCamel);
+            Board subBoard = new Board(this, aResult, aUnrollCamel, GetDiceHistoryUpdated(aUnrollCamel, aDiceNb));
 			m_SubBoard.Add(subBoard);
 		}
 
@@ -386,9 +395,25 @@ namespace CamelUpData.Script
 			return m_Neighbouring[aCamel];
 		}
 
-		public virtual void AddWeight(IBoard aBoard)
+		public void AddWeight(IBoard aBoard)
 		{
 			Weight += aBoard.Weight;
-		}
-	}
+            DicesHistories.AddRange(aBoard.DicesHistories);
+        }
+
+        public void RemoveWeight(int aNewWeight)
+        {
+            Weight = aNewWeight;
+        }
+
+        protected List<string> GetDiceHistoryUpdated(char aUnrollCamel, int aDiceNb)
+        {
+            List<string> newDiceHistories = new List<string>(DicesHistories);
+
+            for (int i = 0; i < newDiceHistories.Count; i++)
+                newDiceHistories[i] += aUnrollCamel.ToString() + aDiceNb;
+
+            return newDiceHistories;
+        }
+    }
 }

@@ -41,11 +41,6 @@ namespace CamelUpData.Script
 		private void AnalyseBoards()
 		{
 			BoardAnalyzer anal = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.ToList(), "R0O0W0Y0G0");
-			BoardAnalyzer anal1 = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.Cast<BoardDebug>().ToList(), "R0O0W0Y0G0", "Y");
-			BoardAnalyzer anal2 = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.Cast<BoardDebug>().ToList(), "R0O0W0Y0G0", "G");
-			BoardAnalyzer anal3 = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.Cast<BoardDebug>().ToList(), "R0O0W0Y0G0", "R");
-			BoardAnalyzer anal4 = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.Cast<BoardDebug>().ToList(), "R0O0W0Y0G0", "W");
-			BoardAnalyzer anal5 = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.Cast<BoardDebug>().ToList(), "R0O0W0Y0G0", "O");
 
 			GameRules.Log(anal.ToString());
 		}

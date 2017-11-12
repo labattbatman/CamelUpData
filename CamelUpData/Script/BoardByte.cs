@@ -55,7 +55,32 @@ namespace CamelUpData.Script
 
 		public List<IBoard> m_SubBoard { get; set; }
 
-		private byte[] m_Rank;
+        private List<List<Byte>> m_DicesHistoriesByte = new List<List<byte>>();
+        private List<string> DicesHistoriesInString = new List<string>();
+        public List<string> DicesHistories
+        {
+            get
+            {
+                //if (DicesHistoriesInString.Count == m_DicesHistoriesByte.Count && DicesHistoriesInString[0].Length == m_DicesHistoriesByte[0].Count)
+                //    return DicesHistoriesInString;
+
+                DicesHistoriesInString = new List<string>();
+
+                foreach(var history in m_DicesHistoriesByte)
+                {
+                    string histString = string.Empty;
+
+                    foreach (var dice in history)
+                        histString += GameRules.ByteToString(dice);
+
+                    DicesHistoriesInString.Add(histString);
+                }
+
+                return DicesHistoriesInString;
+            }
+        }
+
+        private byte[] m_Rank;
 		public int NbRound { get; private set; }
 
 		public int Weight { get; private set; }
@@ -92,20 +117,22 @@ namespace CamelUpData.Script
 			BoardState = GameRules.StringToByte(aBoardId);
 			CasesLandedOn = new int[GameRules.CASE_NUMBER];
 			Weight = 1;
+            m_DicesHistoriesByte.Add(new List<byte>());
 
-			PopulateNeighbouring();
+            PopulateNeighbouring();
 
 			if (!GameRules.USE_DICE_NB_IN_DICE_HSITORY)
 				PopulateSubBoard();
 		}
 
-		protected BoardByte(BoardByte aInitialBoard, string aPattern, byte aRolledCamel)
+		private BoardByte(BoardByte aInitialBoard, string aPattern, byte aRolledCamel, List<List<Byte>> aDiceHistory)
 		{
 			m_SubBoard = new List<IBoard>();
 			byte[] pattern = GameRules.StringToByte(aPattern);
 			byte[] camels = aInitialBoard.GetCamelsNeighbouring(aRolledCamel);
-			
-			for (int i = 0; i < pattern.Length; i++)
+            m_DicesHistoriesByte.AddRange(aDiceHistory);
+
+            for (int i = 0; i < pattern.Length; i++)
 			{
 				if (GameRules.IsBytePatternCamel(pattern[i]))
 				{
@@ -240,7 +267,7 @@ namespace CamelUpData.Script
 
 		protected virtual void CreateSubboard(string aResult, byte aUnrollCamel, int aDiceNb)
 		{
-			BoardByte subBoard = new BoardByte(this, aResult, aUnrollCamel);
+			BoardByte subBoard = new BoardByte(this, aResult, aUnrollCamel, GetDiceHistoryUpdated(aUnrollCamel));
 			m_SubBoard.Add(subBoard);
 		}
 
@@ -418,11 +445,31 @@ namespace CamelUpData.Script
 		public void AddWeight(IBoard aBoard)
 		{
 			Weight += aBoard.Weight;
-		}
+            DicesHistories.AddRange(aBoard.DicesHistories);
+        }
 
-		#region Byte Logic
+        public void RemoveWeight(int aNewWeight)
+        {
+            Weight = aNewWeight;
+        }
 
-		private List<byte[]> SplitBoardByCase()
+        private List<List<Byte>> GetDiceHistoryUpdated(byte aUnrollCamel)
+        {
+            List<List<Byte>> newDiceHistories = new List<List<Byte>>();
+
+            for (int i = 0; i < m_DicesHistoriesByte.Count; i++)
+            {
+                List<Byte> newHistory = new List<byte>(m_DicesHistoriesByte[i]);
+                newHistory.Add(aUnrollCamel);
+                newDiceHistories.Add(newHistory);
+            }
+
+            return newDiceHistories;
+        }
+
+        #region Byte Logic
+
+        private List<byte[]> SplitBoardByCase()
 		{
 			List<byte[]> retval = new List<byte[]>();
 			int lastCasePos = 0;

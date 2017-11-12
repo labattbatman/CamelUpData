@@ -7,22 +7,14 @@ namespace CamelUpData.Script
 	{
 		private BoardDebug m_ParentBoard { get; set; }
 
-		public string DicesHistory
-		{
-			get { return DicesHistories[0]; }
-		}
-
-		public List<string> DicesHistories = new List<string>{string.Empty};
-
 		public BoardDebug(string aBoardId) : base (aBoardId)
 		{
 			
 		}
 
-		public BoardDebug(Board aInitialBoard, string aPattern, char aRolledCamel, List<string> dicesHistories) : base (aInitialBoard, aPattern, aRolledCamel)
+		public BoardDebug(Board aInitialBoard, string aPattern, char aRolledCamel, List<string> aDicesHistories) : base (aInitialBoard, aPattern, aRolledCamel, aDicesHistories)
 		{
 			m_ParentBoard = (BoardDebug)aInitialBoard;
-			DicesHistories = dicesHistories;
 
 			if (IsCamelReachEnd)
 				Program.PopulateFinishBoard(this);
@@ -81,20 +73,8 @@ namespace CamelUpData.Script
 
 		protected override void CreateSubboard(string aResult, char aUnrollCamel, int aDiceNb)
 		{
-			List<string> newDiceHistories = new List<string>(DicesHistories);
-
-			for (int i = 0; i < newDiceHistories.Count; i++)
-				newDiceHistories[i] += aUnrollCamel.ToString() + aDiceNb;
-
-			BoardDebug subBoard = new BoardDebug(this, aResult, aUnrollCamel, newDiceHistories);
+			BoardDebug subBoard = new BoardDebug(this, aResult, aUnrollCamel, GetDiceHistoryUpdated(aUnrollCamel, aDiceNb));
 			m_SubBoard.Add(subBoard);
-		}
-
-		public override void AddWeight(IBoard aBoard)
-		{
-			base.AddWeight(aBoard);
-
-			DicesHistories.AddRange((aBoard as BoardDebug).DicesHistories);
 		}
 	}
 }

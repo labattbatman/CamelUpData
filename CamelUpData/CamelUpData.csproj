@@ -48,9 +48,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Script\Board.cs" />
     <Compile Include="Script\BoardAnalyzer.cs" />
+    <Compile Include="Script\BoardByte.cs" />
+    <Compile Include="Script\BoardDebug.cs" />
     <Compile Include="Script\BoardManager.cs" />
     <Compile Include="Script\CamelMovement.cs" />
     <Compile Include="Script\GameRules.cs" />
+    <Compile Include="Script\IBoard.cs" />
     <Compile Include="Script\Pattern.cs" />
     <Compile Include="Script\PatternGenerator.cs" />
     <Compile Include="Script\ReUse\Extension.cs" />

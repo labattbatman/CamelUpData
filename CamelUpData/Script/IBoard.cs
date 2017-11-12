@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CamelUpData.Script
 {
@@ -9,7 +8,9 @@ namespace CamelUpData.Script
 
 		List<IBoard> m_SubBoard { get; set; }
 
-		bool IsCamelReachEnd { get; }
+        List<string> DicesHistories { get; }
+
+        bool IsCamelReachEnd { get; }
 
 		int NbRound { get; }
 
@@ -21,7 +22,8 @@ namespace CamelUpData.Script
 
 		void AddWeight(IBoard aBoard);
 
-		string GetRankString();
+        void RemoveWeight(int aNewWeight);
 
-	}
+		string GetRankString();
+    }
 }
