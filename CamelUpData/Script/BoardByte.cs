@@ -61,8 +61,8 @@ namespace CamelUpData.Script
         {
             get
             {
-                //if (DicesHistoriesInString.Count == m_DicesHistoriesByte.Count && DicesHistoriesInString[0].Length == m_DicesHistoriesByte[0].Count)
-                //    return DicesHistoriesInString;
+                if (DicesHistoriesInString.Count == m_DicesHistoriesByte.Count && DicesHistoriesInString[0].Length == m_DicesHistoriesByte[0].Count)
+                    return DicesHistoriesInString;
 
                 DicesHistoriesInString = new List<string>();
 
@@ -166,7 +166,6 @@ namespace CamelUpData.Script
 
 		private bool IsCamelLandEmptyCase(byte aCamel)
 		{
-			//todo byteboard
 			byte[] rank = GetRank();
 			aCamel = GameRules.ByteRollToUnroll(aCamel);
 			for (int i = 1; i < rank.Length; i++)
@@ -388,10 +387,6 @@ namespace CamelUpData.Script
 				List<byte> camels = new List<byte>();
 				List<byte[]> splittedBoard = SplitBoardByCase();
 
-				/*foreach (Byte token in tempSplittedBoard)
-					if (!string.IsNullOrEmpty(token)) TODO DELETE
-						splittedBoard.Add(token);*/
-
 				for (int i = 0; i < splittedBoard.Count; i++)
 				{
 					if (!GameRules.IsByteIdentityCamel(splittedBoard[i][0]))
@@ -445,7 +440,8 @@ namespace CamelUpData.Script
 		public void AddWeight(IBoard aBoard)
 		{
 			Weight += aBoard.Weight;
-            DicesHistories.AddRange(aBoard.DicesHistories);
+
+            m_DicesHistoriesByte.AddRange((aBoard as BoardByte).m_DicesHistoriesByte);
         }
 
         public void RemoveWeight(int aNewWeight)

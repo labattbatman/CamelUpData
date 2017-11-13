@@ -175,15 +175,13 @@ namespace CamelUpData.Script
 		private Ev GenerateRollDiceEv()
 		{
             float evNextTurn = 0;
-            List<BoardAnalyzer> evNext = new List<BoardAnalyzer>();//TODO debugger pour BYte != BOard . BYte n'a pas le bon weight
+
             foreach (var camel in GameRules.IDENTITY_CAMEL_NAME_UNROLLED)
-            {
                 evNextTurn += new BoardAnalyzer(m_Boards, m_CamelCardString, camel.ToString()).GetSortedtEvs()[0].m_Ev;
-                evNext.Add(new BoardAnalyzer(m_Boards, m_CamelCardString, camel.ToString()));
-            }
 
             evNextTurn = evNextTurn / GameRules.IDENTITY_CAMEL_NAME_UNROLLED.Length;
             float secondEv = GetSortedtEvs()[1].m_Ev;
+
             Ev retval = new Ev
             {
                 m_PlayerAction = GameRules.PlayerAction.RollDice,

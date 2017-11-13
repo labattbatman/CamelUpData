@@ -138,7 +138,6 @@ namespace CamelUpData.Script
 
 		private bool IsCamelLandEmptyCase(char aCamel)
 		{
-			//todo byteboard
 			string rank = GetRank();
 			aCamel = char.ToUpper(aCamel);
 			for (int i = 1; i < rank.Length; i++)
