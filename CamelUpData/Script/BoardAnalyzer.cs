@@ -86,7 +86,7 @@ namespace CamelUpData.Script
 				for (int j = 0; j < rank.Length; j++)
 				{
 					int currentRank = rank.Length - j - 1;
-					m_CamelRanks[rank[j]].UpdateFinish(currentRank);
+					m_CamelRanks[rank[j]].UpdateFinish(currentRank, board.Weight);
 				}
 
 				if (board.m_SubBoard.Count == 0)
@@ -114,9 +114,11 @@ namespace CamelUpData.Script
 		{	
 			char highestCard = 'Z';
 			float highestEv = -10;
+
 			foreach (var camelRank in m_CamelRanks)
 			{
 				float current = camelRank.Value.EVShortTerm(m_CamelCard[camelRank.Key]);
+
 				if (current > highestEv)
 				{
 					highestCard = camelRank.Key;
@@ -224,7 +226,6 @@ namespace CamelUpData.Script
 			return retval;
 		}
 
-
 		public List<Ev> GetSortedtEvs()
 		{
 			List<Ev> retval = new List<Ev>();
@@ -255,10 +256,10 @@ namespace CamelUpData.Script
 			m_TimeFinish = new int[GameRules.IDENTITY_CAMEL_NAME_ROLLED.Length];
 		}
 
-		public void UpdateFinish(int aRank)
+		public void UpdateFinish(int aRank, int aWeight)
 		{
-			m_TimeFinish[aRank]++;
-			m_TotalFinish++;
+			m_TimeFinish[aRank]+= aWeight;
+			m_TotalFinish+= aWeight;
 		}
 
 		public override string ToString()
