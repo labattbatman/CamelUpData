@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CamelUpData.Script
 {
@@ -50,12 +49,12 @@ namespace CamelUpData.Script
 			}
 		}
 
-		private Dictionary<byte, int> m_Position = new Dictionary<byte, int>();
-		private Dictionary<byte, byte[]> m_Neighbouring = new Dictionary<byte, byte[]>();
+		private readonly Dictionary<byte, int> m_Position = new Dictionary<byte, int>();
+		private readonly Dictionary<byte, byte[]> m_Neighbouring = new Dictionary<byte, byte[]>();
 
 		public List<IBoard> m_SubBoard { get; set; }
 
-        private List<List<Byte>> m_DicesHistoriesByte = new List<List<byte>>();
+        private readonly List<List<Byte>> m_DicesHistoriesByte = new List<List<byte>>();
         private List<string> DicesHistoriesInString = new List<string>();
         public List<string> DicesHistories
         {
@@ -244,10 +243,7 @@ namespace CamelUpData.Script
 				{
 					byte unrollCamel = unRollCamel[j];
 					if (!pattern.CamelsIdentity.ToUpper().Contains(GameRules.ByteToString(unrollCamel).ToString().ToUpper()))
-					{
-						//GameRules.Log("TEST" + unrollCamel + "\n");
 						continue;
-					}
 
 					List<string> results = pattern.GetResultsForDice(GameRules.ByteToString(unrollCamel));
 					unrolledCamels += GameRules.ByteToString(unRollCamel[j]);
@@ -431,7 +427,6 @@ namespace CamelUpData.Script
 				foreach (byte camel in camels)
 						m_Neighbouring.Add(camel, camels.ToArray());
 
-				//GameRules.Log(camels + "\n");
 			}
 
 			return m_Neighbouring[aCamel];

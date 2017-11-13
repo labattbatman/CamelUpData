@@ -8,9 +8,9 @@ namespace CamelUpData.Script
 	{
 		public Ev[] m_Evs = new Ev[Enum.GetNames(typeof(GameRules.PlayerAction)).Length];
 
-		private Dictionary<char, CamelRank> m_CamelRanks = new Dictionary<char, CamelRank>();
-		private Dictionary<char, int> m_CamelCard = new Dictionary<char, int>();
-		private List<IBoard> m_Boards = new List<IBoard>();
+		private readonly Dictionary<char, CamelRank> m_CamelRanks = new Dictionary<char, CamelRank>();
+		private readonly Dictionary<char, int> m_CamelCard = new Dictionary<char, int>();
+		private readonly List<IBoard> m_Boards = new List<IBoard>();
 
 		private int[] m_CasesLandedOn { get; set; }
 		private int m_TotalSubBoardWithWeight { get; set; }
@@ -102,7 +102,6 @@ namespace CamelUpData.Script
 
 		private void GenerateEvs(bool aIsCalculatingRollDice)
 		{
-			//Hardcoder??? meilleur facon?
 			m_Evs[0] = GenerateShortTermCardEv();
 			m_Evs[1] = GeneratePutTrapEv();
 			m_Evs[2] = GenerateLongTermCardEv();
@@ -112,8 +111,8 @@ namespace CamelUpData.Script
 
 		private Ev GenerateShortTermCardEv()
 		{	
-			char highestCard = 'Z';
-			float highestEv = -10;
+			char highestCard = '*';
+			float highestEv = float.MinValue;
 
 			foreach (var camelRank in m_CamelRanks)
 			{
@@ -152,13 +151,13 @@ namespace CamelUpData.Script
 
 			string casesRank = string.Empty;
 			foreach (var highestCase in highestCases)
-				casesRank += highestCase + " ";
+				casesRank += highestCase + ", ";
 
 			Ev retval = new Ev
 			{
 				m_PlayerAction = GameRules.PlayerAction.PutTrap,
 				m_Ev = (float) m_CasesLandedOn[highestCases[0]] / (float) m_TotalSubBoardWithWeight * GameRules.TRAP_REWARD,
-				m_Info = string.Format("Case(s): {0} Minus Trap. Pas EV exacte", casesRank)
+				m_Info = string.Format("Case(s): {0}. Minus Trap. Pas EV exacte.", casesRank)
 			};
 			return retval;
 		}
@@ -187,8 +186,7 @@ namespace CamelUpData.Script
             Ev retval = new Ev
             {
                 m_PlayerAction = GameRules.PlayerAction.RollDice,
-                m_Ev = GameRules.TRAP_REWARD - (evNextTurn - secondEv),
-                m_Info = "Marche pas avec BoardByte"
+                m_Ev = GameRules.TRAP_REWARD - (evNextTurn - secondEv)
             };
 
             return retval;
@@ -196,11 +194,7 @@ namespace CamelUpData.Script
 
 		public override string ToString()
 		{
-			//todo remove
-			Ev biggestEvv = GetSortedtEvs()[0];
-			string retval = string.Format("BestAction: {0} EV: {1}. {2} \n", biggestEvv.m_PlayerAction, biggestEvv.m_Ev.ToString("N2"), biggestEvv.m_Info);
-
-			//string retval = string.Format("Analyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
+			string retval = string.Format("Analyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
 			retval += "---------------------------------\n";
 
 			foreach (var camelRank in m_CamelRanks)
@@ -264,7 +258,7 @@ namespace CamelUpData.Script
 
 		public override string ToString()
 		{
-			string retval = string.Format("{0}: " ,CamelName.ToString());
+			string retval = string.Format("{0}: ", CamelName);
 
 			for (int i = 0; i < m_TimeFinish.Length; i++)
 			{

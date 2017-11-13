@@ -10,15 +10,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 //TODO fait à moitié
 //Test les + (ya un bug avec CamelUpUnity)
 //Tester les -
-//Faire Roll dice decision
 //Pour les positions des traps...repenser le calcul et attendre les traps. fait des tests.
 
 //TODO MAIN
 //Long terme decision. Tester sur un bon ordi le temps
 //Merge avec CamelUpUnity pour le visuel
 //GameRules.IS_SHUTTLE_WHEN_HITTING_MINUS_TRAP. Je le fais????
-
-
 
 namespace CamelUpData
 {
@@ -41,13 +38,9 @@ namespace CamelUpData
 	        if (args.Length == 0)
 	        {
 		        //string testBoard = ";y;g;r;W;o;;";
-				string testBoard = ";YGRWO;;";
-				//BoardManager.Instance.CreateBoardByte(testBoard);
-				//BoardManager.Instance.CreateBoard(testBoard);
-		        BoardManager.Instance.CreateBoardByte(testBoard);
+				string testBoard = ";ORWYG;";
+		        BoardManager.Instance.CreateBoard(testBoard);
 
-				//ComparaisonPourBoardManager();
-				//TestAnalyseBoard(new Board(";ygwBO;;"), "B0O0W0Y0G0");
 				//UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
 				string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
 		        
@@ -56,7 +49,7 @@ namespace CamelUpData
 			}
 	        else
 	        {
-				TestAnalyseBoard(new Board(args[0]), args[1]);
+				//Caller par commandLine
 	        }
         }
 
@@ -90,9 +83,6 @@ namespace CamelUpData
 
         public static void PopulateFinishBoard(BoardDebug aBoard)
         {
-	        //if (m_FinishBoard.Count % 7000 == 0)
-		    //    GameRules.Log(m_FinishBoard.Count.ToString());
-
 			if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
                 m_FinishBoard.Add(aBoard);
 
@@ -170,72 +160,12 @@ namespace CamelUpData
             tw.Close();
         }
 
-        private static void TestAnalyseBoard(Board aBoard, string aCards)
-        {
-			//TODO
-            //BoardAnalyzer boardAnal = new BoardAnalyzer(aBoard, aCards);
-            //GameRules.Log(boardAnal + "\n");
-
-	        /*TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + BOARD_ANALYZER_FILE_NAME, false);
-	        tw.Write(boardAnal.ToStringLong());
-	        tw.Close();*/
-		}
-
-	    public static void HardPopulateFinishBoard(BoardDebug aBoard)
-        {
-            //if (aBoard.IsCamelReachEnd)
-            {		
-                m_FinishBoard.Add(aBoard);
-
-	                if (m_FinishBoard.Count % 100000 == 0)
-	                   GameRules.Log(m_FinishBoard.Count + "\n");
-            }
-        }
-
-	    private static void ComparaisonPourBoardManager()
-	    {
-		    string testBoard = ";YGBWO;;";
-
-			GameRules.USE_DICE_NB_IN_DICE_HSITORY = false;
-		    TestAnalyseBoard(new Board(testBoard), "B0O0W0Y0G0");
-
-		    GameRules.USE_DICE_NB_IN_DICE_HSITORY = true;
-		    BoardManager.Instance.CreateBoard(testBoard);
-
-		    var groupBy = m_UnfinishBoardByMaxRound.GroupBy(c => c.BoardState).ToList();
-		    var dict = new Dictionary<string, int>();
-		    var total = m_UnfinishBoardByMaxRound.Count;
-		    var dict2 = new Dictionary<string, int>();
-		    var total2 = 0;
-
-		    var diceHistoryForCustom = new Dictionary<string, List<string>>();
-
-		    foreach (var all in groupBy)
-		    {
-			    var diceHistory = new List<string>();
-			    dict.Add(all.Key, all.Count());
-
-			    foreach (var board in all)
-				    diceHistory.Add(board.DicesHistory);
-
-			    diceHistoryForCustom.Add(all.Key, diceHistory);
-		    }
-
-		    foreach (var board in BoardManager.Instance.m_UnfinishBoardByMaxRound)
-		    {
-			    dict2.Add(board.Key, board.Value.Weight);
-			    total2 += board.Value.Weight;
-		    }
-		}
-
 		[TestMethod]
 	    public void TestBoards()
 		{
 			GameRules.USE_DICE_NB_IN_DICE_HSITORY = false;
 
 			string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
-
-			//PopulatePattern(";A;B;C;D;E;");
 
 		    foreach (string file in files)
 		    {
@@ -254,30 +184,5 @@ namespace CamelUpData
 					Assert.AreEqual(compared[i], result[i], string.Format("Fail at {0}", Path.GetFileNameWithoutExtension(file)));
 			}	    
 		}
-
-	    [TestMethod]
-	    public void TestBoardHardcoder()
-	    {
-		    GameRules.USE_DICE_NB_IN_DICE_HSITORY = false;
-
-			string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + UNITY_CAMELUP_RESULT_FOLDER);
-
-		    foreach (string file in files)
-		    {
-			    if (Path.GetFileNameWithoutExtension(file) != ";O;B;W;YG;+")
-				    continue;
-
-			    EraseTextFile();
-			    CustomTest(Path.GetFileNameWithoutExtension(file), TEXT_FILE_NAME);
-
-			    string[] compared = File.ReadAllLines(file);
-			    string[] result = File.ReadAllLines(Directory.GetCurrentDirectory() + "/" + TEXT_FILE_NAME);
-
-			    Assert.AreEqual(compared.Length, result.Length);
-
-			    for (int i = 0; i < compared.Length; i++)
-				    Assert.AreEqual(compared[i], result[i]);
-		    }
-	    }
 	}
 }

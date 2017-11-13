@@ -7,10 +7,7 @@ namespace CamelUpData.Script
 	{
 		private BoardDebug m_ParentBoard { get; set; }
 
-		public BoardDebug(string aBoardId) : base (aBoardId)
-		{
-			
-		}
+		public BoardDebug(string aBoardId) : base (aBoardId) { }
 
 		public BoardDebug(Board aInitialBoard, string aPattern, char aRolledCamel, List<string> aDicesHistories) : base (aInitialBoard, aPattern, aRolledCamel, aDicesHistories)
 		{

@@ -41,8 +41,8 @@ namespace CamelUpData.Script
 			}
 		}
 
-		private Dictionary<char, int> m_Position = new Dictionary<char, int>();
-		private Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
+		private readonly Dictionary<char, int> m_Position = new Dictionary<char, int>();
+		private readonly Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
 		public List<IBoard> m_SubBoard { get; set; }
 		
 		private string m_Rank = string.Empty;
@@ -215,10 +215,7 @@ namespace CamelUpData.Script
 				{
 					char unrollCamel = unRollCamel[j];
 					if (!pattern.CamelsIdentity.ToUpper().Contains(unrollCamel.ToString().ToUpper()))
-					{
-						//GameRules.Log("TEST" + unrollCamel + "\n");
 						continue;
-					}
 
 					List<string> results = pattern.GetResultsForDice(unrollCamel);
 					unrolledCamels += unRollCamel[j];
@@ -388,7 +385,6 @@ namespace CamelUpData.Script
 				foreach (char camel in camels)
 					m_Neighbouring.Add(camel, camels);
 
-				//GameRules.Log(camels + "\n");
 			}
 
 			return m_Neighbouring[aCamel];

@@ -41,9 +41,9 @@ namespace CamelUpData.Script
 
 	public class CamelsMovement
 	{
-		private List<Camel> m_StartingCamels = new List<Camel>();
+		private readonly List<Camel> m_StartingCamels = new List<Camel>();
 		private List<Camel> m_Camels = new List<Camel>();
-		private List<Trap> m_Traps = new List<Trap>();  
+		private readonly List<Trap> m_Traps = new List<Trap>();  
 
 		public string StartingCamelsInBoard { get { return GetBoard(m_StartingCamels); } }
 

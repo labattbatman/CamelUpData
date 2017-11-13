@@ -469,9 +469,6 @@ namespace CamelUpData.Script
 					//TODO BUG ICI mauvais pattern ;A;+;+ -> ;A; pas sur si cest la bonne solution
 					caseSinceLastCamel = 0;
 				}
-
-				//Debug.Log(string.Format(" {4} -> camelNb: {0}, caseSinceLastCamel: {1}, nbCamelsOnLastPile: {2}, isCamelSameCase: {3}",
-				//    camelNb, caseSinceLastCamel, nbCamelsOnLastPile, isCamelSameCase, holePattern[i]));
 			}
 			retval.Add(holePattern);
 			return retval;
