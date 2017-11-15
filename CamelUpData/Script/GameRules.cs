@@ -59,21 +59,21 @@ namespace CamelUpData.Script
 		public const char TRAP_MINUS = '-';
 
 		private const char PATTERN_CAMEL_NAME_1 = 'A';
-		private const char PATTERN_CAMEL_NAME_2 = 'B';
-		private const char PATTERN_CAMEL_NAME_3 = 'C';
-		private const char PATTERN_CAMEL_NAME_4 = 'D';
-		private const char PATTERN_CAMEL_NAME_5 = 'E';
+		private const char PATTERN_CAMEL_NAME_2 = 'C';
+		private const char PATTERN_CAMEL_NAME_3 = 'D';
+		private const char PATTERN_CAMEL_NAME_4 = 'E';
+		private const char PATTERN_CAMEL_NAME_5 = 'F';
 		public static readonly char[] PATTERN_CAMEL_NAME =  { PATTERN_CAMEL_NAME_1, PATTERN_CAMEL_NAME_2, PATTERN_CAMEL_NAME_3, PATTERN_CAMEL_NAME_4, PATTERN_CAMEL_NAME_5 };
 
 		private const char IDENTITY_CAMEL_NAME_ROLLED_1 = 'o';
-		private const char IDENTITY_CAMEL_NAME_ROLLED_2 = 'r';
+		private const char IDENTITY_CAMEL_NAME_ROLLED_2 = 'b';
 		private const char IDENTITY_CAMEL_NAME_ROLLED_3 = 'w';
 		private const char IDENTITY_CAMEL_NAME_ROLLED_4 = 'g';
 		private const char IDENTITY_CAMEL_NAME_ROLLED_5 = 'y';
 		public static readonly char[] IDENTITY_CAMEL_NAME_ROLLED = { IDENTITY_CAMEL_NAME_ROLLED_1, IDENTITY_CAMEL_NAME_ROLLED_2, IDENTITY_CAMEL_NAME_ROLLED_3, IDENTITY_CAMEL_NAME_ROLLED_4, IDENTITY_CAMEL_NAME_ROLLED_5 };
 
 		private const char IDENTITY_CAMEL_NAME_UNROLLED_1 = 'O';
-		private const char IDENTITY_CAMEL_NAME_UNROLLED_2 = 'R';
+		private const char IDENTITY_CAMEL_NAME_UNROLLED_2 = 'B';
 		private const char IDENTITY_CAMEL_NAME_UNROLLED_3 = 'W';
 		private const char IDENTITY_CAMEL_NAME_UNROLLED_4 = 'G';
 		private const char IDENTITY_CAMEL_NAME_UNROLLED_5 = 'Y';

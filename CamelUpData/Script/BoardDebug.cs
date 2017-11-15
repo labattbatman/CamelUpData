@@ -12,11 +12,6 @@ namespace CamelUpData.Script
 		public BoardDebug(Board aInitialBoard, string aPattern, char aRolledCamel, List<string> aDicesHistories) : base (aInitialBoard, aPattern, aRolledCamel, aDicesHistories)
 		{
 			m_ParentBoard = (BoardDebug)aInitialBoard;
-
-			if (IsCamelReachEnd)
-				Program.PopulateFinishBoard(this);
-			else if (NbRound >= GameRules.MAX_ROUND_ANALYSE)
-				 Program.PopulateUnfinishBoardbyMaxRound(this);
 		}
 
 		public override string ToString()

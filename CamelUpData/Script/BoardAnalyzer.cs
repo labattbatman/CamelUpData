@@ -54,7 +54,7 @@ namespace CamelUpData.Script
 
 		private void SetCamelCard(string aCards)
 		{
-            //Format: R0O1W2Y0G0
+            //Format: B0O1W2Y0G0
             m_CamelCardString = aCards;
             for (int i = 0; i < aCards.Length; i += 2)
 			{
@@ -258,7 +258,7 @@ namespace CamelUpData.Script
 
 		public override string ToString()
 		{
-			string retval = string.Format("{0}: ", CamelName);
+			string retval = string.Format("{0}: ", CamelName.ToString());
 
 			for (int i = 0; i < m_TimeFinish.Length; i++)
 			{

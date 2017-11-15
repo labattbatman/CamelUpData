@@ -127,7 +127,7 @@ namespace CamelUpData.Script
 			{
 				foreach (var detail in result.Value)
 				{
-					retval += result.Key + detail.Key + GameRules.PATTERN_RESULT_NAME_SEPARATOR + detail.Value + GameRules.PATTERN_RESULT_SEPARATOR;
+					retval += result.Key.ToString() + detail.Key.ToString() + GameRules.PATTERN_RESULT_NAME_SEPARATOR + detail.Value + GameRules.PATTERN_RESULT_SEPARATOR;
 				}
 			}
 			return retval;
