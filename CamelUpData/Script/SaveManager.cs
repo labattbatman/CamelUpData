@@ -9,7 +9,7 @@ namespace CamelUpData.Script
 		{
 			get
 			{
-				string m_FileName = "/PatternDict.txt";
+				string m_FileName = "/Patterns/PatternDict.txt";
 #if UsingUnity
             return Application.dataPath + m_FileName;
 #else

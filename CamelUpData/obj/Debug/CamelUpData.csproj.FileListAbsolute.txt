@@ -10,11 +10,6 @@ C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData17-05-05 - Copie\C
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData17-05-05 - Copie\CamelUpData17-05-05 - Copie\CamelUpData\bin\Debug\CamelUpData.exe
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData17-05-05 - Copie\CamelUpData17-05-05 - Copie\CamelUpData\bin\Debug\CamelUpData.pdb
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData17-05-05 - Copie\CamelUpData17-05-05 - Copie\CamelUpData\obj\Debug\CamelUpData.csprojResolveAssemblyReference.cache
-C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.exe.config
-C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.exe
-C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.pdb
-C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.exe
-C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.pdb
 C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\bin\Debug\CamelUpData.exe.config
 C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\bin\Debug\CamelUpData.exe
 C:\Users\dzl4287\Desktop\CamelUpData-master (1)\CamelUpData-master\CamelUpData\bin\Debug\CamelUpData.pdb
@@ -27,5 +22,15 @@ C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\bin\Debug\CamelUp
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.exe
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\obj\Debug\CamelUpData.pdb
 C:\Users\dzl4287\Desktop\Alexis\CamelUpData-master\CamelUpData\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;O;;B;;W;;Y;;G;.txt
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;O;B;W;YG;+.txt
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;O;B;W;YG;.txt
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;OBW;;;;;;;YG;.txt
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;OBWYG;.txt
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\Patterns\PatternDict.txt
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.exe.config
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.exe
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\CamelUpData.pdb
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
-C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.csprojResolveAssemblyReference.cache
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.exe
+C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.pdb

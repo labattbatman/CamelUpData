@@ -9,7 +9,7 @@ namespace CamelUpData.Script
 	[TestClass]
 	public class BoardTest
 	{
-		private readonly string UNITY_CAMELUP_RESULT_FOLDER = "/UnityResult";
+		private readonly string UNITY_CAMELUP_RESULT_FOLDER = "/FichiersValidateur";
 		private readonly string TEXT_FILE_NAME = "/test.txt";
 		private readonly string BOARD_ANALYZER_FILE_NAME = "/analyzer.txt";
 
