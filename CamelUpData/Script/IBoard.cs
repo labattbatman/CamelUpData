@@ -12,8 +12,6 @@ namespace CamelUpData.Script
 
         bool IsCamelReachEnd { get; }
 
-		int NbRound { get; }
-
 		int Weight { get; }
 
 		int[] CasesLandedOn { get; }

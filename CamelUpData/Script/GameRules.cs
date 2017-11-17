@@ -23,7 +23,19 @@ namespace CamelUpData.Script
 
 		public static bool USE_DICE_NB_IN_DICE_HSITORY = true;
 
-		public static readonly int MAX_ROUND_ANALYSE = 1;
+		private static readonly int MAX_DICES_ROLLED_ANALYSE = 1;
+		public static int GetMaxDicesHistoryLenght
+		{
+			get
+			{
+				if (MaxDicesHistoryLenght < 0)
+					MaxDicesHistoryLenght = MAX_DICES_ROLLED_ANALYSE * 2;
+
+				return MaxDicesHistoryLenght;
+			}
+		}
+
+		private static int MaxDicesHistoryLenght = -1;
 
 		#region Game Rules
 		public static readonly int DICE_NB_FACES = 3;

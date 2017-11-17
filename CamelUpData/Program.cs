@@ -9,12 +9,9 @@ using CamelUpData.Script;
 //Pour les positions des traps...repenser le calcul et attendre les traps. fait des tests.
 
 //TODO MAIN
-//Long terme decision. Tester sur un bon ordi le temps
+//Long terme decision. Tester sur un bon ordi le temps //Rajouter aux testes
 //Merge avec CamelUpUnity pour le visuel
 //GameRules.IS_SHUTTLE_WHEN_HITTING_MINUS_TRAP. Je le fais????
-
-//TODO FICHIER VALIDATEUR (DO COPY)
-//TODO Pattern save aussi
 
 namespace CamelUpData
 {

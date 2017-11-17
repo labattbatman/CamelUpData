@@ -46,7 +46,6 @@ namespace CamelUpData.Script
 		public List<IBoard> m_SubBoard { get; set; }
 		
 		private string m_Rank = string.Empty;
-		public int NbRound{ get; private set; }
 
 		public int Weight { get; set; }
 
@@ -121,11 +120,7 @@ namespace CamelUpData.Script
 
 			BoardState = newBoardState.ToString();
 
-			NbRound = aInitialBoard.NbRound;
 			Weight = aInitialBoard.Weight;
-
-			if (String.IsNullOrEmpty(GetUnrolledCamelByRank()))
-				NbRound++;
 
 			CasesLandedOn = (int[])aInitialBoard.CasesLandedOn.Clone();
 

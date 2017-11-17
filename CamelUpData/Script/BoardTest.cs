@@ -16,6 +16,8 @@ namespace CamelUpData.Script
 		private readonly Dictionary<string, List<BoardDebug>> m_BoardsByDiceOrder = new Dictionary<string, List<BoardDebug>>();
 		private readonly List<BoardDebug> m_FinishBoard = new List<BoardDebug>();
 
+		private readonly int m_DiceHistoryLenght = 10;
+
 		[TestMethod]
 		public void TestBoards()
 		{
@@ -39,6 +41,29 @@ namespace CamelUpData.Script
 				for (int i = 0; i < expected.Length; i++)
 					Assert.AreEqual(expected[i], result[i], string.Format("Fail at {0}", Path.GetFileNameWithoutExtension(file)));
 			}
+		}
+
+		[TestMethod]
+		public void TestBoardAnalyser()
+		{
+			BoardManager.Instance.CreateBoardDebug(";OBWYG;");
+			BoardAnalyzer actual = BoardManager.Instance.AnalyseBoards("B0O0W0Y0G0");
+			List<Ev> actualEvs = actual.GetSortedtEvs();
+
+			Assert.AreEqual(actual.m_TotalSubBoardWithWeight, 29160);
+			AssertEv(actualEvs[0], GameRules.PlayerAction.PickShortTermCard, 1.37f, "Green");
+			AssertEv(actualEvs[1], GameRules.PlayerAction.PutTrap, 0.81f, "Case(s): 4, . Minus Trap. Pas EV exacte.");
+			AssertEv(actualEvs[2], GameRules.PlayerAction.RollDice, -0.19f, null);
+			//AssertEv(actualEvs[3], GameRules.PlayerAction.PickShortTermCard, 1.37f, "Green");
+		}
+
+		private void AssertEv(Ev aEv, GameRules.PlayerAction aAction, float a2DecimalEv, object aInfo)
+		{
+			var evDiff = Math.Abs(Math.Round(aEv.m_Ev, 2) - a2DecimalEv);
+
+			Assert.AreEqual(aEv.m_PlayerAction, aAction);
+			Assert.AreEqual(true, evDiff < 0.01);
+			Assert.AreEqual(aEv.m_Info, aInfo);
 		}
 
 		private void CustomTest(string aBoard, string aFileName)
@@ -91,7 +116,7 @@ namespace CamelUpData.Script
 			if (aBoard.IsCamelReachEnd || aBoard.IsAllCamelRolled)
 				m_FinishBoard.Add(aBoard);
 
-			if(aBoard.m_SubBoard.Count == 0 && aBoard.NbRound < 1)
+			if(aBoard.m_SubBoard.Count == 0 && aBoard.DicesHistories[0].Length < m_DiceHistoryLenght)
 				aBoard.PopulateSubBoard();
 
 			foreach (BoardDebug board in aBoard.m_SubBoard)

@@ -79,8 +79,7 @@ namespace CamelUpData.Script
             }
         }
 
-        private byte[] m_Rank;
-		public int NbRound { get; private set; }
+		private byte[] m_Rank;
 
 		public int Weight { get; private set; }
 
@@ -148,11 +147,7 @@ namespace CamelUpData.Script
 
 			BoardState = newBoardState;
 
-			NbRound = aInitialBoard.NbRound;
 			Weight = aInitialBoard.Weight;
-
-			if (GetUnrolledCamelByRank().Length == 0)
-				NbRound++;
 
 			CasesLandedOn = (int[])aInitialBoard.CasesLandedOn.Clone();
 

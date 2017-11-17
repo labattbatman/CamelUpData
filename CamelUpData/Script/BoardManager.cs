@@ -22,27 +22,29 @@ namespace CamelUpData.Script
 
 		public void CreateBoard(string aBoard)
 		{
-			CreateBoard(new Board(aBoard));
+			CreateBoards(new Board(aBoard));
 		}
 
 		public void CreateBoardDebug(string aBoard)
 		{
-			CreateBoard(new BoardDebug(aBoard));
+			CreateBoards(new BoardDebug(aBoard));
 		}
 
 		public void CreateBoardByte(string aBoard)
 		{
-			CreateBoard(new BoardByte(aBoard));
+			CreateBoards(new BoardByte(aBoard));
 		}
 
-		public void AnalyseBoards(string aShortTermCardRemaining)
+		public BoardAnalyzer AnalyseBoards(string aShortTermCardRemaining)
 		{
 			BoardAnalyzer anal = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.ToList(), aShortTermCardRemaining);
 
 			GameRules.Log(anal.ToString());
+
+			return anal;
 		}
 
-		private void CreateBoard(IBoard aBoard)
+		private void CreateBoards(IBoard aBoard)
 		{
 			m_UncompleteBoards.Add(aBoard.BoardStateString, aBoard);
 
@@ -58,7 +60,7 @@ namespace CamelUpData.Script
 					{
 						if (subBoard.IsCamelReachEnd)
 							AddBoardIntoDict(subBoard, m_FinishBoard);
-						else if (subBoard.NbRound < GameRules.MAX_ROUND_ANALYSE)
+						else if (subBoard.DicesHistories[0].Length < GameRules.GetMaxDicesHistoryLenght)
 							AddBoardIntoDict(subBoard, newUncompleteBoards);
 						else AddBoardIntoDict(subBoard, m_UnfinishBoardByMaxRound);
 					}

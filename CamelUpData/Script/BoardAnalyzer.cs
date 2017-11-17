@@ -13,7 +13,7 @@ namespace CamelUpData.Script
 		private readonly List<IBoard> m_Boards = new List<IBoard>();
 
 		private int[] m_CasesLandedOn { get; set; }
-		private int m_TotalSubBoardWithWeight { get; set; }
+		public int m_TotalSubBoardWithWeight { get; private set; }
 
         private string m_CamelCardString;
 
