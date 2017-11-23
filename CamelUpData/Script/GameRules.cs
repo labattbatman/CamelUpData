@@ -13,6 +13,10 @@ namespace CamelUpData.Script
 	{
 		//Info: Minuscule si dés du camel est sorti.
 
+		//DICE_NB_FACES ^ NbCamel * NbCamelFactoriel: (3^5 * 5!)
+		//29160 possibilités sur 1 round
+		//850 305 600 possibilités sur 2 rounds
+		//24 794 911 296 000 possibilités sur 3 rounds
 		public enum PlayerAction
 		{
 			RollDice,
@@ -23,23 +27,9 @@ namespace CamelUpData.Script
 
 		public static bool USE_DICE_NB_IN_DICE_HSITORY = true;
 
-		private static readonly int MAX_DICES_ROLLED_ANALYSE = 1;
-		public static int GetMaxDicesHistoryLenght
-		{
-			get
-			{
-				if (MaxDicesHistoryLenght < 0)
-					MaxDicesHistoryLenght = MAX_DICES_ROLLED_ANALYSE * 2;
-
-				return MaxDicesHistoryLenght;
-			}
-		}
-
-		private static int MaxDicesHistoryLenght = -1;
-
 		#region Game Rules
 		public static readonly int DICE_NB_FACES = 3;
-		public static readonly int CASE_NUMBER = 20;
+		public static readonly int CASE_NUMBER = 10;
 
 		public static readonly int[] SHORT_TERM_FIRST_PRICE = new int[] { 5, 3, 2 };
 		public static readonly int SHORT_TERM_SECOND_PRICE = 1;

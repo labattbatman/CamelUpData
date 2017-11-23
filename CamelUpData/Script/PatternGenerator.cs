@@ -84,7 +84,7 @@ namespace CamelUpData.Script
 
 		private void SaveNewPatterns()
 		{
-			GameRules.Log("Je me save");
+			GameRules.Log("Je me save. COPIER À LA MAIN LE FICHIER PATTERN\n");
 			SaveManager.Instance.Save(m_PatternsDiscoveredButNotSaved, false);
 			m_PatternsDiscoveredButNotSaved.Clear();
 		}

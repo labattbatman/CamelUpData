@@ -3,11 +3,19 @@ using System.Linq;
 
 namespace CamelUpData.Script
 {
-	public class BoardManager : MonoSingleton<BoardManager>
+	public class BoardManager
 	{
-		public readonly Dictionary<string, IBoard> m_UnfinishBoardByMaxRound = new Dictionary<string, IBoard>();
+		private readonly Dictionary<string, IBoard> m_UnfinishBoardByMaxRound = new Dictionary<string, IBoard>();
 		private readonly Dictionary<string, IBoard> m_FinishBoard = new Dictionary<string, IBoard>();
 		private Dictionary<string, IBoard> m_UncompleteBoards= new Dictionary<string, IBoard>();
+
+		private int m_MaxDicesRoll;
+
+		public BoardManager(int aMaxDicesRoll)
+		{
+			//*2 car on comparer avec le DiceHistory qui contient le chiffre roulé
+			m_MaxDicesRoll = aMaxDicesRoll * 2;
+		}
 
 		public int TotalWeigh
 		{
@@ -16,6 +24,8 @@ namespace CamelUpData.Script
 				int retval = 0;
 				foreach (var board in m_UnfinishBoardByMaxRound)
 					retval += board.Value.Weight;
+				foreach (var board in m_FinishBoard)
+					retval += board.Value.Weight;
 				return retval;
 			}
 		}
@@ -23,7 +33,7 @@ namespace CamelUpData.Script
 		public void CreateBoard(string aBoard)
 		{
 			CreateBoards(new Board(aBoard));
-		}
+		 }
 
 		public void CreateBoardDebug(string aBoard)
 		{
@@ -35,13 +45,13 @@ namespace CamelUpData.Script
 			CreateBoards(new BoardByte(aBoard));
 		}
 
-		public BoardAnalyzer AnalyseBoards(string aShortTermCardRemaining)
+		public List<IBoard> GetAllBoards()
 		{
-			BoardAnalyzer anal = new BoardAnalyzer(m_UnfinishBoardByMaxRound.Values.ToList(), aShortTermCardRemaining);
+			List<IBoard> allBoards = new List<IBoard>();
+			allBoards.AddRange(m_UnfinishBoardByMaxRound.Values);
+			allBoards.AddRange(m_FinishBoard.Values);
 
-			GameRules.Log(anal.ToString());
-
-			return anal;
+			return allBoards;
 		}
 
 		private void CreateBoards(IBoard aBoard)
@@ -59,13 +69,15 @@ namespace CamelUpData.Script
 					foreach (var subBoard in unCompleted.Value.m_SubBoard)
 					{
 						if (subBoard.IsCamelReachEnd)
+						{
 							AddBoardIntoDict(subBoard, m_FinishBoard);
-						else if (subBoard.DicesHistories[0].Length < GameRules.GetMaxDicesHistoryLenght)
+							unCompleted.Value.AddWeightByReachEnd();
+						}
+						else if (subBoard.DicesHistories[0].Length < m_MaxDicesRoll)
 							AddBoardIntoDict(subBoard, newUncompleteBoards);
 						else AddBoardIntoDict(subBoard, m_UnfinishBoardByMaxRound);
 					}
 				}
-
 				m_UncompleteBoards = newUncompleteBoards;
 			}
 		}

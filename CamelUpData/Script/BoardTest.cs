@@ -19,6 +19,21 @@ namespace CamelUpData.Script
 		private readonly int m_DiceHistoryLenght = 10;
 
 		[TestMethod]
+		public void TestGameRules()
+		{
+			Assert.AreEqual(GameRules.DICE_NB_FACES, 3);
+			Assert.AreEqual(GameRules.CASE_NUMBER, 20);
+
+			Assert.AreEqual(GameRules.SHORT_TERM_FIRST_PRICE[0], 5);
+			Assert.AreEqual(GameRules.SHORT_TERM_FIRST_PRICE[1], 3);
+			Assert.AreEqual(GameRules.SHORT_TERM_FIRST_PRICE[2], 2);
+
+			Assert.AreEqual(GameRules.SHORT_TERM_SECOND_PRICE, 1);
+			Assert.AreEqual(GameRules.SHORT_TERM_LAST_PRICE, -1);
+			Assert.AreEqual(GameRules.TRAP_REWARD, 1);
+		}
+
+		[TestMethod]
 		public void TestBoards()
 		{
 			GameRules.USE_DICE_NB_IN_DICE_HSITORY = false;
@@ -46,15 +61,77 @@ namespace CamelUpData.Script
 		[TestMethod]
 		public void TestBoardAnalyser()
 		{
-			BoardManager.Instance.CreateBoardDebug(";OBWYG;");
-			BoardAnalyzer actual = BoardManager.Instance.AnalyseBoards("B0O0W0Y0G0");
+			BoardManager bm = new BoardManager(5);
+			bm.CreateBoardDebug(";OBWYG;");
+			AssertBoardAnalyzer(bm.GetAllBoards());
+
+			bm = new BoardManager(5);
+			bm.CreateBoard(";OBWYG;");
+			AssertBoardAnalyzer(bm.GetAllBoards());
+
+			//TODO extremement long(jamais fini :S) car BoardDebug.DiceHistory ne contient pas le chffre roulé
+			/*
+			bm = new BoardManager();
+			bm.CreateBoardByte(";OBWYG;");
+			AssertBoardAnalyzer(bm.GetAllBoards());
+			*/
+		}
+
+		[TestMethod]
+		public void TestLongTermBoardAnalyzerRank()
+		{
+			string testBoard = ";;;;O;B;WY;;G;";
+
+			BoardManager bm = new BoardManager(1);
+			bm.CreateBoard(testBoard);
+			var ltbm = new LongTermBoardAnalyser(bm.GetAllBoards(), () => bm = null);
+
+			var bmm = new BoardManager(10);
+			bmm.CreateBoard(testBoard);
+			var rankCamels = new CamelRankManager(bmm.GetAllBoards()).GetCamelRanks;
+
+			var actual = ltbm.GetAverageCamelRankInfo();
+			var expected = new Dictionary<char, double[]>();
+
+			foreach (var rankCamel in rankCamels)
+			{
+				var rank = new double[5];
+
+				for (int i = 0; i < 5; i++)
+				{
+					rank[i] = (double)rankCamel.TimeFinish(i) / rankCamel.m_TotalFinish;
+				}
+
+				expected.Add(rankCamel.CamelName, rank);
+			}
+
+			for(int i = 0; i < 5; i++)
+			{
+				var total = 0.0;
+
+				foreach (var exp in expected)
+					total += exp.Value[i];
+
+				Assert.IsTrue(Math.Abs(1 - total) < 0.01, i.ToString());
+			}
+
+			foreach (var exp in expected)
+			{
+				for (int i = 0; i < exp.Value.Length; i++)
+					Assert.IsTrue(Math.Abs(exp.Value[i] - actual[exp.Key][i]) < 0.001, String.Format("Camel {0}, position {1}", exp.Key, i));
+			}
+		}
+
+		private void AssertBoardAnalyzer(List<IBoard> aBoards)
+		{
+			BoardAnalyzer actual = new BoardAnalyzer(aBoards, "B0O0W0Y0G0");
 			List<Ev> actualEvs = actual.GetSortedtEvs();
 
 			Assert.AreEqual(actual.m_TotalSubBoardWithWeight, 29160);
 			AssertEv(actualEvs[0], GameRules.PlayerAction.PickShortTermCard, 1.37f, "Green");
 			AssertEv(actualEvs[1], GameRules.PlayerAction.PutTrap, 0.81f, "Case(s): 4, . Minus Trap. Pas EV exacte.");
 			AssertEv(actualEvs[2], GameRules.PlayerAction.RollDice, -0.19f, null);
-			//AssertEv(actualEvs[3], GameRules.PlayerAction.PickShortTermCard, 1.37f, "Green");
+			//AssertEv(actualEvs[3], GameRules.PlayerAction.PickLongTermCard, 1.37f, "Green");
 		}
 
 		private void AssertEv(Ev aEv, GameRules.PlayerAction aAction, float a2DecimalEv, object aInfo)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using CamelUpData.Script.ReUse;
 
 namespace CamelUpData.Script
 {
@@ -390,6 +391,16 @@ namespace CamelUpData.Script
 			Weight += aBoard.Weight;
             DicesHistories.AddRange(aBoard.DicesHistories);
         }
+
+		public void AddWeightByReachEnd()
+		{
+			if (IsCamelReachEnd)
+			{
+				int unrollCamel = GetUnrolledCamelByRank().Length;
+
+				Weight *= (int)Math.Pow(GameRules.DICE_NB_FACES, unrollCamel) * MathFunc.Factorial(unrollCamel);
+			}
+		}
 
         public void RemoveWeight(int aNewWeight)
         {

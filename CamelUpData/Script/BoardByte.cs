@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CamelUpData.Script.ReUse;
 
 namespace CamelUpData.Script
 {
@@ -453,9 +454,19 @@ namespace CamelUpData.Script
             return newDiceHistories;
         }
 
-        #region Byte Logic
+		public void AddWeightByReachEnd()
+		{
+			if (IsCamelReachEnd)
+			{
+				int unrollCamel = GetUnrolledCamelByRank().Length;
 
-        private List<byte[]> SplitBoardByCase()
+				Weight *= (int)Math.Pow(GameRules.DICE_NB_FACES, unrollCamel) * MathFunc.Factorial(unrollCamel);
+			}
+		}
+
+		#region Byte Logic
+
+		private List<byte[]> SplitBoardByCase()
 		{
 			List<byte[]> retval = new List<byte[]>();
 			int lastCasePos = 0;

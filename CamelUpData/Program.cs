@@ -1,17 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using CamelUpData.Script;
-
-//TODO fait à moitié
-//Test les + (ya un bug avec CamelUpUnity)
-//Tester les -
-//Pour les positions des traps...repenser le calcul et attendre les traps. fait des tests.
-
-//TODO MAIN
-//Long terme decision. Tester sur un bon ordi le temps //Rajouter aux testes
-//Merge avec CamelUpUnity pour le visuel
-//GameRules.IS_SHUTTLE_WHEN_HITTING_MINUS_TRAP. Je le fais????
 
 namespace CamelUpData
 {
@@ -25,26 +16,33 @@ namespace CamelUpData
 
 	        if (args.Length == 0)
 	        {
-		        //GameRules.USE_DICE_NB_IN_DICE_HSITORY = false;
-				//string testBoard = ";y;g;r;W;o;;";
-				string testBoard = ";OBWYG;";
-		        //string testBoard = ";O;;B;;W;;Y;;G;";
-
-				BoardManager.Instance.CreateBoardDebug(testBoard);
-		        BoardManager.Instance.AnalyseBoards("B0O0W0Y0G0");
-
+		        //TestBoardManager();
 				//UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
+
 				string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
-		        
 				GameRules.Log(log);
 				Console.ReadLine();
 			}
 	        else
 	        {
-		        BoardManager.Instance.CreateBoard(args[0]);
-		        BoardManager.Instance.AnalyseBoards(args[1]);
+				BoardManager bm = new BoardManager(5);
+		        bm.CreateBoard(";OBWYG;");
+
+		        BoardAnalyzer ba = new BoardAnalyzer(bm.GetAllBoards(), "B0O0W0Y0G0");
 			}
         }
+
+		private static void TestBoardManager()
+	    {
+			//string testBoard = ";y;g;r;W;o;;";
+		    string testBoard = ";OBWYG;";
+		    //string testBoard = ";O;;B;;W;;Y;;G;";
+		    BoardManager bm = new BoardManager(5);
+		    bm.CreateBoard(testBoard);
+
+		    BoardAnalyzer ba = new BoardAnalyzer(bm.GetAllBoards(), "B0O0W0Y0G0");
+		    GameRules.Log(ba.ToString());
+		}
 
 	    private static void UNITY_CallCamelUpExe(string aBoard, string aCards)
 	    {

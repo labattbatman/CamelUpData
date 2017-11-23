@@ -20,8 +20,11 @@ namespace CamelUpData.Script
 
 		void AddWeight(IBoard aBoard);
 
-        void RemoveWeight(int aNewWeight);
+		void RemoveWeight(int aNewWeight);
 
 		string GetRankString();
-    }
+
+		void AddWeightByReachEnd();
+
+	}
 }
