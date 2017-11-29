@@ -409,8 +409,6 @@ namespace CamelUpData.Script
 				dhWeight *= (int)Math.Pow(GameRules.DICE_NB_FACES, missingDices) * MathFunc.Factorial(missingDices);
 				Weight += dhWeight;
 			}
-
-			SetAllCamelUnroll();
 		}
 
 		public void RemoveWeight(int aNewWeight)

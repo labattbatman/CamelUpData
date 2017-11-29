@@ -22,13 +22,13 @@ namespace CamelUpData.Script
 		private Dictionary<string, IBoard> m_UncompleteBoards = new Dictionary<string, IBoard>();
 
 		//CamelRankManager avec sa proportion. Toutes les proportions <= 1
-		private List<CamelRankInfo> m_CamelRankInfos = new List<CamelRankInfo>();
+		private List<CamelRankInfo> m_CamelRankInfos = new List<CamelRankInfo>();//todo private
 
 		private int m_MaxDicesRoll; //TODO pas sur encore quoi faire avec lui
 
 		//private readonly int MAX_BOARDS_IN_MEMORY = 134304211;
 
-		public long TotalWeight => GetWeight(m_FinishBoard.Values.ToList()) + GetWeight(m_UnfinishBoard.Values.ToList()) + GetWeight(m_UncompleteBoards.Values.ToList());
+		private long TotalWeight => GetWeight(m_FinishBoard.Values.ToList()) + GetWeight(m_UnfinishBoard.Values.ToList()) + GetWeight(m_UncompleteBoards.Values.ToList());
 
 		private double GetTotalProportionAllRankManagers
 		{
@@ -43,12 +43,13 @@ namespace CamelUpData.Script
 			}
 		}
 
-		public LongTermBoardAnalyser(List<IBoard> aBoards, Action aActionAfterManageBoard)
+		//TODO supporter plusieurs board...il y a un bug quand on ajoute boards avec 2 dés roullés
+		public LongTermBoardAnalyser(IBoard aBoard, Action aActionAfterManageBoard)
 		{
 			//*2 car on comparer avec le DiceHistory qui contient le chiffre roulé
-			m_MaxDicesRoll = aBoards[0].DicesHistories[0].Length + 2;
+			m_MaxDicesRoll = m_FinishBoard.Values.SelectMany(fb => fb.DicesHistories).Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 2;
 
-			ManageBoards(aBoards);
+			ManageBoards(new List<IBoard>{aBoard});
 			if(aActionAfterManageBoard != null)
 				aActionAfterManageBoard.Invoke();
 

@@ -82,9 +82,7 @@ namespace CamelUpData.Script
 		{
 			string testBoard = ";;;;;;;;;;;;;;O;B;WY;;G;";
 
-			BoardManager bm = new BoardManager(1);
-			bm.CreateBoard(testBoard, false);
-			var ltbm = new LongTermBoardAnalyser(bm.GetAllBoards(), () => bm = null);
+			var ltbm = new LongTermBoardAnalyser(new Board(testBoard), null);
 			var actual = ltbm.GetAverageCamelRankInfo();
 
 			var bmm = new BoardManager(10);
