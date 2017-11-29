@@ -24,7 +24,7 @@ namespace CamelUpData.Script
 
 		string GetRankString();
 
-		void AddWeightByReachEnd();
+		void AddWeightByReachEnd(int aDiceHistoryLengthWithDiceNumber);
 
 	}
 }

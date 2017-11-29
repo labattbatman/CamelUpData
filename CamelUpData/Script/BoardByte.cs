@@ -20,7 +20,7 @@ namespace CamelUpData.Script
 			}
 		}
 
-		public int[] CasesLandedOn { get; private set; }
+		public int[] CasesLandedOn { get; }
 
 		public string HighestCaseLandedOn
 		{
@@ -454,8 +454,9 @@ namespace CamelUpData.Script
             return newDiceHistories;
         }
 
-		public void AddWeightByReachEnd()
+		public void AddWeightByReachEnd(int aDiceHistoryLengthWithDiceNumber)
 		{
+			//TODO
 			if (IsCamelReachEnd)
 			{
 				int unrollCamel = GetUnrolledCamelByRank().Length;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using CamelUpData.Script;
@@ -16,9 +15,8 @@ namespace CamelUpData
 
 	        if (args.Length == 0)
 	        {
-		        //TestBoardManager();
+				//TestBoardManager();
 				//UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
-
 				string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
 				GameRules.Log(log);
 				Console.ReadLine();
@@ -26,7 +24,7 @@ namespace CamelUpData
 	        else
 	        {
 				BoardManager bm = new BoardManager(5);
-		        bm.CreateBoard(";OBWYG;");
+		        bm.CreateBoard(";OBWYG;", true);
 
 		        BoardAnalyzer ba = new BoardAnalyzer(bm.GetAllBoards(), "B0O0W0Y0G0");
 			}
@@ -38,7 +36,7 @@ namespace CamelUpData
 		    string testBoard = ";OBWYG;";
 		    //string testBoard = ";O;;B;;W;;Y;;G;";
 		    BoardManager bm = new BoardManager(5);
-		    bm.CreateBoard(testBoard);
+		    bm.CreateBoard(testBoard, true);
 
 		    BoardAnalyzer ba = new BoardAnalyzer(bm.GetAllBoards(), "B0O0W0Y0G0");
 		    GameRules.Log(ba.ToString());

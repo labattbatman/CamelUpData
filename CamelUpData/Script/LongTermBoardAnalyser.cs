@@ -28,7 +28,7 @@ namespace CamelUpData.Script
 
 		//private readonly int MAX_BOARDS_IN_MEMORY = 134304211;
 
-		public int TotalWeight => GetWeight(m_FinishBoard.Values.ToList()) + GetWeight(m_UnfinishBoard.Values.ToList()) + GetWeight(m_UncompleteBoards.Values.ToList());
+		public long TotalWeight => GetWeight(m_FinishBoard.Values.ToList()) + GetWeight(m_UnfinishBoard.Values.ToList()) + GetWeight(m_UncompleteBoards.Values.ToList());
 
 		private double GetTotalProportionAllRankManagers
 		{
@@ -175,16 +175,13 @@ namespace CamelUpData.Script
 					m_CamelRankManager = newManager,
 					m_Proportion = GetProportion(aBoards)
 				});
-
-			if(GetTotalProportionAllRankManagers > 1)
-				throw new Exception();
 		}
 
-		private int GetWeight(List<IBoard> aDict)
+		private long GetWeight(List<IBoard> aDict)
 		{
-			int retval = 0;
+			long retval = 0;
 			foreach (var board in aDict)
-				retval += board.Weight;
+				retval += Convert.ToInt64(board.Weight);
 
 			return retval;
 		}

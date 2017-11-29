@@ -62,11 +62,11 @@ namespace CamelUpData.Script
 		public void TestBoardAnalyser()
 		{
 			BoardManager bm = new BoardManager(5);
-			bm.CreateBoardDebug(";OBWYG;");
+			bm.CreateBoardDebug(";OBWYG;", true);
 			AssertBoardAnalyzer(bm.GetAllBoards());
 
 			bm = new BoardManager(5);
-			bm.CreateBoard(";OBWYG;");
+			bm.CreateBoard(";OBWYG;", true);
 			AssertBoardAnalyzer(bm.GetAllBoards());
 
 			//TODO extremement long(jamais fini :S) car BoardDebug.DiceHistory ne contient pas le chffre roulé
@@ -80,17 +80,17 @@ namespace CamelUpData.Script
 		[TestMethod]
 		public void TestLongTermBoardAnalyzerRank()
 		{
-			string testBoard = ";;;;O;B;WY;;G;";
+			string testBoard = ";;;;;;;;;;;;;;O;B;WY;;G;";
 
 			BoardManager bm = new BoardManager(1);
-			bm.CreateBoard(testBoard);
+			bm.CreateBoard(testBoard, false);
 			var ltbm = new LongTermBoardAnalyser(bm.GetAllBoards(), () => bm = null);
+			var actual = ltbm.GetAverageCamelRankInfo();
 
 			var bmm = new BoardManager(10);
-			bmm.CreateBoard(testBoard);
+			bmm.CreateBoard(testBoard, true);
 			var rankCamels = new CamelRankManager(bmm.GetAllBoards()).GetCamelRanks;
 
-			var actual = ltbm.GetAverageCamelRankInfo();
 			var expected = new Dictionary<char, double[]>();
 
 			foreach (var rankCamel in rankCamels)
@@ -139,7 +139,7 @@ namespace CamelUpData.Script
 			var evDiff = Math.Abs(Math.Round(aEv.m_Ev, 2) - a2DecimalEv);
 
 			Assert.AreEqual(aEv.m_PlayerAction, aAction);
-			Assert.AreEqual(true, evDiff < 0.01);
+			Assert.IsTrue(evDiff < 0.01);
 			Assert.AreEqual(aEv.m_Info, aInfo);
 		}
 

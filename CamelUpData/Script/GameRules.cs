@@ -29,7 +29,7 @@ namespace CamelUpData.Script
 
 		#region Game Rules
 		public static readonly int DICE_NB_FACES = 3;
-		public static readonly int CASE_NUMBER = 10;
+		public static readonly int CASE_NUMBER = 20;
 
 		public static readonly int[] SHORT_TERM_FIRST_PRICE = new int[] { 5, 3, 2 };
 		public static readonly int SHORT_TERM_SECOND_PRICE = 1;

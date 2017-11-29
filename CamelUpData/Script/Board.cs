@@ -392,17 +392,28 @@ namespace CamelUpData.Script
             DicesHistories.AddRange(aBoard.DicesHistories);
         }
 
-		public void AddWeightByReachEnd()
+		public void AddWeightByReachEnd(int aDiceHistoryLengthWithDiceNumber)
 		{
-			if (IsCamelReachEnd)
+			Weight = 0;
+			foreach (var dh in DicesHistories)
 			{
-				int unrollCamel = GetUnrolledCamelByRank().Length;
+				// /2 car on a dice Number
+				int missingDices = (aDiceHistoryLengthWithDiceNumber - dh.Length) / 2;
+				int dhWeight = 1;
+				while (missingDices > m_Rank.Length)
+				{
+					dhWeight *= (int)Math.Pow(GameRules.DICE_NB_FACES, m_Rank.Length) * MathFunc.Factorial(m_Rank.Length);
+					missingDices -= m_Rank.Length;
+				}
 
-				Weight *= (int)Math.Pow(GameRules.DICE_NB_FACES, unrollCamel) * MathFunc.Factorial(unrollCamel);
+				dhWeight *= (int)Math.Pow(GameRules.DICE_NB_FACES, missingDices) * MathFunc.Factorial(missingDices);
+				Weight += dhWeight;
 			}
+
+			SetAllCamelUnroll();
 		}
 
-        public void RemoveWeight(int aNewWeight)
+		public void RemoveWeight(int aNewWeight)
         {
             Weight = aNewWeight;
         }

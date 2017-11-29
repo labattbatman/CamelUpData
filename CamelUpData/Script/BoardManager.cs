@@ -6,7 +6,7 @@ namespace CamelUpData.Script
 	public class BoardManager
 	{
 		private readonly Dictionary<string, IBoard> m_UnfinishBoardByMaxRound = new Dictionary<string, IBoard>();
-		private readonly Dictionary<string, IBoard> m_FinishBoard = new Dictionary<string, IBoard>();
+		private readonly Dictionary<string, IBoard> m_FinishBoard = new Dictionary<string, IBoard>();//to private
 		private Dictionary<string, IBoard> m_UncompleteBoards= new Dictionary<string, IBoard>();
 
 		private int m_MaxDicesRoll;
@@ -17,11 +17,11 @@ namespace CamelUpData.Script
 			m_MaxDicesRoll = aMaxDicesRoll * 2;
 		}
 
-		public int TotalWeigh
+		public long TotalWeigh
 		{
 			get
 			{
-				int retval = 0;
+				long retval = 0;
 				foreach (var board in m_UnfinishBoardByMaxRound)
 					retval += board.Value.Weight;
 				foreach (var board in m_FinishBoard)
@@ -30,19 +30,19 @@ namespace CamelUpData.Script
 			}
 		}
 
-		public void CreateBoard(string aBoard)
+		public void CreateBoard(string aBoard, bool aAddWeightByReachEnd)
 		{
-			CreateBoards(new Board(aBoard));
+			CreateBoards(new Board(aBoard), aAddWeightByReachEnd);
 		 }
 
-		public void CreateBoardDebug(string aBoard)
+		public void CreateBoardDebug(string aBoard, bool aAddWeightByReachEnd)
 		{
-			CreateBoards(new BoardDebug(aBoard));
+			CreateBoards(new BoardDebug(aBoard), aAddWeightByReachEnd);
 		}
 
-		public void CreateBoardByte(string aBoard)
+		public void CreateBoardByte(string aBoard, bool aAddWeightByReachEnd)
 		{
-			CreateBoards(new BoardByte(aBoard));
+			CreateBoards(new BoardByte(aBoard), aAddWeightByReachEnd);
 		}
 
 		public List<IBoard> GetAllBoards()
@@ -54,7 +54,7 @@ namespace CamelUpData.Script
 			return allBoards;
 		}
 
-		private void CreateBoards(IBoard aBoard)
+		private void CreateBoards(IBoard aBoard, bool aAddWeightByReachEnd)
 		{
 			m_UncompleteBoards.Add(aBoard.BoardStateString, aBoard);
 
@@ -71,7 +71,6 @@ namespace CamelUpData.Script
 						if (subBoard.IsCamelReachEnd)
 						{
 							AddBoardIntoDict(subBoard, m_FinishBoard);
-							unCompleted.Value.AddWeightByReachEnd();
 						}
 						else if (subBoard.DicesHistories[0].Length < m_MaxDicesRoll)
 							AddBoardIntoDict(subBoard, newUncompleteBoards);
@@ -79,6 +78,18 @@ namespace CamelUpData.Script
 					}
 				}
 				m_UncompleteBoards = newUncompleteBoards;
+			}
+
+			if (aAddWeightByReachEnd)
+			{
+				int maxDiceHistory = m_FinishBoard.Values.SelectMany(fb => fb.DicesHistories).Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length;
+				foreach (var board in m_FinishBoard.Values)
+				{
+					if (board.IsCamelReachEnd)
+					{
+						board.AddWeightByReachEnd(maxDiceHistory);
+					}
+				}
 			}
 		}
 
