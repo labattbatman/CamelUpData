@@ -123,13 +123,11 @@ namespace CamelUpData.Script
 
 			Weight = aInitialBoard.Weight;
 
-			CasesLandedOn = (int[])aInitialBoard.CasesLandedOn.Clone();
+			CasesLandedOn = (int[]) aInitialBoard.CasesLandedOn.Clone();
 
 			int caseLanded = GetCamelPos(aRolledCamel);
-			if(caseLanded < CasesLandedOn.Length && IsCamelLandEmptyCase(aRolledCamel))
+			if (caseLanded < CasesLandedOn.Length && IsCamelLandEmptyCase(aRolledCamel))
 				CasesLandedOn[caseLanded]++;
-
-			PopulateNeighbouring();
 		}
 
 		private bool IsCamelLandEmptyCase(char aCamel)
@@ -190,6 +188,8 @@ namespace CamelUpData.Script
 		{       
 			if (IsCamelReachEnd)
 				return;
+
+			PopulateNeighbouring();
 
 			string unRollCamel = GetUnrolledCamelByRank();
 
@@ -278,6 +278,11 @@ namespace CamelUpData.Script
 			}
 
 			return retval;
+		}
+
+		public int GetUnrolledCamelNumber()
+		{
+			return GetUnrolledCamelByRank().Length;
 		}
 
 		private char CamelToPattern(char aCamel)
@@ -425,5 +430,5 @@ namespace CamelUpData.Script
 
             return newDiceHistories;
         }
-    }
+	}
 }

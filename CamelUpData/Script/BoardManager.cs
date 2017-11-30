@@ -30,19 +30,19 @@ namespace CamelUpData.Script
 			}
 		}
 
-		public void CreateBoard(string aBoard, bool aAddWeightByReachEnd)
+		public void CreateBoard(string aBoard)
 		{
-			CreateBoards(new Board(aBoard), aAddWeightByReachEnd);
+			CreateBoards(new Board(aBoard));
 		 }
 
-		public void CreateBoardDebug(string aBoard, bool aAddWeightByReachEnd)
+		public void CreateBoardDebug(string aBoard)
 		{
-			CreateBoards(new BoardDebug(aBoard), aAddWeightByReachEnd);
+			CreateBoards(new BoardDebug(aBoard));
 		}
 
-		public void CreateBoardByte(string aBoard, bool aAddWeightByReachEnd)
+		public void CreateBoardByte(string aBoard)
 		{
-			CreateBoards(new BoardByte(aBoard), aAddWeightByReachEnd);
+			CreateBoards(new BoardByte(aBoard));
 		}
 
 		public List<IBoard> GetAllBoards()
@@ -54,7 +54,7 @@ namespace CamelUpData.Script
 			return allBoards;
 		}
 
-		private void CreateBoards(IBoard aBoard, bool aAddWeightByReachEnd)
+		private void CreateBoards(IBoard aBoard)
 		{
 			m_UncompleteBoards.Add(aBoard.BoardStateString, aBoard);
 
@@ -79,16 +79,13 @@ namespace CamelUpData.Script
 				}
 				m_UncompleteBoards = newUncompleteBoards;
 			}
-
-			if (aAddWeightByReachEnd)
+			//P-e ajouter un bool pour le faire
+			int maxDiceHistory = m_FinishBoard.Values.SelectMany(fb => fb.DicesHistories).Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length;
+			foreach (var board in m_FinishBoard.Values)
 			{
-				int maxDiceHistory = m_FinishBoard.Values.SelectMany(fb => fb.DicesHistories).Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length;
-				foreach (var board in m_FinishBoard.Values)
+				if (board.IsCamelReachEnd)
 				{
-					if (board.IsCamelReachEnd)
-					{
-						board.AddWeightByReachEnd(maxDiceHistory);
-					}
+					board.AddWeightByReachEnd(maxDiceHistory);
 				}
 			}
 		}

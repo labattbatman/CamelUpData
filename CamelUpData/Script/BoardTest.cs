@@ -62,16 +62,16 @@ namespace CamelUpData.Script
 		public void TestBoardAnalyser()
 		{
 			BoardManager bm = new BoardManager(5);
-			bm.CreateBoardDebug(";OBWYG;", true);
+			bm.CreateBoardDebug(";OBWYG;");
 			AssertBoardAnalyzer(bm.GetAllBoards());
 
 			bm = new BoardManager(5);
-			bm.CreateBoard(";OBWYG;", true);
+			bm.CreateBoard(";OBWYG;");
 			AssertBoardAnalyzer(bm.GetAllBoards());
-
+			
 			//TODO extremement long(jamais fini :S) car BoardDebug.DiceHistory ne contient pas le chffre roulé
 			/*
-			bm = new BoardManager();
+			bm = new BoardManager(5);
 			bm.CreateBoardByte(";OBWYG;");
 			AssertBoardAnalyzer(bm.GetAllBoards());
 			*/
@@ -86,7 +86,7 @@ namespace CamelUpData.Script
 			var actual = ltbm.GetAverageCamelRankInfo();
 
 			var bmm = new BoardManager(10);
-			bmm.CreateBoard(testBoard, true);
+			bmm.CreateBoard(testBoard);
 			var rankCamels = new CamelRankManager(bmm.GetAllBoards()).GetCamelRanks;
 
 			var expected = new Dictionary<char, double[]>();

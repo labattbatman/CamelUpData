@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace CamelUpData.Script
@@ -22,11 +23,13 @@ namespace CamelUpData.Script
 		private Dictionary<string, IBoard> m_UncompleteBoards = new Dictionary<string, IBoard>();
 
 		//CamelRankManager avec sa proportion. Toutes les proportions <= 1
-		private List<CamelRankInfo> m_CamelRankInfos = new List<CamelRankInfo>();//todo private
+		private List<CamelRankInfo> m_CamelRankInfos = new List<CamelRankInfo>();
+
+		private double TotalPropotionRankInfos => m_CamelRankInfos.Select(cr => cr.m_Proportion).Sum();
 
 		private int m_MaxDicesRoll; //TODO pas sur encore quoi faire avec lui
 
-		//private readonly int MAX_BOARDS_IN_MEMORY = 134304211;
+		//private readonly int MAX_BOARDS_IN_MEMORY = 200000;
 
 		private long TotalWeight => GetWeight(m_FinishBoard.Values.ToList()) + GetWeight(m_UnfinishBoard.Values.ToList()) + GetWeight(m_UncompleteBoards.Values.ToList());
 
@@ -43,7 +46,7 @@ namespace CamelUpData.Script
 			}
 		}
 
-		//TODO supporter plusieurs board...il y a un bug quand on ajoute boards avec 2 dés roullés
+		//TODO supporter plusieurs board...il y a un bug quand on ajoute boards avec 2 dés roulés
 		public LongTermBoardAnalyser(IBoard aBoard, Action aActionAfterManageBoard)
 		{
 			//*2 car on comparer avec le DiceHistory qui contient le chiffre roulé
@@ -59,7 +62,7 @@ namespace CamelUpData.Script
 				m_FinishBoard.Clear();
 			}
 
-			while (m_UncompleteBoards.Any())
+			while (m_UncompleteBoards.Any() && IsContinueAnalyze())
 			{
 				CreateBoards();
 				m_UncompleteBoards = new Dictionary<string, IBoard>(m_UnfinishBoard);
@@ -190,6 +193,12 @@ namespace CamelUpData.Script
 		private double GetProportion(List<IBoard> aBoards)
 		{
 			return Math.Round((1 - GetTotalProportionAllRankManagers) * GetWeight(aBoards) / TotalWeight, 15);
+		}
+
+		private bool IsContinueAnalyze()
+		{
+			//TODO
+			return true;
 		}
 	}
 }

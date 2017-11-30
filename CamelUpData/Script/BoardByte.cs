@@ -295,7 +295,7 @@ namespace CamelUpData.Script
 			return retval;
 		}
 
-		public byte[] GetUnrolledCamelByRank()
+		private byte[] GetUnrolledCamelByRank()
 		{
 			List<byte> retvalList = new List<byte>();
 			foreach (byte token in BoardState)
@@ -305,6 +305,11 @@ namespace CamelUpData.Script
 			}
 
 			return retvalList.ToArray();
+		}
+
+		public int GetUnrolledCamelNumber()
+		{
+			return GetUnrolledCamelByRank().Length;
 		}
 
 		private char CamelToPattern(char aCamel)
@@ -456,12 +461,20 @@ namespace CamelUpData.Script
 
 		public void AddWeightByReachEnd(int aDiceHistoryLengthWithDiceNumber)
 		{
-			//TODO
-			if (IsCamelReachEnd)
+			Weight = 0;
+			foreach (var dh in DicesHistories)
 			{
-				int unrollCamel = GetUnrolledCamelByRank().Length;
+				// /2 car on a dice Number
+				int missingDices = (aDiceHistoryLengthWithDiceNumber - dh.Length) / 2;
+				int dhWeight = 1;
+				while (missingDices > m_Rank.Length)
+				{
+					dhWeight *= (int)Math.Pow(GameRules.DICE_NB_FACES, m_Rank.Length) * MathFunc.Factorial(m_Rank.Length);
+					missingDices -= m_Rank.Length;
+				}
 
-				Weight *= (int)Math.Pow(GameRules.DICE_NB_FACES, unrollCamel) * MathFunc.Factorial(unrollCamel);
+				dhWeight *= (int)Math.Pow(GameRules.DICE_NB_FACES, missingDices) * MathFunc.Factorial(missingDices);
+				Weight += dhWeight;
 			}
 		}
 

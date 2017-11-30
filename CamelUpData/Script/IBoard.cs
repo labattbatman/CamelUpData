@@ -26,5 +26,7 @@ namespace CamelUpData.Script
 
 		void AddWeightByReachEnd(int aDiceHistoryLengthWithDiceNumber);
 
+		int GetUnrolledCamelNumber();
+
 	}
 }
