@@ -15,7 +15,8 @@ namespace CamelUpData
 
 	        if (args.Length == 0)
 	        {
-		        TestLT();
+				TestLTGuesser();
+		        //TestLT();
 				//TestBoardManager();
 				//UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
 				string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
@@ -31,7 +32,14 @@ namespace CamelUpData
 			}
         }
 
-	    private static void TestLT()
+	    private static void TestLTGuesser()
+	    {
+		    var guesser = new LongTermCardGuesser();
+		    guesser.AddFirstCamelCard(";;;;;OB;;;W;;;Y;;G;");
+	    }
+
+
+		private static void TestLT()
 	    {
 			string testBoard = ";;;;;;;;;;;;;O;B;WY;;G;";
 		    //ring testBoard = ";;;;;;;;;;;;;;O;B;WY;;G;";

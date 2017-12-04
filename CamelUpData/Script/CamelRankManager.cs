@@ -35,6 +35,15 @@ namespace CamelUpData.Script
 			return new Tuple<char, float>(highestCard, highestEv);
 		}
 
+		public Dictionary<char, float> GetAllProportionByPosition(int aPos)
+		{
+			Dictionary<char, float> retval = new Dictionary<char, float>();
+			foreach (var rank in m_CamelRanks)
+				retval.Add(rank.Key, rank.Value.GetProportionByPosition(aPos));
+
+			return retval;
+		}
+
 		public string ToString(Dictionary<char, int> aCamelCards)
 		{
 			string retval = String.Empty;
@@ -112,11 +121,16 @@ namespace CamelUpData.Script
 
 			for (int i = 0; i < m_TimeFinish.Length; i++)
 			{
-				float rankPercentFinish = (float)m_TimeFinish[i] / (float)m_TotalFinish;
+				float rankPercentFinish = GetProportionByPosition(i);
 				retval += rankPercentFinish * GameRules.GetRankPrice(i, aCardNb);
 			}
 
 			return retval;
+		}
+
+		public float GetProportionByPosition(int aPos)
+		{
+			return (float)m_TimeFinish[aPos] / (float)m_TotalFinish;
 		}
 	}
 }

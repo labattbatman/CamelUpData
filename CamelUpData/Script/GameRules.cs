@@ -35,6 +35,9 @@ namespace CamelUpData.Script
 		public static readonly int SHORT_TERM_SECOND_PRICE = 1;
 		public static readonly int SHORT_TERM_LAST_PRICE = -1;
 
+		public static readonly int[] LONG_TERM_PRICE = new int[] { 8, 5, 3, 2, 1 };
+		public static readonly int LONG_TERM_FAIL_PRICE = -1;
+
 		public static readonly int TRAP_REWARD = 1;
 		public static readonly int TRAP_PLUS_MODIFIER = 1;
 		public static readonly int TRAP_MINUS_MODIFIER = -1;
