@@ -14,13 +14,15 @@ namespace CamelUpData.Script
 		private readonly List<IBoard> m_Boards = new List<IBoard>();
 		private CamelRankManager m_CamelRankManager;
 
-		public BoardAnalyzer(List<IBoard> aBoards, string aCards)
+		private string m_OriginBoard;
+
+		public BoardAnalyzer(string aOriginBoard, List<IBoard> aBoards, string aCards)
 		{
 			m_Boards = new List<IBoard>(aBoards);
-            Setup(aCards, true);
+            Setup(aOriginBoard, aCards, true);
 		}
 
-		private BoardAnalyzer(List<IBoard> aBoards, string aCards, string aRules)
+		private BoardAnalyzer(string aOriginBoard, List<IBoard> aBoards, string aCards, string aRules)
 		{
 			foreach (var aBoard in aBoards)
 			{
@@ -37,12 +39,14 @@ namespace CamelUpData.Script
 				}
 			}
 
-            Setup(aCards, false);
+            Setup(aOriginBoard, aCards, false);
         }
 
-        private void Setup(string aCards, bool aIsCalculatingRollDice)
+        private void Setup(string aOriginBoard, string aCards, bool aIsCalculatingRollDice)
         {
-	        m_CamelRankManager = new CamelRankManager(m_Boards);
+	        m_OriginBoard = aOriginBoard;
+
+			m_CamelRankManager = new CamelRankManager(m_Boards);
 			m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
 
 	        SetCamelCard(aCards);
@@ -87,9 +91,11 @@ namespace CamelUpData.Script
 		{
 			m_Evs[0] = GenerateShortTermCardEv();
 			m_Evs[1] = GeneratePutTrapEv();
-            if(aIsCalculatingRollDice)
-			    m_Evs[3] = GenerateRollDiceEv();
-			m_Evs[2] = GenerateLongTermCardEv();
+			if (aIsCalculatingRollDice)
+			{
+				m_Evs[3] = GenerateRollDiceEv();
+				m_Evs[2] = GenerateLongTermCardEv(); //TODO inclure ou ne pas inclure
+			}
 		}
 
 		private Ev GenerateShortTermCardEv()
@@ -134,15 +140,8 @@ namespace CamelUpData.Script
 
 		private Ev GenerateLongTermCardEv()
 		{
-			//LongTermBoardAnalyser ltba = new LongTermBoardAnalyser(m_Boards, ClearDictionaries);
-
-			Ev retval = new Ev
-			{
-				m_PlayerAction = GameRules.PlayerAction.PickLongTermCard,
-				m_Ev = -9,
-				m_Info = "TODO!!!!!! Avec test unitaire"
-			};
-			return retval;
+			LongTermBoardAnalyser ltba = new LongTermBoardAnalyser(new Board(m_OriginBoard), ClearDictionaries);
+			return ltba.GetEv();
 		}
 
 		private Ev GenerateRollDiceEv()
@@ -150,7 +149,7 @@ namespace CamelUpData.Script
             float evNextTurn = 0;
 
             foreach (var camel in GameRules.IDENTITY_CAMEL_NAME_UNROLLED)
-                evNextTurn += new BoardAnalyzer(m_Boards, m_CamelCardString, camel.ToString()).GetSortedtEvs()[0].m_Ev;
+                evNextTurn += new BoardAnalyzer(m_OriginBoard, m_Boards, m_CamelCardString, camel.ToString()).GetSortedtEvs()[0].m_Ev;
 
             evNextTurn = evNextTurn / GameRules.IDENTITY_CAMEL_NAME_UNROLLED.Length;
             float secondEv = GetSortedtEvs()[1].m_Ev;
@@ -169,7 +168,7 @@ namespace CamelUpData.Script
 			string retval = string.Format("Analyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
 			retval += "---------------------------------\n";
 
-			retval += m_CamelRankManager.ToString(m_CamelCards);
+			//retval += m_CamelRankManager.ToString(m_CamelCards);
 
 			retval += "---------------------------------\n";
 

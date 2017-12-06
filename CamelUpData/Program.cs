@@ -15,9 +15,9 @@ namespace CamelUpData
 
 	        if (args.Length == 0)
 	        {
-				TestLTGuesser();
+				//TestLTGuesser();
 		        //TestLT();
-				//TestBoardManager();
+				TestBoardManager();
 				//UNITY_CallCamelUpExe(";YGWBO;;","B0O0W0Y0G0");
 				string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
 				GameRules.Log(log);
@@ -25,10 +25,7 @@ namespace CamelUpData
 			}
 	        else
 	        {
-				BoardManager bm = new BoardManager(5);
-		        bm.CreateBoard(";OBWYG;");
 
-		        BoardAnalyzer ba = new BoardAnalyzer(bm.GetAllBoards(), "B0O0W0Y0G0");
 			}
         }
 
@@ -38,26 +35,25 @@ namespace CamelUpData
 		    guesser.AddFirstCamelCard(";;;;;OB;;;W;;;Y;;G;");
 	    }
 
-
 		private static void TestLT()
 	    {
-			string testBoard = ";;;;;;;;;;;;;O;B;WY;;G;";
+			string testBoard = ";;;;;;;;;;;;;;O;B;WY;;G;";
 		    //ring testBoard = ";;;;;;;;;;;;;;O;B;WY;;G;";
 
 			var ltbm = new LongTermBoardAnalyser(new Board(testBoard), null);
-		    var actual = ltbm.GetAverageCamelRankInfo();
+		    var actual = ltbm.GetEv();
 
 		}
 
 		private static void TestBoardManager()
 	    {
 			//string testBoard = ";y;g;r;W;o;;";
-		    string testBoard = ";OBWYG;";
-		    //string testBoard = ";O;;B;;W;;Y;;G;";
-		    BoardManager bm = new BoardManager(5);
-		    bm.CreateBoardByte(testBoard);
+		    //string testBoard = ";OBWYG;";
+			string testBoard = ";;;;;;;;;;;O;B;WY;;G;";
+			BoardManager bm = new BoardManager(5);
+		    bm.CreateBoard(testBoard);
 
-		    BoardAnalyzer ba = new BoardAnalyzer(bm.GetAllBoards(), "B0O0W0Y0G0");
+		    BoardAnalyzer ba = new BoardAnalyzer(testBoard, bm.GetAllBoards(), "B0O0W0Y0G0");
 		    GameRules.Log(ba.ToString());
 		}
 

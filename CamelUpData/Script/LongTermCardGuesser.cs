@@ -3,7 +3,7 @@ using CamelUpData.Script.ReUse;
 
 namespace CamelUpData.Script
 {
-	public class LongTermCardGuesser
+	public class LongTermCardGuesser : MonoSingleton<LongTermCardGuesser>
 	{
 		private readonly List<Dictionary<char, float>> m_FirstCards = new List<Dictionary<char, float>>();
 		private readonly List<Dictionary<char, float>> m_LastCards = new List<Dictionary<char, float>>();
@@ -43,6 +43,9 @@ namespace CamelUpData.Script
 
 		private float GetPrice(char aCamel, List<Dictionary<char, float>> aList)
 		{
+			if (aList.Count == 0)
+				return GameRules.LONG_TERM_PRICE[0];
+
 			float retval = 0f;
 			var comb = MathFunc.AllCombinationsBooleans(aList.Count);
 

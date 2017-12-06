@@ -61,13 +61,14 @@ namespace CamelUpData.Script
 		[TestMethod]
 		public void TestBoardAnalyser()
 		{
+			string board = ";OBWYG;";
 			BoardManager bm = new BoardManager(5);
-			bm.CreateBoardDebug(";OBWYG;");
-			AssertBoardAnalyzer(bm.GetAllBoards());
+			bm.CreateBoardDebug(board);
+			AssertBoardAnalyzer(board, bm.GetAllBoards());
 
 			bm = new BoardManager(5);
-			bm.CreateBoard(";OBWYG;");
-			AssertBoardAnalyzer(bm.GetAllBoards());
+			bm.CreateBoard(board);
+			AssertBoardAnalyzer(board, bm.GetAllBoards());
 			
 			//TODO extremement long(jamais fini :S) car BoardDebug.DiceHistory ne contient pas le chffre roulé
 			/*
@@ -120,15 +121,15 @@ namespace CamelUpData.Script
 			}
 		}
 
-		private void AssertBoardAnalyzer(List<IBoard> aBoards)
+		private void AssertBoardAnalyzer(string aOriginBoard, List<IBoard> aBoards)
 		{
-			BoardAnalyzer actual = new BoardAnalyzer(aBoards, "B0O0W0Y0G0");
+			BoardAnalyzer actual = new BoardAnalyzer(aOriginBoard, aBoards, "B0O0W0Y0G0");
 			List<Ev> actualEvs = actual.GetSortedtEvs();
 
 			Assert.AreEqual(actual.m_TotalSubBoardWithWeight, 29160);
 			AssertEv(actualEvs[0], GameRules.PlayerAction.PickShortTermCard, 1.37f, "Green");
 			AssertEv(actualEvs[1], GameRules.PlayerAction.PutTrap, 0.81f, "Case(s): 4, . Minus Trap. Pas EV exacte.");
-			AssertEv(actualEvs[2], GameRules.PlayerAction.RollDice, -0.19f, null);
+			AssertEv(actualEvs[3], GameRules.PlayerAction.RollDice, -0.19f, null);
 			//AssertEv(actualEvs[3], GameRules.PlayerAction.PickLongTermCard, 1.37f, "Green");
 		}
 
@@ -137,7 +138,7 @@ namespace CamelUpData.Script
 			var evDiff = Math.Abs(Math.Round(aEv.m_Ev, 2) - a2DecimalEv);
 
 			Assert.AreEqual(aEv.m_PlayerAction, aAction);
-			Assert.IsTrue(evDiff < 0.01);
+			Assert.IsTrue(evDiff < 0.01, aAction + " EvDiff is: " + evDiff);
 			Assert.AreEqual(aEv.m_Info, aInfo);
 		}
 

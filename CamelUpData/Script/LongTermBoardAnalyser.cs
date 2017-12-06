@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace CamelUpData.Script
@@ -29,8 +28,6 @@ namespace CamelUpData.Script
 
 		private int m_MaxDicesRoll; //TODO pas sur encore quoi faire avec lui
 
-		//private readonly int MAX_BOARDS_IN_MEMORY = 200000;
-
 		private long TotalWeight => GetWeight(m_FinishBoard.Values.ToList()) + GetWeight(m_UnfinishBoard.Values.ToList()) + GetWeight(m_UncompleteBoards.Values.ToList());
 
 		private double GetTotalProportionAllRankManagers
@@ -46,9 +43,9 @@ namespace CamelUpData.Script
 			}
 		}
 
-		//TODO supporter plusieurs board...il y a un bug quand on ajoute boards avec 2 dés roulés
 		public LongTermBoardAnalyser(IBoard aBoard, Action aActionAfterManageBoard)
 		{
+			//TODO supporter plusieurs board...il y a un bug quand on ajoute boards avec 2 dés roulés
 			//*2 car on comparer avec le DiceHistory qui contient le chiffre roulé
 			m_MaxDicesRoll = m_FinishBoard.Values.SelectMany(fb => fb.DicesHistories).Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 2;
 
@@ -64,7 +61,14 @@ namespace CamelUpData.Script
 
 			while (m_UncompleteBoards.Any() && IsContinueAnalyze())
 			{
-				CreateBoards();
+				try
+				{
+					CreateBoards();
+				}
+				catch (Exception ex)
+				{
+					
+				}
 				m_UncompleteBoards = new Dictionary<string, IBoard>(m_UnfinishBoard);
 				m_UnfinishBoard.Clear();
 				m_MaxDicesRoll += 2;
@@ -110,6 +114,50 @@ namespace CamelUpData.Script
 					}
 				}
 			}
+
+			return retval;
+		}
+
+		public Ev GetEv()
+		{
+			Dictionary<char, double[]> camelRanks = GetAverageCamelRankInfo();
+			Tuple<char, double> highestEvFirstPlace = new Tuple<char, double>('x', -10f);
+			Tuple<char, double> highestEvLastPlace = new Tuple<char, double>('x', -10f);
+
+			foreach (var cr in camelRanks)
+			{
+				double ev = LongTermCardGuesser.Instance.GetPriceForFirst(cr.Key) * cr.Value[0];
+				if (ev > highestEvFirstPlace.Item2)
+					highestEvFirstPlace = new Tuple<char, double>(cr.Key, ev);
+
+				ev = LongTermCardGuesser.Instance.GetPriceForLast(cr.Key) * cr.Value[4];//todo magic number
+				if (ev > highestEvLastPlace.Item2)
+					highestEvLastPlace = new Tuple<char, double>(cr.Key, ev);
+			}
+
+			Tuple<char, double> highest;
+			bool isFirst;
+
+			if (highestEvFirstPlace.Item2 > highestEvLastPlace.Item2)
+			{
+				highest = highestEvFirstPlace;
+				isFirst = true;
+			}
+			else
+			{
+				highest = highestEvLastPlace;
+				isFirst = false;
+			}
+
+			string info = String.Format("{0} cards pour le {1}, avec une proportion de {2}", 
+				isFirst? "First" : "Last", GameRules.FullNameCamel(highest.Item1), GetTotalProportionAllRankManagers);
+
+			Ev retval = new Ev
+			{
+				m_PlayerAction = GameRules.PlayerAction.PickLongTermCard,
+				m_Ev = (float)highest.Item2,
+				m_Info = info
+			};
 
 			return retval;
 		}
