@@ -37,7 +37,7 @@ namespace CamelUpData
 
 		private static void TestLT()
 	    {
-			string testBoard = ";;;;;;;;;;;;;;O;B;WY;;G;";
+			string testBoard = ";;;;;;;;;;;;;;;O;B;WY;;G;";
 		    //ring testBoard = ";;;;;;;;;;;;;;O;B;WY;;G;";
 
 			var ltbm = new LongTermBoardAnalyser(new Board(testBoard), null);
@@ -49,7 +49,7 @@ namespace CamelUpData
 	    {
 			//string testBoard = ";y;g;r;W;o;;";
 		    //string testBoard = ";OBWYG;";
-			string testBoard = ";;;;;;;;;;;O;B;WY;;G;";
+			string testBoard = ";;;;;;;;;O;B;WY;;G;";
 			BoardManager bm = new BoardManager(5);
 		    bm.CreateBoard(testBoard);
 

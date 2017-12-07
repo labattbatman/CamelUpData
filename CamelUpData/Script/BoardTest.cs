@@ -129,7 +129,7 @@ namespace CamelUpData.Script
 			Assert.AreEqual(actual.m_TotalSubBoardWithWeight, 29160);
 			AssertEv(actualEvs[0], GameRules.PlayerAction.PickShortTermCard, 1.37f, "Green");
 			AssertEv(actualEvs[1], GameRules.PlayerAction.PutTrap, 0.81f, "Case(s): 4, . Minus Trap. Pas EV exacte.");
-			AssertEv(actualEvs[3], GameRules.PlayerAction.RollDice, -0.19f, null);
+			AssertEv(actualEvs[2], GameRules.PlayerAction.RollDice, -0.19f, null);
 			//AssertEv(actualEvs[3], GameRules.PlayerAction.PickLongTermCard, 1.37f, "Green");
 		}
 

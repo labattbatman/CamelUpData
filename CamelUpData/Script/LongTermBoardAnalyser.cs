@@ -24,9 +24,11 @@ namespace CamelUpData.Script
 		//CamelRankManager avec sa proportion. Toutes les proportions <= 1
 		private List<CamelRankInfo> m_CamelRankInfos = new List<CamelRankInfo>();
 
-		private double TotalPropotionRankInfos => m_CamelRankInfos.Select(cr => cr.m_Proportion).Sum();
-
 		private int m_MaxDicesRoll; //TODO pas sur encore quoi faire avec lui
+
+		private bool m_IsMemoryFail;
+
+		private double TotalPropotionRankInfos => m_CamelRankInfos.Select(cr => cr.m_Proportion).Sum();
 
 		private long TotalWeight => GetWeight(m_FinishBoard.Values.ToList()) + GetWeight(m_UnfinishBoard.Values.ToList()) + GetWeight(m_UncompleteBoards.Values.ToList());
 
@@ -67,8 +69,10 @@ namespace CamelUpData.Script
 				}
 				catch (Exception ex)
 				{
-					
+					m_IsMemoryFail = true;
+					GameRules.Log(string.Format("\n Je fail at: {0} avec {1} UncompleteBoards \n", GetTotalProportionAllRankManagers, m_UncompleteBoards.Count));
 				}
+
 				m_UncompleteBoards = new Dictionary<string, IBoard>(m_UnfinishBoard);
 				m_UnfinishBoard.Clear();
 				m_MaxDicesRoll += 2;
@@ -220,7 +224,7 @@ namespace CamelUpData.Script
 		private void AddCamelRankManager(List<IBoard> aBoards)
 		{
 			CamelRankManager newManager = new CamelRankManager(aBoards);
-
+			var t = GetWeight(aBoards);
 			m_CamelRankInfos.Add(
 				new CamelRankInfo
 				{
@@ -246,7 +250,7 @@ namespace CamelUpData.Script
 		private bool IsContinueAnalyze()
 		{
 			//TODO
-			return true;
+			return !m_IsMemoryFail;
 		}
 	}
 }
