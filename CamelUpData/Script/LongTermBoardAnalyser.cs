@@ -26,7 +26,7 @@ namespace CamelUpData.Script
 
 		private int m_MaxDicesRoll; //TODO pas sur encore quoi faire avec lui
 
-		private bool m_IsMemoryFail;
+		private readonly bool m_IsMemoryFail;
 
 		private double TotalPropotionRankInfos => m_CamelRankInfos.Select(cr => cr.m_Proportion).Sum();
 
@@ -70,18 +70,20 @@ namespace CamelUpData.Script
 				catch (Exception ex)
 				{
 					m_IsMemoryFail = true;
-					GameRules.Log(string.Format("\n Je fail at: {0} avec {1} UncompleteBoards \n", GetTotalProportionAllRankManagers, m_UncompleteBoards.Count));
 				}
-
-				m_UncompleteBoards = new Dictionary<string, IBoard>(m_UnfinishBoard);
-				m_UnfinishBoard.Clear();
-				m_MaxDicesRoll += 2;
 
 				if (m_FinishBoard.Values.Any())
 				{
 					AddCamelRankManager(m_FinishBoard.Values.ToList());
 					m_FinishBoard.Clear();
 				}
+
+				if (m_IsMemoryFail)
+					GameRules.Log(string.Format("\n\n Je fail at: {0} avec {1} UncompleteBoards \n\n", GetTotalProportionAllRankManagers, m_UncompleteBoards.Count));
+
+				m_UncompleteBoards = new Dictionary<string, IBoard>(m_UnfinishBoard);
+				m_UnfinishBoard.Clear();
+				m_MaxDicesRoll += 2;
 			}
 		}
 
