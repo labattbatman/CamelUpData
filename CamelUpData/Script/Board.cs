@@ -402,8 +402,7 @@ namespace CamelUpData.Script
 			Weight = 0;
 			foreach (var dh in DicesHistories)
 			{
-				// /2 car on a dice Number
-				int missingDices = (aDiceHistoryLengthWithDiceNumber - dh.Length) / 2;
+				int missingDices = aDiceHistoryLengthWithDiceNumber - dh.Length;
 				int dhWeight = 1;
 				while (missingDices > m_Rank.Length)
 				{
@@ -421,12 +420,12 @@ namespace CamelUpData.Script
             Weight = aNewWeight;
         }
 
-        protected List<string> GetDiceHistoryUpdated(char aUnrollCamel, int aDiceNb)
+        protected virtual List<string> GetDiceHistoryUpdated(char aUnrollCamel, int aDiceNb)
         {
             List<string> newDiceHistories = new List<string>(DicesHistories);
 
             for (int i = 0; i < newDiceHistories.Count; i++)
-                newDiceHistories[i] += aUnrollCamel.ToString() + aDiceNb;
+                newDiceHistories[i] += aUnrollCamel.ToString();
 
             return newDiceHistories;
         }

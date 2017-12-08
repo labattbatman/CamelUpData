@@ -13,8 +13,7 @@ namespace CamelUpData.Script
 
 		public BoardManager(int aMaxDicesRoll)
 		{
-			//*2 car on comparer avec le DiceHistory qui contient le chiffre roulé
-			m_MaxDicesRoll = aMaxDicesRoll * 2;
+			m_MaxDicesRoll = aMaxDicesRoll;
 		}
 
 		public long TotalWeigh

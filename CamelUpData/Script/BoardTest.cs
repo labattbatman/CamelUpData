@@ -62,7 +62,8 @@ namespace CamelUpData.Script
 		public void TestBoardAnalyser()
 		{
 			string board = ";OBWYG;";
-			BoardManager bm = new BoardManager(5);
+			BoardManager bm = new BoardManager(10);
+			
 			bm.CreateBoardDebug(board);
 			AssertBoardAnalyzer(board, bm.GetAllBoards());
 
@@ -70,12 +71,9 @@ namespace CamelUpData.Script
 			bm.CreateBoard(board);
 			AssertBoardAnalyzer(board, bm.GetAllBoards());
 			
-			//TODO extremement long(jamais fini :S) car BoardDebug.DiceHistory ne contient pas le chffre roulé
-			/*
 			bm = new BoardManager(5);
-			bm.CreateBoardByte(";OBWYG;");
-			AssertBoardAnalyzer(bm.GetAllBoards());
-			*/
+			bm.CreateBoardByte(board);
+			AssertBoardAnalyzer(board, bm.GetAllBoards());
 		}
 
 		[TestMethod]
@@ -117,7 +115,7 @@ namespace CamelUpData.Script
 			foreach (var exp in expected)
 			{
 				for (int i = 0; i < exp.Value.Length; i++)
-					Assert.IsTrue(Math.Abs(exp.Value[i] - actual[exp.Key][i]) < 0.001, String.Format("Camel {0}, position {1}", exp.Key, i));
+					Assert.IsTrue(Math.Abs(exp.Value[i] - actual[exp.Key][i]) < 0.001, String.Format("Camel {0}, position {1}. Exp: {2} Act:{3}", exp.Key, i, exp.Value[i], actual[exp.Key][i]));
 			}
 		}
 

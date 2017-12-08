@@ -48,8 +48,7 @@ namespace CamelUpData.Script
 		public LongTermBoardAnalyser(IBoard aBoard, Action aActionAfterManageBoard)
 		{
 			//TODO supporter plusieurs board...il y a un bug quand on ajoute boards avec 2 dés roulés
-			//*2 car on comparer avec le DiceHistory qui contient le chiffre roulé
-			m_MaxDicesRoll = m_FinishBoard.Values.SelectMany(fb => fb.DicesHistories).Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length + 2;
+			m_MaxDicesRoll = m_FinishBoard.Values.SelectMany(fb => fb.DicesHistories).Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur).Length;
 
 			ManageBoards(new List<IBoard>{aBoard});
 			if(aActionAfterManageBoard != null)
@@ -83,7 +82,7 @@ namespace CamelUpData.Script
 
 				m_UncompleteBoards = new Dictionary<string, IBoard>(m_UnfinishBoard);
 				m_UnfinishBoard.Clear();
-				m_MaxDicesRoll += 2;
+				m_MaxDicesRoll++;
 			}
 		}
 

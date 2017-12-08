@@ -51,7 +51,7 @@ namespace CamelUpData
 		    //string testBoard = ";OBWYG;";
 			string testBoard = ";;;;;;;;;O;B;WY;;G;";
 			BoardManager bm = new BoardManager(5);
-		    bm.CreateBoard(testBoard);
+		    bm.CreateBoardDebug(testBoard);
 
 		    BoardAnalyzer ba = new BoardAnalyzer(testBoard, bm.GetAllBoards(), "B0O0W0Y0G0");
 		    GameRules.Log(ba.ToString());

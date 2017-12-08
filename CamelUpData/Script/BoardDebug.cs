@@ -68,5 +68,15 @@ namespace CamelUpData.Script
 			BoardDebug subBoard = new BoardDebug(this, aResult, aUnrollCamel, GetDiceHistoryUpdated(aUnrollCamel, aDiceNb));
 			m_SubBoard.Add(subBoard);
 		}
+
+		protected override List<string> GetDiceHistoryUpdated(char aUnrollCamel, int aDiceNb)
+		{
+			List<string> newDiceHistories = base.GetDiceHistoryUpdated(aUnrollCamel, aDiceNb);
+
+			for (int i = 0; i < newDiceHistories.Count; i++)
+				newDiceHistories[i] += aDiceNb;
+
+			return newDiceHistories;
+		}
 	}
 }

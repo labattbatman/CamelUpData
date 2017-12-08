@@ -465,7 +465,7 @@ namespace CamelUpData.Script
 			foreach (var dh in DicesHistories)
 			{
 				// /2 car on a dice Number
-				int missingDices = (aDiceHistoryLengthWithDiceNumber - dh.Length) / 2;
+				int missingDices = aDiceHistoryLengthWithDiceNumber - dh.Length;
 				int dhWeight = 1;
 				while (missingDices > m_Rank.Length)
 				{
