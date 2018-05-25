@@ -53,11 +53,15 @@
     <Compile Include="Script\BoardManager.cs" />
     <Compile Include="Script\BoardTest.cs" />
     <Compile Include="Script\CamelMovement.cs" />
+    <Compile Include="Script\CamelRankManager.cs" />
     <Compile Include="Script\GameRules.cs" />
     <Compile Include="Script\IBoard.cs" />
+    <Compile Include="Script\LongTermBoardAnalyser.cs" />
+    <Compile Include="Script\LongTermCardGuesser.cs" />
     <Compile Include="Script\Pattern.cs" />
     <Compile Include="Script\PatternGenerator.cs" />
     <Compile Include="Script\ReUse\Extension.cs" />
+    <Compile Include="Script\ReUse\MathFunc.cs" />
     <Compile Include="Script\ReUse\MonoSingleton.cs" />
     <Compile Include="Script\SaveManager.cs" />
   </ItemGroup>

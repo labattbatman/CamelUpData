@@ -34,3 +34,17 @@ C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\D
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.exe
 C:\Users\alexis\Desktop\Stock - oct - 2015\Project\CamelUpData\CamelUpData\obj\Debug\CamelUpData.pdb
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\obj\Debug\CamelUpData.csproj.CoreCompileInputs.cache
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\obj\Debug\CamelUpData.exe
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\obj\Debug\CamelUpData.pdb
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;O;;B;;W;;Y;;G;.txt
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;O;B;W;YG;+.txt
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;O;B;W;YG;.txt
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;OBW;;;;;;;YG;.txt
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\FichiersValidateur\;OBWYG;.txt
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\Patterns\PatternDict.txt
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\CamelUpData.exe.config
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\CamelUpData.exe
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\CamelUpData.pdb
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\dzl4287\Desktop\Alexis\CamelUpData\CamelUpData\obj\Debug\CamelUpData.csproj.CopyComplete
