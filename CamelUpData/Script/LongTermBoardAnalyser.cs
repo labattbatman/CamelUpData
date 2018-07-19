@@ -45,6 +45,8 @@ namespace CamelUpData.Script
 			}
 		}
 
+		//METHOD
+
 		public LongTermBoardAnalyser(IBoard aBoard, Action aActionAfterManageBoard)
 		{
 			//TODO supporter plusieurs board...il y a un bug quand on ajoute boards avec 2 dés roulés
