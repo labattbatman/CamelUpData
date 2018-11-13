@@ -7,7 +7,7 @@ namespace CamelUpData.Script
 	{
 		private readonly Dictionary<string, IBoard> m_UnfinishBoardByMaxRound = new Dictionary<string, IBoard>();
 		private readonly Dictionary<string, IBoard> m_FinishBoard = new Dictionary<string, IBoard>();//to private
-		private Dictionary<string, IBoard> m_UncompleteBoards= new Dictionary<string, IBoard>();
+		private Dictionary<string, IBoard> m_UncompleteBoards = new Dictionary<string, IBoard>();
 
 		private int m_MaxDicesRoll;
 
@@ -32,10 +32,11 @@ namespace CamelUpData.Script
 		public void CreateBoard(string aBoard)
 		{
 			CreateBoards(new Board(aBoard));
-		 }
+		}
 
 		public void CreateBoardDebug(string aBoard)
 		{
+			var t = new BoardDebug(aBoard);
 			CreateBoards(new BoardDebug(aBoard));
 		}
 
