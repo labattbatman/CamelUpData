@@ -9,21 +9,21 @@ namespace CamelUpData
 {
 	public class Program
 	{
+		//LOOP infinie dans GenerateLongTermCardEv() BoardAnalyzer.cs L97
+
 		private static DateTime m_StartingTime;
 
 		static void Main(string[] args)
 		{
 			m_StartingTime = DateTime.Now;
 			args = GetBoardStatus();
+			GameRules.Log(string.Format("Boards: {0} \nCards: {1} \n\n", args[0], args[1]));
 
-
-			BoardManager bm = new BoardManager(1);
+			BoardManager bm = new BoardManager(5);
 			bm.CreateBoard(args[0]);
 
 			BoardAnalyzer ba = new BoardAnalyzer(args[0], bm.GetAllBoards(), args[1]);
 			GameRules.Log(ba.ToString());
-
-
 
 			ShowExecutionTimeLog();
 			//TestLTGuesser();
@@ -77,6 +77,7 @@ namespace CamelUpData
 					case '5': converted = "0"; break;
 					case '3': converted = "1"; break;
 					case '2': converted = "2"; break;
+					case '0': converted = "3"; break;
 					default: throw new Exception("Cards Status in arguments is invalid: " + camel[1]);
 				}
 
@@ -108,7 +109,7 @@ namespace CamelUpData
 
 		private static void ShowExecutionTimeLog()
 		{
-			string log = string.Format("{0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
+			string log = string.Format("\nTemps d'exexution: {0}\n", (DateTime.Now - m_StartingTime).TotalSeconds);
 			GameRules.Log(log);
 			Console.ReadLine();
 		}

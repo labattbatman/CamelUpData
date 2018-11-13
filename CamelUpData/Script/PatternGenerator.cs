@@ -22,7 +22,7 @@ namespace CamelUpData.Script
 		protected override void Init()
 		{
 			base.Init();
-		
+
 			if (SaveManager.Instance.IsPatternSaved)
 			{
 				m_Patterns = SaveManager.Instance.Load();
@@ -38,7 +38,7 @@ namespace CamelUpData.Script
 
 			m_Patterns.Add(newPattern.Id, newPattern);
 
-			for(int i = 0; i < newPattern.ResultsInList.Count; i++)
+			for (int i = 0; i < newPattern.ResultsInList.Count; i++)
 			{
 				List<string> formatedResults = GameRules.PatternResultToPattern(newPattern.ResultsInList[i]);
 
@@ -59,7 +59,7 @@ namespace CamelUpData.Script
 			CamelsMovement camelsMovement = new CamelsMovement(aPattern);
 			Pattern pattern = new Pattern(aPattern, camelsMovement.GetCamelsResults());
 			return pattern;
-		}  
+		}
 
 		private void GeneratePatterns()
 		{
@@ -69,6 +69,7 @@ namespace CamelUpData.Script
 			}
 
 			m_Stopwatch.Start();
+
 			while (m_PatternsToDiscover.Count != 0 && m_Stopwatch.ElapsedMilliseconds < m_AllowedTimeByFrame)
 			{
 				m_PatternsDiscoveredButNotSaved.Add(PopulatePatternDict(m_PatternsToDiscover[0]));
@@ -97,7 +98,9 @@ namespace CamelUpData.Script
 
 		public void SaveLastPatterns()
 		{
-			SaveNewPatterns();
+			GameRules.Log("Je me save. COPIER À LA MAIN LE FICHIER PATTERN\n");
+			SaveManager.Instance.Save(m_PatternsDiscoveredButNotSaved, true);
+			m_PatternsDiscoveredButNotSaved.Clear();
 		}
 
 		public void StartGeneratePattern(string aInitialBoard)

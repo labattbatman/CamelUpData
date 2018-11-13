@@ -45,9 +45,12 @@ namespace CamelUpData.Script
 
 		public static int GetRankPrice(int aRank, int aCardNb)
 		{
-			switch(aRank)
+			switch (aRank)
 			{
-				case 0: return SHORT_TERM_FIRST_PRICE[aCardNb];
+				case 0:
+					if (aCardNb < SHORT_TERM_FIRST_PRICE.Length)
+						return SHORT_TERM_FIRST_PRICE[aCardNb];
+					else return -100;
 				case 1: return SHORT_TERM_SECOND_PRICE;
 				default: return SHORT_TERM_LAST_PRICE;
 			}
@@ -68,7 +71,7 @@ namespace CamelUpData.Script
 		private const char PATTERN_CAMEL_NAME_3 = 'D';
 		private const char PATTERN_CAMEL_NAME_4 = 'E';
 		private const char PATTERN_CAMEL_NAME_5 = 'F';
-		public static readonly char[] PATTERN_CAMEL_NAME =  { PATTERN_CAMEL_NAME_1, PATTERN_CAMEL_NAME_2, PATTERN_CAMEL_NAME_3, PATTERN_CAMEL_NAME_4, PATTERN_CAMEL_NAME_5 };
+		public static readonly char[] PATTERN_CAMEL_NAME = { PATTERN_CAMEL_NAME_1, PATTERN_CAMEL_NAME_2, PATTERN_CAMEL_NAME_3, PATTERN_CAMEL_NAME_4, PATTERN_CAMEL_NAME_5 };
 
 		private const char IDENTITY_CAMEL_NAME_ROLLED_1 = 'o';
 		private const char IDENTITY_CAMEL_NAME_ROLLED_2 = 'b';
@@ -103,7 +106,7 @@ namespace CamelUpData.Script
 
 		public static bool IsCharPatternCamel(string aChar)
 		{
-			if(aChar.Length == 1)
+			if (aChar.Length == 1)
 				return IsCharPatternCamel(aChar[0]);
 
 			Log("Error: aChar is too long: " + aChar);
@@ -138,7 +141,7 @@ namespace CamelUpData.Script
 
 		public static int PATTER_NAME_NUMBER(char aPatternName)
 		{
-			for(int i = 0; i < PATTERN_CAMEL_NAME.Length; i++)
+			for (int i = 0; i < PATTERN_CAMEL_NAME.Length; i++)
 				if (PATTERN_CAMEL_NAME[i] == aPatternName)
 					return i;
 
@@ -147,7 +150,7 @@ namespace CamelUpData.Script
 
 		public static string FullNameCamel(char aChar)
 		{
-			switch(aChar)
+			switch (aChar)
 			{
 				case 'o':
 				case 'O': return "Orange";
@@ -438,14 +441,14 @@ namespace CamelUpData.Script
 			bool isCamelSameCase = false;
 
 			for (int i = 0; i < holePattern.Length; i++)
-			{        
+			{
 				if (holePattern[i] == GameRules.CASE_SEPARATOR)
 				{
 					caseSinceLastCamel++;
 					isCamelSameCase = false;
 				}
 				else if (holePattern[i] != GameRules.TRAP_MINUS && holePattern[i] != GameRules.TRAP_PLUS)
-				{                          
+				{
 					if (IsCamelsAreTooFar(nbCamelsOnLastPile, caseSinceLastCamel))
 					{
 						retval.Add(holePattern.Substring(0, i - caseSinceLastCamel));
@@ -480,7 +483,7 @@ namespace CamelUpData.Script
 		}
 
 		public static bool IsCamelsAreTooFar(int aNbOnSlowestPileOfCamel, int aNbOfCaseBetweenCamels)
-		{      
+		{
 			return aNbOnSlowestPileOfCamel * GameRules.DICE_NB_FACES < aNbOfCaseBetweenCamels;
 		}
 

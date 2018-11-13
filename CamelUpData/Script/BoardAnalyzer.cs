@@ -19,7 +19,7 @@ namespace CamelUpData.Script
 		public BoardAnalyzer(string aOriginBoard, List<IBoard> aBoards, string aCards)
 		{
 			m_Boards = new List<IBoard>(aBoards);
-            Setup(aOriginBoard, aCards, true);
+			Setup(aOriginBoard, aCards, true);
 		}
 
 		private BoardAnalyzer(string aOriginBoard, List<IBoard> aBoards, string aCards, string aRules)
@@ -39,20 +39,20 @@ namespace CamelUpData.Script
 				}
 			}
 
-            Setup(aOriginBoard, aCards, false);
-        }
+			Setup(aOriginBoard, aCards, false);
+		}
 
-        private void Setup(string aOriginBoard, string aCards, bool aIsCalculatingRollDice)
-        {
-	        m_OriginBoard = aOriginBoard;
+		private void Setup(string aOriginBoard, string aCards, bool aIsCalculatingRollDice)
+		{
+			m_OriginBoard = aOriginBoard;
 
 			m_CamelRankManager = new CamelRankManager(m_Boards);
 			m_CasesLandedOn = new int[GameRules.CASE_NUMBER];
 
-	        SetCamelCard(aCards);
+			SetCamelCard(aCards);
 			CalculateWeightAndCasesLandedOn();
 			GenerateEvs(aIsCalculatingRollDice);
-        }
+		}
 
 		private void SetCamelCard(string aCards)
 		{
@@ -94,7 +94,7 @@ namespace CamelUpData.Script
 			if (aIsCalculatingRollDice)
 			{
 				m_Evs[3] = GenerateRollDiceEv();
-				m_Evs[2] = GenerateLongTermCardEv(); //TODO inclure ou ne pas inclure
+				//m_Evs[2] = GenerateLongTermCardEv(); //TODO inclure ou ne pas inclure
 			}
 		}
 
@@ -112,13 +112,13 @@ namespace CamelUpData.Script
 
 		private Ev GeneratePutTrapEv()
 		{
-			List<int> highestCases = new List<int> {0};
+			List<int> highestCases = new List<int> { 0 };
 
 			for (int i = 0; i < m_CasesLandedOn.Length; i++)
 			{
 				if (m_CasesLandedOn[i] >= m_CasesLandedOn[highestCases[0]])
 				{
-					if(m_CasesLandedOn[i] > m_CasesLandedOn[highestCases[0]])
+					if (m_CasesLandedOn[i] > m_CasesLandedOn[highestCases[0]])
 						highestCases.Clear();
 
 					highestCases.Add(i);
@@ -126,13 +126,16 @@ namespace CamelUpData.Script
 			}
 
 			string casesRank = string.Empty;
-			foreach (var highestCase in highestCases)
-				casesRank += highestCase + ", ";
+			for (int i = 0; i < highestCases.Count; i++)
+			{
+				if (i != 0) casesRank += ", ";
+				casesRank += highestCases[i];
+			}
 
 			Ev retval = new Ev
 			{
 				m_PlayerAction = GameRules.PlayerAction.PutTrap,
-				m_Ev = (float) m_CasesLandedOn[highestCases[0]] / (float) m_TotalSubBoardWithWeight * GameRules.TRAP_REWARD,
+				m_Ev = (float)m_CasesLandedOn[highestCases[0]] / (float)m_TotalSubBoardWithWeight * GameRules.TRAP_REWARD,
 				m_Info = string.Format("Case(s): {0}. Minus Trap. Pas EV exacte.", casesRank)
 			};
 			return retval;
@@ -146,26 +149,26 @@ namespace CamelUpData.Script
 
 		private Ev GenerateRollDiceEv()
 		{
-            float evNextTurn = 0;
+			float evNextTurn = 0;
 
-            foreach (var camel in GameRules.IDENTITY_CAMEL_NAME_UNROLLED)
-                evNextTurn += new BoardAnalyzer(m_OriginBoard, m_Boards, m_CamelCardString, camel.ToString()).GetSortedtEvs()[0].m_Ev;
+			foreach (var camel in GameRules.IDENTITY_CAMEL_NAME_UNROLLED)
+				evNextTurn += new BoardAnalyzer(m_OriginBoard, m_Boards, m_CamelCardString, camel.ToString()).GetSortedtEvs()[0].m_Ev;
 
-            evNextTurn = evNextTurn / GameRules.IDENTITY_CAMEL_NAME_UNROLLED.Length;
-            float secondEv = GetSortedtEvs()[1].m_Ev;
+			evNextTurn = evNextTurn / GameRules.IDENTITY_CAMEL_NAME_UNROLLED.Length;
+			float secondEv = GetSortedtEvs()[1].m_Ev;
 
-            Ev retval = new Ev
-            {
-                m_PlayerAction = GameRules.PlayerAction.RollDice,
-                m_Ev = GameRules.TRAP_REWARD - (evNextTurn - secondEv)
-            };
+			Ev retval = new Ev
+			{
+				m_PlayerAction = GameRules.PlayerAction.RollDice,
+				m_Ev = GameRules.TRAP_REWARD - (evNextTurn - secondEv)
+			};
 
-            return retval;
+			return retval;
 		}
 
 		public override string ToString()
 		{
-			string retval = string.Format("Analyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
+			string retval = string.Format("\n\nAnalyze of {0} boards with a weight of {1}\n", m_Boards.Count, m_TotalSubBoardWithWeight);
 			retval += "---------------------------------\n";
 
 			//retval += m_CamelRankManager.ToString(m_CamelCards);
@@ -177,6 +180,7 @@ namespace CamelUpData.Script
 			retval += string.Format("Highest card long term is \nEV: {1} {0}\n\n", m_Evs[2].m_Info, m_Evs[2].m_Ev.ToString("N2"));
 			retval += string.Format("RollDice                  \nEV: {0} {1}\n\n", m_Evs[3].m_Ev.ToString("N2"), m_Evs[3].m_Info);
 
+			retval += "---------------------------------\n";
 			retval += "---------------------------------\n";
 
 			Ev biggestEv = GetSortedtEvs()[0];
@@ -192,7 +196,7 @@ namespace CamelUpData.Script
 			foreach (var ev in m_Evs)
 				retval.Add(ev);
 
-			retval.Sort(delegate(Ev x, Ev y)
+			retval.Sort(delegate (Ev x, Ev y)
 			{
 				return y.m_Ev.CompareTo(x.m_Ev);
 			});
