@@ -56,7 +56,7 @@ namespace CamelUpData
 					race += GameRules.CASE_SEPARATOR;
 
 				lastCase = caseSeparatorNeeded;
-				race += Regex.Replace(ca, @"[\d-]", string.Empty);
+				race += Regex.Replace(ca, @"[\d]", string.Empty);
 			}
 			return race;
 		}
