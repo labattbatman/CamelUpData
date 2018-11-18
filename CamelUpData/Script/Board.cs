@@ -168,8 +168,8 @@ namespace CamelUpData.Script
             var camelPos = GetCamelPos(aCamel);
             for (int i = 1; i < rank.Length; i++)
 			{
-				if (char.ToUpper(rank[i]) == aCamel)
-					return camelPos != GetCamelPos(rank[i - 1]);
+				if (char.ToUpper(rank[i]) == aCamel && camelPos != GetCamelPos(rank[i - 1]))
+					return false;
                 pos = i;
 			}
             

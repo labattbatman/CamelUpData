@@ -152,7 +152,11 @@ namespace CamelUpData.Script
 			float evNextTurn = 0;
 
 			foreach (var camel in GameRules.IDENTITY_CAMEL_NAME_UNROLLED)
-				evNextTurn += new BoardAnalyzer(m_OriginBoard, m_Boards, m_CamelCardString, camel.ToString()).GetSortedtEvs()[0].m_Ev;
+            {
+                if(m_OriginBoard.Contains(camel.ToString()))
+                    evNextTurn += new BoardAnalyzer(m_OriginBoard, m_Boards, m_CamelCardString, camel.ToString()).GetSortedtEvs()[0].m_Ev;
+            }
+				
 
 			evNextTurn = evNextTurn / GameRules.IDENTITY_CAMEL_NAME_UNROLLED.Length;
 			float secondEv = GetSortedtEvs()[1].m_Ev;
