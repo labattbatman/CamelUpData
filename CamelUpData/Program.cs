@@ -51,6 +51,8 @@ namespace CamelUpData
 
 			foreach (var ca in cases)
 			{
+                if (string.IsNullOrEmpty(ca))
+                    continue;
 				var caseSeparatorNeeded = Convert.ToInt32(Regex.Match(ca, @"\d+").Value);
 				for (int i = lastCase; i < caseSeparatorNeeded; i++)
 					race += GameRules.CASE_SEPARATOR;

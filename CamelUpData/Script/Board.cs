@@ -45,8 +45,38 @@ namespace CamelUpData.Script
 		private readonly Dictionary<char, int> m_Position = new Dictionary<char, int>();
 		private readonly Dictionary<char, string> m_Neighbouring = new Dictionary<char, string>();
 		public List<IBoard> m_SubBoard { get; set; }
-		
-		private string m_Rank = string.Empty;
+
+        private int[] m_TrapsPos;
+        public int[] TrapsPos
+        {
+            get
+            {
+                if(m_TrapsPos == null)
+                {
+                    var traps = new List<int>();
+                    int currentPos = 0;
+                    foreach (var bs in BoardState)
+                    {
+                        switch (bs)
+                        {
+                            case GameRules.CASE_SEPARATOR:
+                                currentPos++; break;
+                            case GameRules.TRAP_PLUS:
+                            case GameRules.TRAP_MINUS:
+                                traps.Add(currentPos); break;
+                            default:continue;
+                        }
+                    }
+
+                    m_TrapsPos = new int[traps.Count];
+                    for (int i = 0; i < traps.Count; i++)
+                        m_TrapsPos[i] = traps[i];
+                }
+                return m_TrapsPos;
+            }
+        }
+
+        private string m_Rank = string.Empty;
 
 		public int Weight { get; set; }
 
@@ -126,20 +156,28 @@ namespace CamelUpData.Script
 			CasesLandedOn = (int[]) aInitialBoard.CasesLandedOn.Clone();
 
 			int caseLanded = GetCamelPos(aRolledCamel);
-			if (caseLanded < CasesLandedOn.Length && IsCamelLandEmptyCase(aRolledCamel))
+			if (caseLanded < CasesLandedOn.Length && IsCamelLandOnPossibleFutureTrap(aRolledCamel))
 				CasesLandedOn[caseLanded]++;
 		}
 
-		private bool IsCamelLandEmptyCase(char aCamel)
+		private bool IsCamelLandOnPossibleFutureTrap(char aCamel)
 		{
 			string rank = GetRank();
 			aCamel = char.ToUpper(aCamel);
-			for (int i = 1; i < rank.Length; i++)
+            var pos = -1;
+            var camelPos = GetCamelPos(aCamel);
+            for (int i = 1; i < rank.Length; i++)
 			{
 				if (char.ToUpper(rank[i]) == aCamel)
-					return GetCamelPos(aCamel) != GetCamelPos(rank[i - 1]);
+					return camelPos != GetCamelPos(rank[i - 1]);
+                pos = i;
 			}
-
+            
+            foreach(var trap in TrapsPos)
+            {
+                if (Math.Abs(trap - camelPos) == 1)
+                    return false;
+            }
 			return true;
 		}
 
